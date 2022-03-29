@@ -1,0 +1,40 @@
+.div{
+    background-color: #000;
+    height: 70px;
+    width: 100%;
+    display: inline-grid;
+}
+
+.franken{
+  grid-column-start: 1;
+  grid-column-end: 2;
+  color: #fff;
+  text-align: left;
+  margin: auto;
+  text-shadow: 3px 3px #846384;
+  font-size: 35px;
+  font-weight: bold;
+  font-style: italic;
+  padding-left: 20px;
+  padding-top: 8px;
+}
+
+.crate{
+  grid-column-start: 2;
+  grid-column-end: 5;
+  height: 30px;
+  width: 150px;
+  background-color:chartreuse;
+  color: #fff;
+  margin: auto;
+  font-weight: bold;
+  font-size: 20px;
+  margin-left: 1000px;
+}
+
+@media (max-width: 600px) {
+    .grid {
+      width: 100%;
+      flex-direction: column;
+    }
+  }
