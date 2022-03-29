@@ -26,10 +26,10 @@
 }
 
 .submitInput{
-    background-color: rgba(0, 0, 130);
+    background-color: rgba(0, 0, 80);
     color: white;
     border-radius: 10%;
-    padding: 1%;
+    padding: 2%;
 }
 
 .form{
