@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import InicioSesion from '../components/InicioSesion'
+import Login from '../components/Login'
 import styles from '../styles/Home.module.css'
 import Header from '../components/Head'
 
