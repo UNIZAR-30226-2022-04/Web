@@ -5,47 +5,62 @@
 @layer components {
   /*HEAD STYLES*/
   .divHead{
-    @apply  flex 
+    @apply  fixed
+            flex 
             flex-row 
+            top-0
+            left-0
+            h-auto
+            w-screen
             align-middle 
             bg-black 
+            shadow-lg
+            items-center
+            p-3
+            pr-1
   }
 
   .franken{
-    @apply  m-5
-            text-3xl 
+    @apply  text-3xl 
+            justify-start
             text-cyan-50 
-            font-bold
-            w-full 
+            font-bold 
+            pl-5
   }
 
   .crateGroupHead{
-    @apply  flex 
-            flex-row 
-            mt-5
+    @apply  flex
+            flex-row
+            justify-end
             pr-5
             space-x-3
             w-full
   }
 
   .crateHeadPicture{
-    @apply  fixed top-1 bottom-11
+    @apply  absolute
+  }
+
+  .crateHeadText{
+    @apply  absolute
+            right-3
+          text-white
+            text-xl 
+            text-center
+            hover:underline
+            font-bold
   }
 
   .crateHead{
-    @apply  relative 
-            text-right
+    @apply  relative
+            flex
+            flex-row
+            items-center
             rounded-lg
-            hover:underline
-            pr-5
             h-10
-            w-64
+            w-56
+            pl-3
             bg-green-600 
-            text-white
-            text-2xl 
-            font-bold
-            space-x-10
-            container
   }
 }
 

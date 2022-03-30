@@ -24,21 +24,21 @@ function Crate({person}){
         <div class='crateGroupHead'>
             <div class='crateHead'>
                 <Image class='crateHeadPicture' src='/icons/portrait.png' width="25" height="25" />
-                <p class='float-right'>{person.name}</p>
+                <p class='crateHeadText'>{person.name}</p>
             </div>
             <div class='crateHead'>
                 <Image class='crateHeadPicture' src='/icons/star.png' width="25" height="25" />
-                {person.stars}
+                <p class='crateHeadText'>{person.stars}</p>
             </div>
             <div class='crateHead'>
                 <Image class='crateHeadPicture' src='/icons/circle.png' width="25" height="25" />
-                {person.coins}
+                <p class='crateHeadText'>{person.coins}</p>
             </div>
             <div>
-                <Image src='/icons/settings.png' width="45" height="45"/>
+                <Image src='/icons/settings.png' width="38" height="38"/>
             </div>
             <div>
-                <Image src='/icons/sign-out.png' width="45" height="45"/>
+                <Image src='/icons/sign-out.png' width="38" height="38"/>
             </div>
         </div>
     )
