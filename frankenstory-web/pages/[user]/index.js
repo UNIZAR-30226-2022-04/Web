@@ -1,6 +1,6 @@
-import Header from '../components/Head'
+import Header from '../../components/Head'
 
-export default function Home() {
+export default function Inicio() {
   return (
       <>
         <Header />

@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 @layer components {
+  /* COMMON STYLES */
+  .background{
+    @apply  h-screen 
+            w-screen 
+            bg-gradient-to-tr 
+            from-teal-600 
+            to-green-400
+  }
+
   /*HEAD STYLES*/
   .divHead{
     @apply  fixed
@@ -13,7 +22,7 @@
             h-auto
             w-screen
             align-middle 
-            bg-black 
+            bg-slate-900 
             shadow-lg
             items-center
             p-3
@@ -33,6 +42,7 @@
             flex-row
             justify-end
             pr-5
+            pl-5
             space-x-3
             w-full
   }
@@ -60,7 +70,7 @@
             h-10
             w-56
             pl-3
-            bg-green-600 
+            bg-gradient-to-r from-teal-600 to-green-400
   }
 }
 
