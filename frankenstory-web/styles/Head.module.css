@@ -1,13 +1,11 @@
+/*CLASSIC CSS COMPONENTS*/
 .div{
     background-color: #000;
     height: 70px;
     width: 100%;
-    display: inline-grid;
 }
 
 .franken{
-  grid-column-start: 1;
-  grid-column-end: 2;
   color: #fff;
   text-align: left;
   margin: auto;
@@ -20,8 +18,6 @@
 }
 
 .crate{
-  grid-column-start: 2;
-  grid-column-end: 5;
   height: 30px;
   width: 150px;
   background-color:chartreuse;

@@ -1,3 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /*HEAD STYLES*/
+  .divHead{
+    @apply  flex 
+            flex-row 
+            align-middle 
+            bg-black 
+  }
+
+  .franken{
+    @apply  m-5
+            text-3xl 
+            text-cyan-50 
+            font-bold
+            w-full 
+  }
+
+  .crateGroupHead{
+    @apply  flex 
+            flex-row 
+            mt-5
+            pr-5
+            space-x-3
+            w-full
+  }
+
+  .crateHeadPicture{
+    @apply  fixed top-1 bottom-11
+  }
+
+  .crateHead{
+    @apply  relative 
+            text-right
+            rounded-lg
+            hover:underline
+            pr-5
+            h-10
+            w-64
+            bg-green-600 
+            text-white
+            text-2xl 
+            font-bold
+            space-x-10
+            container
+  }
+}
+
 html,
 body {
   padding: 0;
@@ -14,7 +65,3 @@ a {
 * {
   box-sizing: border-box;
 }
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
