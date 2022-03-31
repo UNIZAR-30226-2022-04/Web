@@ -2,13 +2,21 @@ import { useState } from "react"
 import Link from "next/Link"
 
 const Login = () => {
+  //const res=await fetch("https://mooncode-frankenstory-dev.herokuapp.com/api/login")
   const [name, setName] = useState("")
   const [password, setPassword] = useState("")
 
   const onSubmit = (e)=>{
     e.preventDefault()
+    if(name == ""){
+      alert("Introduce un nombre de usuario")
+    }else if(password == ""){
+      alert("Introduce una contraseña")
+    }else{
     console.log(name)
     console.log(password)
+    //console.log(res)
+    }
   }
 
   return (
