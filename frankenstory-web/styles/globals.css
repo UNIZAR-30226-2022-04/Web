@@ -125,9 +125,17 @@
   .rulette_outter{
     @apply fixed right-0 w-[400px] h-screen bg-black rounded-tl-full rounded-bl-full flex items-center
   }
-
+ 
   .rulette_inner{
-    @apply fixed right-0 w-[200px] h-[300px] bg-white rounded-tl-full rounded-bl-full
+    @apply fixed right-0 w-[350px] h-[650px] bg-white rounded-tl-full rounded-bl-full flex items-center
+  }
+
+  .rulette_inner_2{
+    @apply fixed right-0 w-[200px] h-[400px] bg-black rounded-tl-full rounded-bl-full flex items-center
+  }
+
+  .rulette_inner_3{
+    @apply fixed right-0 w-[150px] h-[280px] bg-white rounded-tl-full rounded-bl-full
   }
 }
 
