@@ -1,37 +1,63 @@
+import { useRouter } from 'next/router'
 import Header from '../../components/Head'
-import FriendStats from '../../components/Stats'
+import FriendStats from '../../components/Statistics'
+import Rulette from '../../components/Rulette'
 
-const people = [
-    { name: 'Mercu',
-      stars: 6575
-    },
-    {
-      name: 'Amiga',
-      stars: 4342 
-    },
-    {
-      name: 'Tú',
-      stars: 3350
-    },
-    {
-      name: 'Amigo',
-      stars: 575
-    }
-]
+export default function Stats({info}) {
+  
+  const headerInfo = {
+    username: info.username,
+    stars: info.stars,
+    coins: info.coins
+  }
 
-const info = {
-  stars: 3350,
-  coins: 1750,
-  name: 'Mr. Patinete'
-}
-
-export default function Stats() {
   return (
     <>
-      <Header data={info}/>
-      <div class='background'>
-        <FriendStats data={people}/>
-      </div>
+        <Header data={headerInfo}>
+          <div class='background'>
+            <FriendStats data={info.bestFour} />
+            <Rulette />
+          </div>  
+        </Header> 
     </>
   )
+}
+
+export async function getStaticPaths () {
+    return {
+        paths:[],
+        fallback:'blocking'
+    }
+}
+
+export async function getStaticProps ({params}) {
+  const user = params.user
+  const info = {
+    username: user,
+    result: "success", 
+    picture: "",
+    stars: 3350,
+    coins: 1750,
+    bestFour: [
+      { username: 'Mercu',
+        stars: 6575
+      },
+      {
+        username: 'Amiga',
+        stars: 4342 
+      },
+      {
+        username: 'Tú',
+        stars: 3350
+      },
+      {
+        username: 'Amigo',
+        stars: 575
+      }
+    ]
+  }
+
+  return {
+    props: { info }
+  }
 }

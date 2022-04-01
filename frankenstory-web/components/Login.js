@@ -1,5 +1,5 @@
 import { useState } from "react"
-import Link from "next/Link"
+import Link from "next/link"
 
 const checkLogin = async ({user},{pass}) => {
   var req
@@ -38,6 +38,8 @@ const Login = () => {
     }
   }
 
+  const goTo = '/' + name + '/stats'
+
   return (
     <div className= "p-6 h-screen w-screen flex items-center bg-blue-100">
       <form className ="m-auto justify-center p-6 bg-white align-middle" onSubmit={onSubmit}>
@@ -47,8 +49,9 @@ const Login = () => {
           <div>Contraseña</div>
           <input className="p-2 w-full bg-blue-100 text-blue-400" type="text" value={password} placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)}/>
           <div className="py-2 font-bold text-blue-800"><Link  href="/">Crear Cuenta</Link></div>
-          <input className="ml-20 bg-center text-white justify-self-center bg-blue-900 rounded-md px-4 py-2"
-          type="submit" value="Iniciar sesión"/>
+          <Link href={goTo}>
+            <input className="ml-20 bg-center text-white justify-self-center bg-blue-900 rounded-md px-4 py-2" type="submit" value="Iniciar sesión"/>
+          </Link>          
       </form>
     </div>
   )
