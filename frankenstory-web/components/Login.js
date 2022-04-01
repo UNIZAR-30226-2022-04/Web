@@ -4,8 +4,17 @@ import Link from "next/Link"
 const checkLogin = async ({user},{pass}) => {
   var req
   var res
+
+  let data = {
+    username:user,
+    password:pass
+  }
   req = await fetch(
-    `https://mooncode-frankenstory-dev.herokuapp.com/api/login?username=${user}_password=${pass}`,{method:"GET"})
+    `https://mooncode-frankenstory-dev.herokuapp.com/api/login?username=${user}_password=${pass}`,
+    {method:"POST",
+    Accept:"json",
+    headers:{'Content-Type': 'application/json'},
+    body : JSON.stringify(data)})
   res = await req.json()
   console.log(res)
 }
