@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router'
-import Header from '../../components/Head'
+import Layout from '../../components/Layout'
 import FriendStats from '../../components/Statistics'
 import Rulette from '../../components/Rulette'
 
 export default function Stats({info}) {
   
-  const headerInfo = {
+  const layoutInfo = {
     username: info.username,
     stars: info.stars,
     coins: info.coins
@@ -13,12 +13,10 @@ export default function Stats({info}) {
 
   return (
     <>
-        <Header data={headerInfo}>
-          <div class='background'>
-            <FriendStats data={info.bestFour} />
-            <Rulette />
-          </div>  
-        </Header> 
+        <Layout data={layoutInfo}>          
+            <FriendStats data={info.bestFour} />            
+            <Rulette/> 
+        </Layout> 
     </>
   )
 }
