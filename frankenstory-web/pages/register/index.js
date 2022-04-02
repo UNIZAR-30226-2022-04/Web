@@ -1,13 +1,13 @@
 import React from 'react'
-import Login from '../../components/Login'
+import Register from '../../components/Register'
 
-const login = () => {
+const register = () => {
   return (
     <div className="background p-6 h-screen w-screen flex items-center">
-      <Login/>
+      <Register/>
     </div>
 
   )
 }
 
-export default login
+export default register
