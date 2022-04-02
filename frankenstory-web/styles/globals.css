@@ -5,11 +5,26 @@
 @layer components {
   /* COMMON STYLES */
   .background{
-    @apply  h-screen 
+    @apply  fixed
+            top-0
+            left-0
+            h-screen 
             w-screen 
             bg-gradient-to-tr 
             from-teal-600 
             to-green-400
+  }
+
+  .clickableItem{
+    @apply  cursor-pointer
+            hover:underline
+  }
+
+  .franken{
+    @apply  text-3xl 
+            justify-start
+            text-cyan-50 
+            font-bold
   }
 
   /*HEAD STYLES*/
@@ -29,14 +44,6 @@
             pr-1
   }
 
-  .franken{
-    @apply  text-3xl 
-            justify-start
-            text-cyan-50 
-            font-bold 
-            pl-5
-  }
-
   .crateGroupHead{
     @apply  flex
             flex-row
@@ -48,7 +55,7 @@
   }
 
   .crateHeadPicture{
-    @apply  absolute
+    @apply  absolute 
   }
 
   .crateHeadText{
@@ -61,8 +68,8 @@
             font-bold
   }
 
-  .crateHead{
-    @apply  relative
+  .crateHead{ 
+    @apply  relative 
             flex
             flex-row
             items-center
@@ -71,6 +78,61 @@
             w-56
             pl-3
             bg-gradient-to-r from-teal-600 to-green-400
+  }
+
+  /* STATISTICS */
+  .statsBox{
+    @apply  absolute 
+            h-screen 
+            flex 
+            flex-col 
+            justify-center
+            pl-20
+            space-y-2
+  }
+
+  .statsTitle{
+    @apply  relative 
+            flex 
+            flex-row 
+            h-auto 
+            w-auto
+  }
+  
+  .statsFriends{
+    @apply  flex 
+            flex-col
+            bg-lime-900
+            bg-opacity-20
+            rounded-lg            
+            px-3 py-4
+            space-y-4
+  }
+  
+  .statsOneFriend{
+    @apply  flex 
+            flex-row
+            items-center 
+  }
+
+  .personNameStats{
+    @apply  w-40 
+            franken
+  }
+
+  .starsStats{
+    @apply  w-32 
+            franken
+  }
+
+  .ruletteButton{
+    @apply bg-red-400
+            flex
+            rounded-md
+            h-16
+            w-16
+            items-center
+            justify-center
   }
 }
 

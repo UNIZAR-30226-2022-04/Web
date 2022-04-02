@@ -1,11 +1,11 @@
-import Header from '../../components/Head'
+import Layout from '../../components/Layout'
 
 export default function Inicio() {
   return (
       <>
-        <Header />
-        <div class='background'>
-        </div>
+        <Layout>
+          <div class='background' />
+        </Layout>
       </>
   )
 }
