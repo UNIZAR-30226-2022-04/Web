@@ -27,6 +27,13 @@
             font-bold
   }
 
+  .franken2{
+    @apply  text-3xl 
+            justify-start
+            text-green-900 
+            font-extrabold
+  }
+
   /*HEAD STYLES*/
   .divHead{
     @apply  fixed
@@ -80,6 +87,43 @@
             bg-gradient-to-r from-teal-600 to-green-400
   }
 
+  /* FRIENDS */
+
+  .friendsBox {
+    @apply  absolute 
+            h-screen 
+            flex 
+            flex-col 
+            justify-center
+            pl-40
+            space-y-2
+            w-1/4
+  }
+
+  .friendsTitle {
+    @apply  relative 
+            flex 
+            flex-row 
+            h-auto 
+            w-auto
+  }
+
+  .friendsSearch{
+    @apply  relative
+            p-2
+            w-full
+  }
+
+  .friend{
+    @apply  relative
+            text-2xl
+            text-blue-900
+            font-bold
+            justify-center
+            bg-teal-500
+            rounded
+            border-white
+  }
   /* STATISTICS */
   .statsBox{
     @apply  absolute 

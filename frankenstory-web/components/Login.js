@@ -4,7 +4,6 @@ import Link from "next/link"
 const checkLogin = async ({user},{pass}) => {
   var req
   var res
-
   let data = {
     username:user,
     password:pass
@@ -38,7 +37,7 @@ const Login = () => {
     }
   }
 
-  const goTo = '/' + name + '/stats'
+  const goTo = '/' + name + '/friends'
 
   return (
       <form className ="m-auto justify-center p-6 bg-white align-middle" onSubmit={onSubmit}>

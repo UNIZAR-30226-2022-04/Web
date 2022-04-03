@@ -1,4 +1,4 @@
-/*import Image from 'next/image'
+import Image from 'next/image'
 
 export default function Head({data}) {
     return(
@@ -31,4 +31,4 @@ function Crate({image, text}){
             <p class='crateHeadText'>{text}</p>
         </div>
     )
-}*/
+}
