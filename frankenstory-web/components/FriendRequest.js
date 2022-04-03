@@ -1,4 +1,4 @@
-export default function Friend({name,isFriend,id}){
+export default function FriendRequest({name}){
     const onClick = (isFriend,id) => {
         if (isFriend){
             console.log(`Borrando amigo ${id}`)
@@ -10,12 +10,12 @@ export default function Friend({name,isFriend,id}){
     return(
         <div class="friend">
             <div>{name}</div>
-            <button class="float-right"> {isFriend ? "-" : "+" } </button>
+            <button class="float-right">X</button>
+            <button class="float-right">V</button>
         </div>
     )
 }
 
-Friend.defaultProps = {
-    name:"Benito",
-    isFriend: true
+FriendRequest.defaultProps = {
+    name:"Camela",
 }

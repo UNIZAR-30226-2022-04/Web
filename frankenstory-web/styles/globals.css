@@ -4,6 +4,14 @@
 
 @layer components {
   /* COMMON STYLES */
+  .scrollBox{
+    @apply  relative
+            h-48
+            bg-scroll
+            bg-contain
+            overflow-auto
+  }
+
   .background{
     @apply  fixed
             top-0
@@ -91,11 +99,13 @@
 
   .friendsBox {
     @apply  absolute 
-            h-screen 
+            h-screen
             flex 
             flex-col 
             justify-center
-            pl-40
+            pl-32
+            pt-20
+            pb-10
             space-y-2
             w-1/4
   }
@@ -117,12 +127,15 @@
   .friend{
     @apply  relative
             text-2xl
+            mb-1
             text-blue-900
             font-bold
-            justify-center
             bg-teal-500
             rounded
             border-white
+            border-2
+            flex
+            min-w-full
   }
   /* STATISTICS */
   .statsBox{

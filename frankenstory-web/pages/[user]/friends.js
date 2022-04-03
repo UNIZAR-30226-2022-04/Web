@@ -4,9 +4,10 @@ import FriendList from '../../components/FriendScreen'
 import Rulette from '../../components/Rulette'
 
 export default function friends({info}) {
+  console.log(info.username);
     return(
         <Layout data={info}>
-            <FriendList data={info.name}/>
+            <FriendList data={info.username}/>
             <Rulette />
         </Layout>
     )
@@ -45,7 +46,6 @@ export async function getStaticProps ({params}) {
         }
       ]
     }
-  
     return {
       props: { info }
     }
