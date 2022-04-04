@@ -27,6 +27,11 @@ export default function FriendScreen({info}) {
       ]
     return (
     <>
+        <httpProtocol>
+        <customHeaders>
+                <add name="Access-Control-Allow-Origin" value="*" />
+            </customHeaders>
+        </httpProtocol>
         <div class="friendsBox">
             <div class="friendsTitle">
                 <div class="franken2">Buscar amigos</div>

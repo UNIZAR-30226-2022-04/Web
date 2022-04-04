@@ -2,29 +2,23 @@ import { useState } from "react"
 import Link from "next/link"
 
 const tryLogin = async (user,pass) => {
+
+  var response
+
   var url = "https://mooncode-frankenstory-dev.herokuapp.com/api/login"
 
   var data = {
     username:user,
     password:pass
   }
-  data = JSON.stringify(data)
 
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.satus == 200){
-      var response = JSON.parse(xhttp.responseText)
-      console.log(response)
-    }
-  };
-  xhttp.open("POST", url, true);
-  xhttp.setRequestHeader("Content-Type", "application/json")
-  xhttp.setRequestHeader("Accept", "application/json")
-  xhttp.setRequestHeader()
-  xhttp.send();
-
-
-
+  response = await fetch(url,{
+    method: "POST",
+    //body: JSON.stringify(data)
+  })
+  console.log(JSON.stringify(data))
+  data = await response.json();
+  console.log(data)
 }
 
 const Login = () => {
@@ -38,8 +32,6 @@ const Login = () => {
     }else{
       setName("")
       setPassword("")
-      console.log(name)
-      console.log(password)
       tryLogin(name,password)
     }
   }
