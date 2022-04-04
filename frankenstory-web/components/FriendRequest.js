@@ -8,9 +8,9 @@ export default function FriendRequest({name}){
     }
 
     return(
-        <div class="friend">
+        <div class="friend flex">
             <div>{name}</div>
-            <button class="float-right">X</button>
+            <button class="pl-2">X</button>
             <button class="float-right">V</button>
         </div>
     )

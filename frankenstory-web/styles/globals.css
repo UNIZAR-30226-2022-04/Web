@@ -6,7 +6,7 @@
   /* COMMON STYLES */
   .scrollBox{
     @apply  relative
-            h-48
+            h-40
             bg-scroll
             bg-contain
             overflow-auto
@@ -107,7 +107,7 @@
             pt-20
             pb-10
             space-y-2
-            w-1/4
+            w-1/3
   }
 
   .friendsTitle {

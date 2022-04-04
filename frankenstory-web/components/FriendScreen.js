@@ -1,100 +1,14 @@
 import FriendList from "./FriendList"
-import FriendRequest from "./FriendRequest"
+import RequestList from "./RequestList"
 import Friend from "./Friend"
 
 export default function FriendScreen({info}) {
+    const requests=[
+        {username: "Benito"},
+        {username: "Camela"}
+    ]
 
     const friends= [
-        { username: 'Mercu',
-          id: 4
-        },
-        {
-          username: 'Amiga',
-          id: 3 
-        },
-        {
-          username: 'Tú',
-          id: 2
-        },
-        {
-          username: 'Amigo',
-          id: 1
-        },
-        { username: 'Mercu',
-          id: 4
-        },
-        {
-          username: 'Amiga',
-          id: 3 
-        },
-        {
-          username: 'Tú',
-          id: 2
-        },
-        {
-          username: 'Amigo',
-          id: 1
-        },
-        { username: 'Mercu',
-          id: 4
-        },
-        {
-          username: 'Amiga',
-          id: 3 
-        },
-        {
-          username: 'Tú',
-          id: 2
-        },
-        {
-          username: 'Amigo',
-          id: 1
-        },
-        { username: 'Mercu',
-          id: 4
-        },
-        {
-          username: 'Amiga',
-          id: 3 
-        },
-        {
-          username: 'Tú',
-          id: 2
-        },
-        {
-          username: 'Amigo',
-          id: 1
-        },
-        { username: 'Mercu',
-          id: 4
-        },
-        {
-          username: 'Amiga',
-          id: 3 
-        },
-        {
-          username: 'Tú',
-          id: 2
-        },
-        {
-          username: 'Amigo',
-          id: 1
-        },
-        { username: 'Mercu',
-          id: 4
-        },
-        {
-          username: 'Amiga',
-          id: 3 
-        },
-        {
-          username: 'Tú',
-          id: 2
-        },
-        {
-          username: 'Amigo',
-          id: 1
-        },
         { username: 'Mercu',
           id: 4
         },
@@ -129,10 +43,7 @@ export default function FriendScreen({info}) {
                 <div class="franken2">Peticiones</div>
             </div>
             <div class="scrollBox h-auto">
-                <FriendRequest/>
-                <FriendRequest/>
-                <FriendRequest/>
-                <FriendRequest/>
+                <RequestList data={requests}/>
             </div>
             
         </div>
