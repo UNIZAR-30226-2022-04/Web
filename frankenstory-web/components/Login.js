@@ -12,9 +12,13 @@ const tryLogin = async (user,pass) => {
     password:pass
   }
 
+  var myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/json');
+
   response = await fetch(url,{
     method: "POST",
-    //body: JSON.stringify(data)
+    headers: myHeaders,
+    body: JSON.stringify(data)
   })
   console.log(JSON.stringify(data))
   data = await response.json();
