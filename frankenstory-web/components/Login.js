@@ -5,7 +5,8 @@ const tryLogin = async (user,pass) => {
 
   var response
 
-  var url = "https://mooncode-frankenstory-dev.herokuapp.com/api/login"
+  //var url = "https://mooncode-frankenstory-dev.herokuapp.com/api/login"
+  var url ="https://localhost:3001/api/login"
 
   var data = {
     username:user,
@@ -16,10 +17,10 @@ const tryLogin = async (user,pass) => {
   myHeaders.append('Content-Type', 'application/json');*/
 
   response = await fetch(url,{
-    method: "POST",
-    headers: {
+    method: "PUT",
+    /*headers: {
       'Content-Type': 'application/json'
-    },
+    },*/
     body: JSON.stringify(data),
   })
   console.log(JSON.stringify(data))
