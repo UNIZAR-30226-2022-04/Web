@@ -1,34 +1,56 @@
 import { useState } from "react"
 import Link from "next/link"
 
-async function tryLogin (user,pass) {
-  let url ="http://localhost:3000/api/login"
+const tryLogin = async (user,pass) => {
 
   const data = {
-    "username": user,
-    "password": pass
+    username:user,
+    password:pass
   }
-
+  const url ="http://localhost:3000/api/login"
   const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Accept': 'application/json' 
     },
     body: JSON.stringify(data)
   }
-  
   var res = await fetch(url,options)
   var jsonRes = await res.json()
-
-  console.log(jsonRes)
+  return jsonRes
 }
 
 const Login = () => {
 
+  const onSubmit = (e) => {
+    
+    e.preventDefault()
+    if(name == ""){
+      alert("Introduce un nombre de usuario")
+    }else if(password == ""){
+      alert("Introduce una contraseña")
+    }else{
+      tryLogin(name,password).then((res) =>{
+        if(res.result == "success"){
+          window.location = `http://localhost:3000/${name}/stats`
+        }else{
+          if(res.reason == "user_not_found"){
+            alert("Usuario desconocido")
+          }else if(res.reason == "wrong_password"){
+            alert("Contraseña incorrecta")
+          }else{
+            alert("Error desconocido")
+          }
+        }
+      })
+    }
+    setName("")
+    setPassword("")
+  }
+
   const [name, setName] = useState("")
   const [password, setPassword] = useState("")
-
-  //const goTo = '/' + name + '/friends'
 
   return (
       <form className ="m-auto justify-center p-6 bg-white align-middle" onSubmit={onSubmit}>
