@@ -53,7 +53,7 @@ const Login = () => {
   const [password, setPassword] = useState("")
 
   return (
-      <form className ="m-auto justify-center p-6 bg-white align-middle" onSubmit={onSubmit}>
+      <form className ="m-auto justify-center p-6 bg-white align-middle">
           <h1 className="pb-3 pt-6 px-10 text-4xl text-blue-800 font-bold">Iniciar sesión</h1>
           <div>Usuario</div>
           <input className="p-2 w-full bg-blue-100 text-blue-400" type="text" value={name} placeholder="Usuario" onChange={(e) => setName(e.target.value)}/>

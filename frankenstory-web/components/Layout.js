@@ -1,35 +1,28 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import Rulette from './Rulette'
 
 export default function Head({children, data}) {
     return(
-        <div class='background'>
-
-            {children}   
+        <div class='background'>            
             <div class='divHead'>
                 <div class='franken' >
                     Frankenstory
                 </div>
                 <Crates person={data} />
             </div> 
-                    
-        </div>
-        
+            {children}
+        </div>        
     )
 }
 
-//<Crates person={data} />
-
 function Crates({person}){
-    const settingsRef = '/' + person.username + '/settings'
     return(
         <div class='crateGroupHead absolute'>            
             <Crate image='/icons/star.png' text={person.stars}/>
             <Crate image='/icons/circle.png' text={person.coins}/>
             <Crate image='/icons/portrait.png' text={person.username}/>
             <div>
-                <Link href={settingsRef}>
+                <Link href='/profile/settings'>
                     <Image class='clickableItem' src='/icons/settings.png' width="38" height="38"/> 
                 </Link> 
             </div>
