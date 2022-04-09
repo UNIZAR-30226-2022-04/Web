@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  username      String        @id @db.VarChar(30)
+  password_hash String        @db.VarChar(30)
+  email         String        @unique @db.VarChar(40)
+  image_ID      Int           @default(0)
+  mooncoins     Int           @default(100)
+  stars         Int           @default(0)
+  receiver      Petition[]    @relation("receiver")
+  questioner    Petition[]    @relation("questioner")
+  himself       Friendship[]  @relation("himself")
+  friend        Friendship[]  @relation("friend")
+  participant   Participant[] @relation("participant")
+  contributor   Paragraph[]   @relation("contributor")
+}
+
+model Petition {
+  questioner    Player @relation(name: "questioner", fields: [username], references: [username], onDelete: Cascade)
+  username      String @db.VarChar(30)
+  receiver      Player @relation(name: "receiver", fields: [petition_name], references: [username], onDelete: Cascade)
+  petition_name String @db.VarChar(30)
+
+  @@id([username, petition_name])
+}
+
+model Friendship {
+  himself    Player @relation(name: "himself", fields: [username], references: [username], onDelete: Cascade)
+  username   String @db.VarChar(30)
+  friend     Player @relation(name: "friend", fields: [friendname], references: [username], onDelete: Cascade)
+  friendname String @db.VarChar(30)
+
+  @@id([username, friendname])
+}
+
+model Story {
+  story_id    Int           @id @default(autoincrement())
+  story       Participant[] @relation("story")
+  tale        Tale_mode[]   @relation("tale")
+  quick_match Quick_match[] @relation("quick_match")
+  contributed Paragraph[]   @relation("contributed")
+}
+
+model Participant {
+  participant Player  @relation(name: "participant", fields: [username], references: [username], onDelete: Cascade)
+  username    String  @db.VarChar(30)
+  story       Story   @relation(name: "story", fields: [story_id], references: [story_id], onDelete: Cascade)
+  story_id    Int
+  voted       String  @unique @db.VarChar(30)
+  creator     Boolean
+
+  @@id([username, story_id])
+}
+
+model Tale_mode {
+  tale                Story   @relation(name: "tale", fields: [story_id], references: [story_id], onDelete: Cascade) //Prisma no permite herencia
+  story_id            Int     @id
+  max_turns           Int     @default(1)
+  max_paragraph_chars Int     @default(50)
+  privacy             Boolean @default(false)//1=private, 0=public
+  finished            Boolean @default(false)
+  scored              Boolean @default(false)//1=scored, 0=not scored
+  title               String  @db.VarChar(50)
+}
+
+model Quick_match {
+  quick_match Story @relation(name: "quick_match", fields: [story_id], references: [story_id], onDelete: Cascade) //Prisma no permite herencia
+  story_id    Int //0=normal, 1=tendencias Twitter, 2=palabras obligatorias
+  mode        Int   @unique
+}
+
+model Paragraph {
+  text        String @db.VarChar(250)
+  Score       Float  @default(0)
+  turn_number Int    @default(0)
+  contributor Player @relation(name: "contributor", fields: [username], references: [username], onDelete: Cascade)
+  username    String @db.VarChar(30)
+  contributed Story  @relation(name: "contributed", fields: [story_id], references: [story_id], onDelete: Cascade)
+  story_id    Int
+
+  @@id([turn_number, username, story_id])
+}
