@@ -19,6 +19,8 @@ export default function Head({children, data}) {
     )
 }
 
+//<Crates person={data} />
+
 function Crates({person}){
     const settingsRef = '/' + person.username + '/settings'
     return(
