@@ -44,14 +44,8 @@
 
   /*HEAD STYLES*/
   .divHead{
-    @apply  fixed
+    @apply  relative
             flex 
-            flex-row 
-            top-0
-            left-0
-            h-auto
-            w-screen
-            align-middle 
             bg-slate-900 
             shadow-lg
             items-center
@@ -173,12 +167,12 @@
   }
 
   .personNameStats{
-    @apply  w-40 
+    @apply  w-auto 
             franken
   }
 
   .starsStats{
-    @apply  w-32 
+    @apply  pl-24 
             franken
   }
 
@@ -190,6 +184,31 @@
             w-16
             items-center
             justify-center
+  }
+
+  /* Settings Styles */
+  .settingsLayout{
+    @apply  flex
+            flex-row
+            items-center
+            justify-center
+            space-x-56
+  }
+
+  .settingsColLayout{
+    @apply  flex
+            flex-col
+            space-y-2
+  }
+
+  .buttonStyle{
+    @apply  shadow
+            focus:outline-none 
+            text-white
+            font-bold 
+            py-2 
+            px-4 
+            rounded
   }
 }
 
