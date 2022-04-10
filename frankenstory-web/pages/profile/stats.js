@@ -8,7 +8,8 @@ export default function Stats({userInfo}) {
   const layoutInfo = {
     username: user.username,
     stars:    userInfo.stars,
-    coins:    userInfo.coins
+    coins:    userInfo.coins,
+    image_ID: userInfo.picture
   } 
 
   return (

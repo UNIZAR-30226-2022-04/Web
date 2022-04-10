@@ -16,19 +16,22 @@ export default function Head({children, data}) {
 }
 
 function Crates({person}){
+    const imageRoute = '/profPic/icon' + person.image_ID + '.png'
+    console.log(imageRoute)
+
     return(
-        <div class='crateGroupHead absolute'>            
+        <div className='crateGroupHead absolute'>            
             <Crate image='/icons/star.png' text={person.stars}/>
             <Crate image='/icons/circle.png' text={person.coins}/>
-            <Crate image='/icons/portrait.png' text={person.username}/>
+            <Crate image={imageRoute} text={person.username}/>
             <div>
                 <Link href='/profile/settings'>
-                    <Image class='clickableItem' src='/icons/settings.png' width="38" height="38"/> 
+                    <Image className='clickableItem' src='/icons/settings.png' width="38" height="38"/> 
                 </Link> 
             </div>
             <div> 
                 <Link href='/login'>
-                    <Image class='clickableItem' src='/icons/sign-out.png' width="38" height="38"/> 
+                    <Image className='clickableItem' src='/icons/sign-out.png' width="38" height="38"/> 
                 </Link> 
             </div>
         </div>
@@ -37,9 +40,9 @@ function Crates({person}){
 
 function Crate({image, text}){
     return(
-        <div class='crateHead'>
-            <Image class='crateHeadPicture' src={image} width="25" height="25" />
-            <p class='crateHeadText clickableItem'>{text}</p>
+        <div className='crateHead'>
+            <Image className='crateHeadPicture' src={image} width="25" height="25"/>
+            <p className='crateHeadText clickableItem'>{text}</p>
         </div>
     )
 }

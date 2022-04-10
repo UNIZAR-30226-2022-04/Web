@@ -10,7 +10,7 @@ export default function Stats({data}) {
                 </div>
                 
                 <div class='statsFriends'>
-                    {data.map((person) => ( <PersonInfo person={person} /> ) ) }
+                    {data.map((person) => ( <PersonInfo key={person.toString()} person={person} /> ) ) }
                 </div>  
             </div>
         </>
