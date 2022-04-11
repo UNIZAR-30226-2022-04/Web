@@ -1,42 +1,40 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function Rulette({data, page}) {
+export default function Rulette({page}) {
     return(
-        <div className='flex flex-col h-screen justify-center items-end pr-12 space-y-3'>
-            {page=='stats'?(
-                <Link href=''>
+        <div className='absolute flex flex-col right-0 justify-center items-end pr-12 space-y-3'>            
+            <RuletteButton page={page} thisPage='story' icon='/rulette/long_play.png' reference='/storyMode'/>
+            
+            <div className='pr-24'>
+                <RuletteButton page={page} thisPage='quickPlay' icon='/rulette/quick_play.png' reference='/'/>
+            </div>
+            <div className='pr-24'>
+                <RuletteButton page={page} thisPage='yourStories' icon='/rulette/your_stories.png' reference='/'/>              
+            </div>
+
+            <RuletteButton page={page} thisPage='friends' icon='/rulette/friends.png' reference='/profile/friends'/>
+
+        </div>    
+    )
+}
+
+function RuletteButton({page, thisPage, icon, reference}){
+    return(
+        <>
+            {page == thisPage?(
+                <Link href='/profile/stats'>
                     <div className='ruletteButton'>
-                        <a><Image src='/rulette/home.png' width="60" height="60"/></a>     
+                        <a><Image src='/icons/home.png' width="60" height="60"/></a>     
                     </div>
                 </Link>
             ):(
-                <Link href=''>
+                <Link href={reference}>
                     <div className='ruletteButton'>
-                        <a><Image src='/rulette/long_play.png' width="60" height="60"/></a>     
-                    </div>
+                        <a><Image src={icon} width="60" height="60" /> </a>
+                    </div>  
                 </Link>
             )}
-              
-            <div className='pr-24'>
-                <Link href=''>
-                    <div className='ruletteButton'>
-                        <a><Image src='/rulette/quick_play.png' width="60" height="60" /></a>
-                    </div>  
-                </Link>
-            </div>                
-            <div className='pr-24'>
-                <Link href=''>
-                    <div className='ruletteButton'>
-                        <a><Image src='/rulette/your_stories.png' width="60" height="60" /> </a>
-                    </div>  
-                </Link>
-            </div>
-            <Link href='/profile/friends'>
-                <div className='ruletteButton'>
-                    <a><Image src='/rulette/friends.png' width="60" height="60" /></a>
-                </div>  
-            </Link> 
-        </div>    
-    )
+        </>
+    )    
 }

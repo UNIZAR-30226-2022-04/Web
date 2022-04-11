@@ -4,7 +4,8 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
     './styles/**/*.{js,css}'],
   theme: {
-    extend: {},
+    extend: {
+    },
   },
   plugins: []
 }

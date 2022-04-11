@@ -14,8 +14,6 @@
 
   .background{
     @apply  fixed
-            top-0
-            left-0
             h-screen 
             w-screen 
             bg-gradient-to-tr 
@@ -26,6 +24,22 @@
   .clickableItem{
     @apply  cursor-pointer
             hover:underline
+  }
+
+  .commonTitle{
+    @apply  text-3xl 
+            justify-start
+            text-cyan-50 
+            font-bold
+            txtShadw
+  }
+
+  .commonSubtitle{
+    @apply  text-xl 
+            justify-start
+            text-cyan-50 
+            font-bold
+            txtShadw
   }
 
   .franken{
@@ -210,6 +224,46 @@
             px-4 
             rounded
   }
+
+  /* Tale Mode */
+  .taleCrate{
+    @apply bg-sky-200
+            rounded-2xl
+            flex 
+            flex-row 
+            space-x-4 
+            items-center
+            pl-4
+            pr-2
+            h-14
+  }
+  
+  .taleTitle{
+    @apply  w-32
+            text-indigo-700
+            text-lg
+            font-bold
+            
+  }
+
+  .taleCreator{
+    @apply  w-32
+          text-indigo-700
+            text-xs
+            font-bold
+  }
+
+  .taleTurns{
+    @apply  w-16
+            pr-2
+          text-indigo-700
+            text-sm
+            font-bold
+  }
+}
+
+.txtShadw {
+  text-shadow: 5px 4px green
 }
 
 html,

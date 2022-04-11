@@ -14,9 +14,11 @@ export default function Stats({userInfo}) {
 
   return (
     <>
-        <Layout data={layoutInfo}>          
+        <Layout data={layoutInfo}>
+          <div className='flex flex-row w-screen items-center h-screen space-x-20 ml-5'>
             <FriendStats data={userInfo.bestFour} />            
-            <Rulette/> 
+            <Rulette /> 
+          </div>                        
         </Layout> 
     </>
   )

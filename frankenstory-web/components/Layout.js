@@ -1,13 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function Head({children, data, inSettingsScreen}) {
+export default function Layout({children, data, inSettingsScreen}) {
     return(
         <div className='background'>            
             <div className='divHead'>
-                <div className='franken' >
-                    Frankenstory
-                </div>
+                <Image src='/frankenstory.png' width="200" height="50"/>
                 <Crates person={data} changeSettings={inSettingsScreen} />
             </div> 
             {children}

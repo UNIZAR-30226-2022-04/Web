@@ -2,18 +2,16 @@ import Image from 'next/image'
 
 export default function Stats({data}) {
     return(
-        <>
-            <div className='statsBox'>
-                <div className='statsTitle'>
-                    <Image src='/icons/stats.png' width="40" height="25" />
-                    <h1 className='franken'>Statistics</h1>
-                </div>
-                
-                <div className='statsFriends'>
-                    {data.map((person) => ( <PersonInfo key={person.toString()} person={person} /> ) ) }
-                </div>  
+        <div className='statsBox'>
+            <div className='statsTitle'>
+                <Image src='/icons/stats.png' width="40" height="25" />
+                <h1 className='franken'>Statistics</h1>
             </div>
-        </>
+            
+            <div className='statsFriends'>
+                {data.map((person) => ( <PersonInfo key={person.toString()} person={person} /> ) ) }
+            </div>  
+        </div>
     )
 
 }
