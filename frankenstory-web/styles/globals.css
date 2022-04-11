@@ -180,8 +180,8 @@
     @apply bg-red-400
             flex
             rounded-md
-            h-16
-            w-16
+            h-28
+            w-28
             items-center
             justify-center
   }
