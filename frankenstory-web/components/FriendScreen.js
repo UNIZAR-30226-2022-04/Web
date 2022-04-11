@@ -3,50 +3,31 @@ import RequestList from "./RequestList"
 import Friend from "./Friend"
 
 export default function FriendScreen({info}) {
-    const requests=[
-        {username: "Benito"},
-        {username: "Camela"}
-    ]
-
-    const friends= [
-        { username: 'Mercu',
-          id: 4
-        },
-        {
-          username: 'Amiga',
-          id: 3 
-        },
-        {
-          username: 'Tú',
-          id: 2
-        },
-        {
-          username: 'Amigo',
-          id: 1
-        },
-      ]
     return (
     <>
-        <div class="friendsBox">
-            <div class="friendsTitle">
-                <div class="franken2">Buscar amigos</div>
+        <div className="friendsBox">
+            <div className="friendsTitle">
+                <div className="franken2">Buscar amigos</div>
             </div>
-            <input class="friendsSearch" type="text" placeholder="Introduce nombre"/>
+            <input className="friendsSearch" type="text" placeholder="Introduce nombre"/>
             <Friend isFriend={false}/>
-            <div class="friendsTitle">
-                <div class="franken2">Tus amigos</div>
+            <div className="friendsTitle">
+                <div className="franken2">Tus amigos</div>
             </div>
-            <div class="scrollBox">
-                <FriendList data={friends}/>
+            <div className="scrollBox">
+                <FriendList data={info}/>
             </div>
-            <div class="friendsTitle">
-                <div class="franken2">Peticiones</div>
+            <div className="friendsTitle">
+                <div className="franken2">Peticiones</div>
             </div>
-            <div class="scrollBox h-auto">
-                <RequestList data={requests}/>
-            </div>
+
             
         </div>
     </>
   )
 }
+
+/*            <div className="scrollBox h-auto">
+                <RequestList data={info}/>
+            </div>
+*/

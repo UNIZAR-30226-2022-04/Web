@@ -2,8 +2,8 @@ import Image from 'next/image'
 
 export default function Head({data}) {
     return(
-        <div class='divHead'>
-            <div class='franken' >
+        <div className='divHead'>
+            <div className='franken' >
                 Frankenstory
             </div>
             <Crates person={data} />
@@ -13,7 +13,7 @@ export default function Head({data}) {
 
 function Crates({person}){
     return(
-        <div class='crateGroupHead'>
+        <div className='crateGroupHead'>
            
             <Crate image='/icons/star.png' text={person.stars}/>
             <Crate image='/icons/circle.png' text={person.coins}/>
@@ -26,9 +26,9 @@ function Crates({person}){
 
 function Crate({image, text}){
     return(
-        <div class='crateHead'>
-            <Image class='crateHeadPicture' src={image} width="25" height="25" />
-            <p class='crateHeadText'>{text}</p>
+        <div className='crateHead'>
+            <Image className='crateHeadPicture' src={image} width="25" height="25" />
+            <p className='crateHeadText'>{text}</p>
         </div>
     )
 }

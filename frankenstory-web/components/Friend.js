@@ -1,16 +1,16 @@
-export default function Friend({name,isFriend,id}){
-    const onClick = (isFriend,id) => {
+export default function Friend({name,isFriend}){
+    const onClick = (isFriend) => {
         if (isFriend){
-            console.log(`Borrando amigo ${id}`)
+            console.log(`Borrando amigo ${name}`)
         }else{
-            console.log(`Añadiendo amigo ${id}`)
+            console.log(`Añadiendo amigo ${name}`)
         }
     }
 
     return(
-        <div class="friend">
+        <div className="friend">
             <div>{name}</div>
-            <button class="float-right"> {isFriend ? "-" : "+" } </button>
+            <button className="float-right"> {isFriend ? "-" : "+" } </button>
         </div>
     )
 }

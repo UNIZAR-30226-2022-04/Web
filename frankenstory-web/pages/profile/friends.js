@@ -1,52 +1,44 @@
 import { useRouter } from 'next/router'
 import Layout from '../../components/Layout'
-import FriendList from '../../components/FriendScreen'
+import FriendScreen from '../../components/FriendScreen'
 import Rulette from '../../components/Rulette'
 
-export default function friends({info}) {
-  console.log(info.username);
+const user = {
+  "username":"Jaime",
+  "password":"Jaime1234"
+}
+
+export default function friends({userInfo}) {
+
+  const layoutInfo = {
+    username: user.username,
+    stars:    userInfo.stars,
+    coins:    userInfo.coins,
+    image_ID: userInfo.picture
+  } 
+
     return(
-        <Layout data={info}>
-            <FriendList data={info.username}/>
+        <Layout data={layoutInfo}>
+            <FriendScreen data={user}/>
             <Rulette />
         </Layout>
     )
 }
 
-export async function getStaticPaths () {
-    return {
-        paths:[],
-        fallback:'blocking'
-    }
-}
+  export async function getStaticProps () {
 
-export async function getStaticProps ({params}) {
-    const user = params.user
-    const info = {
-      username: user,
-      result: "success", 
-      picture: "",
-      stars: 3350,
-      coins: 1750,
-      bestFour: [
-        { username: 'Mercu',
-          stars: 6575
-        },
-        {
-          username: 'Amiga',
-          stars: 4342 
-        },
-        {
-          username: 'Tú',
-          stars: 3350
-        },
-        {
-          username: 'Amigo',
-          stars: 575
-        }
-      ]
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user) 
     }
+    
+    const friendStats = await fetch('http://localhost:3000/api/home', options)
+    const userInfo = await friendStats.json()
+  
     return {
-      props: { info }
+      props: { userInfo }
     }
   }

@@ -3,9 +3,9 @@ import Link from 'next/link'
 export default function Home() {
   return (
       <>
-        <div class='background'>
+        <div className='background'>
           <Link href='/login'>
-            <h1 class='franken'>Inicio de Sesión</h1>
+            <h1 className='franken'>Inicio de Sesión</h1>
           </Link>
         </div>
       </>

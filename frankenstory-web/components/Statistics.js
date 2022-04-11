@@ -3,13 +3,13 @@ import Image from 'next/image'
 export default function Stats({data}) {
     return(
         <>
-            <div class='statsBox'>
-                <div class='statsTitle'>
+            <div className='statsBox'>
+                <div className='statsTitle'>
                     <Image src='/icons/stats.png' width="40" height="25" />
-                    <h1 class='franken'>Statistics</h1>
+                    <h1 className='franken'>Statistics</h1>
                 </div>
                 
-                <div class='statsFriends'>
+                <div className='statsFriends'>
                     {data.map((person) => ( <PersonInfo key={person.toString()} person={person} /> ) ) }
                 </div>  
             </div>
@@ -20,9 +20,9 @@ export default function Stats({data}) {
 
 function PersonInfo({person}){
     return(
-        <div class='statsOneFriend'>   
-            <h1 class='personNameStats clickableItem'>{person.username}</h1>
-            <h1 class='starsStats'>{person.stars}</h1>
+        <div className='statsOneFriend'>   
+            <h1 className='personNameStats clickableItem'>{person.username}</h1>
+            <h1 className='starsStats'>{person.stars}</h1>
             <Image src='/icons/star.png' width="38" height="38"/>
         </div>  
     )

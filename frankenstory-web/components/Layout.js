@@ -3,9 +3,9 @@ import Link from 'next/link'
 
 export default function Head({children, data}) {
     return(
-        <div class='background'>            
-            <div class='divHead'>
-                <div class='franken' >
+        <div className='background'>            
+            <div className='divHead'>
+                <div className='franken' >
                     Frankenstory
                 </div>
                 <Crates person={data} />
