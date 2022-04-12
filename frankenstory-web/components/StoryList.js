@@ -14,11 +14,11 @@ export default function StoryList({stories}){
 
 function Story({story}){
     return(
-        <div className='taleCrate'>
-            <p className='taleTitle'>{story.title}</p>
-            <p className='taleCreator'>{story.creator}</p>
+        <div className='commonCrate'>
+            <p className='w-32 commonFont'>{story.title}</p>
+            <p className='w-32 commonSubFont'>{story.creator}</p>
             <div className='relative flex flex-row items-center'>
-                <div className='taleTurns'>{story.turn}/{story.maxTurns}</div>
+                <div className='w-16 pr-2 text-indigo-700 text-sm font-bold'>{story.turn}/{story.maxTurns}</div>
                 <Link href='/'>
                     <a><Image src="/icons/pencil.png" width="20" height="20"/></a>
                 </Link>

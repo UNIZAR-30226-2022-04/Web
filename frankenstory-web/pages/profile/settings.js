@@ -28,8 +28,8 @@ export default function Settings({userInfo}) {
           <div className='commonTitle'>Ajustes</div>
         </div> 
         
-        <div className='settingsLayout'>
-          <form className='settingsColLayout'>       
+        <div className='flex flex-row items-center space-x-56 '>
+          <form className='flex flex-col space-y-2 '>       
               <div className='commonTitle'>Conteseña</div>
               <input type="password" value={passwd} placeholder="**********" onChange={(e) => setPass(e.target.value)}/>
               <div className='commonTitle' >Repita la Conteseña</div>
@@ -37,24 +37,24 @@ export default function Settings({userInfo}) {
               <button className='buttonStyle bg-green-800 hover:bg-green-400' type="button" onClick={() => changePassword(passwd, passwdRep)}>Cambiar Contraseña</button>
           </form>
 
-          <div className='settingsColLayout'>
+          <div className='flex flex-col space-y-2 '>
               <div className="flex flex-col items-center space-y-4">
                 
-                <div className="profilePictureGroup">
+                <div className="flex flex-row space-x-3">
                   <ProfilePic iconId='0' path='/profPic/icon0.png' selectedIcon={icon} setIcon={setIcon}/>
                   <ProfilePic iconId='1' path='/profPic/icon1.png' selectedIcon={icon} setIcon={setIcon}/>
                   <ProfilePic iconId='2' path='/profPic/icon2.png' selectedIcon={icon} setIcon={setIcon}/>
                   <ProfilePic iconId='3' path='/profPic/icon3.png' selectedIcon={icon} setIcon={setIcon}/>           
                 </div>
 
-                <div className="profilePictureGroup">
+                <div className="flex flex-row space-x-3">
                   <ProfilePic iconId='4' path='/profPic/icon4.png' selectedIcon={icon} setIcon={setIcon}/>
                   <ProfilePic iconId='5' path='/profPic/icon5.png' selectedIcon={icon} setIcon={setIcon}/>
                   <ProfilePic iconId='6' path='/profPic/icon6.png' selectedIcon={icon} setIcon={setIcon}/>
                   <ProfilePic iconId='7' path='/profPic/icon7.png' selectedIcon={icon} setIcon={setIcon}/>
                 </div>
 
-                <div className="profilePictureGroup">   
+                <div className="flex flex-row space-x-3">   
                   <ProfilePic iconId='8' path='/profPic/icon8.png' selectedIcon={icon} setIcon={setIcon}/>
                   <ProfilePic iconId='9' path='/profPic/icon9.png' selectedIcon={icon} setIcon={setIcon}/>
                 </div>
@@ -78,13 +78,13 @@ export default function Settings({userInfo}) {
 function ProfilePic({iconId, path, selectedIcon, setIcon}){
   if(selectedIcon == iconId){
     return(
-      <div className='profilePictureSelection hover:ring-violet-800 ring ring-violet-800'>
+      <div className='rounded-full h-12 w-12 ring ring-violet-800'>
         <Image id={iconId}  src={path} width="50" height="50" onClick={(e) => setIcon(e.target.id) }/>
       </div>
     )
   }else{
     return(
-      <div className='profilePictureSelection'>
+      <div className='hover:ring hover:ring-violet-300 rounded-full h-12 w-12'>
         <Image id={iconId}  src={path} width="50" height="50" onClick={(e) => setIcon(e.target.id) }/>
       </div>
     )

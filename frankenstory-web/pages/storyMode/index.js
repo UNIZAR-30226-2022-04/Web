@@ -63,8 +63,9 @@ export default function StoryMode({userInfo}){
                 </div>
                 <form className='flex flex-col space-y-3'>
                     <h1 className='commonTitle'>Crear Partida</h1>
-                    <div className='taleCrate'>
-                        <h1 className='taleTitle'>Partida Pública: </h1>
+                    
+                    <div className='commonCrate'>
+                        <h1 className='commonFont w-32'>Partida Pública: </h1>
                         {visibility=='public'?(
                             <button type='button' onClick={(e) => setVisibility('private')} className='bg-green-700 text-white w-full rounded-3xl'>Sí</button>
                         ):(
@@ -72,15 +73,18 @@ export default function StoryMode({userInfo}){
                         )}
                         
                     </div>
-                    <div className='taleCrate'>
-                        <h1 className='taleTitle'>Turnos: </h1>
+
+                    <div className='commonCrate'>
+                        <h1 className='commonFont w-32'>Turnos: </h1>
                         <input type='number' min='0' className='text-center w-full rounded-lg'></input>
                     </div>
-                    <div className='taleCrate'>
-                        <h1 className='taleTitle'>Número Caracteres: </h1>
+
+                    <div className='commonCrate'>
+                        <h1 className='commonFont w-32'>Número Caracteres: </h1>
                         <input type='number' min='0' className='text-center w-full rounded-lg'></input>
                     </div>
-                    <button type='submit' className='bg-red-200'>
+
+                    <button type='submit' className='buttonStyle bg-red-300'>
                         Crear Partida
                     </button>
                 </form>                

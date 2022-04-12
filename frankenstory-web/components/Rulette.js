@@ -25,13 +25,13 @@ function RuletteButton({page, thisPage, icon, reference}){
         <>
             {page == thisPage?(
                 <Link href='/profile/stats'>
-                    <div className='ruletteButton'>
+                    <div className='ruletteButton clickableItem'>
                         <a><Image src='/icons/home.png' width="60" height="60"/></a>     
                     </div>
                 </Link>
             ):(
                 <Link href={reference}>
-                    <div className='ruletteButton'>
+                    <div className='ruletteButton clickableItem'>
                         <a><Image src={icon} width="60" height="60" /> </a>
                     </div>  
                 </Link>

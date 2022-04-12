@@ -56,46 +56,48 @@
             font-extrabold
   }
 
-  /*HEAD STYLES*/
-  .divHead{
-    @apply  relative
-            flex 
-            bg-slate-900 
-            shadow-lg
-            items-center
-            p-3
-  }
-
-  .crateGroupHead{
-    @apply  flex
-            flex-row
-            justify-end
-            pr-5
-            pl-5
-            space-x-3
-            w-full
-  }
-
-  .crateHeadText{
-    @apply  absolute
-            right-3
-          text-white
-            text-xl 
-            text-center
-            hover:underline
-            font-bold
-  }
-
-  .crateHead{ 
-    @apply  relative 
+  .ruletteButton{
+    @apply bg-red-400
             flex
-            flex-row
+            rounded-md
+            h-28
+            w-28
             items-center
-            rounded-lg
-            h-10
-            w-56
-            pl-3
-            bg-gradient-to-r from-teal-600 to-green-400
+            justify-center
+  }
+
+  .buttonStyle{
+    @apply  shadow
+            focus:outline-none 
+            text-white
+            font-bold 
+            py-2 
+            px-4 
+            rounded-xl 
+  }
+
+  .commonCrate{
+    @apply bg-sky-200
+            rounded-2xl
+            flex 
+            flex-row 
+            space-x-4 
+            items-center
+            pl-4
+            pr-2
+            h-14
+  }
+
+  .commonFont{
+    @apply  text-indigo-700 
+            text-lg
+            font-bold         
+  }
+
+  .commonSubFont{
+    @apply  text-indigo-700
+            text-xs
+            font-bold
   }
 
   /* FRIENDS */
@@ -139,132 +141,6 @@
             border-2
             flex
             min-w-full
-  }
-  /* STATISTICS */
-  .statsBox{
-    @apply  absolute 
-            h-screen 
-            flex 
-            flex-col 
-            justify-center
-            pl-20
-            space-y-2
-  }
-
-  .statsTitle{
-    @apply  relative 
-            flex 
-            flex-row 
-            h-auto 
-            w-auto
-  }
-  
-  .statsFriends{
-    @apply  flex 
-            flex-col
-            bg-lime-900
-            bg-opacity-20
-            rounded-lg            
-            px-3 py-4
-            space-y-4
-  }
-  
-  .statsOneFriend{
-    @apply  flex 
-            flex-row
-            items-center 
-  }
-
-  .personNameStats{
-    @apply  w-auto 
-            franken
-  }
-
-  .starsStats{
-    @apply  pl-24 
-            franken
-  }
-
-  .ruletteButton{
-    @apply bg-red-400
-            flex
-            rounded-md
-            h-28
-            w-28
-            items-center
-            justify-center
-  }
-
-  /* Settings Styles */
-  .settingsLayout{
-    @apply  flex
-            flex-row
-            items-center
-            space-x-56 
-  }
-
-  .settingsColLayout{
-    @apply  flex
-            flex-col
-            space-y-2 
-  }
-
-  .buttonStyle{
-    @apply  shadow
-            focus:outline-none 
-            text-white
-            font-bold 
-            py-2 
-            px-4 
-            rounded-xl
-  }
-
-  .profilePictureGroup{
-    @apply flex flex-row space-x-3
-  }
-
-  .profilePictureSelection{
-    @apply  hover:ring
-          hover:ring-violet-300
-            rounded-full
-            h-12
-            w-12
-  }
-
-  /* Tale Mode */
-  .taleCrate{
-    @apply bg-sky-200
-            rounded-2xl
-            flex 
-            flex-row 
-            space-x-4 
-            items-center
-            pl-4
-            pr-2
-            h-14
-  }
-  
-  .taleTitle{
-    @apply  w-32
-            text-indigo-700
-            text-lg
-            font-bold
-            
-  }
-
-  .taleCreator{
-    @apply  w-32
-          text-indigo-700
-            text-xs
-            font-bold
-  }
-
-  .taleTurns{
-    @apply  w-16
-            pr-2
-          text-indigo-700
-            text-sm
-            font-bold
   }
 }
 
