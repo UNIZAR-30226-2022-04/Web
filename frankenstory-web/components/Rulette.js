@@ -3,12 +3,13 @@ import Link from 'next/link'
 
 export default function Rulette({page}) {
     return(
-        <div className='absolute flex flex-col right-0 justify-center items-end pr-12 space-y-3'>            
+        <div className='absolute flex flex-col right-0 justify-center h-full w-auto items-end pr-12 space-y-3'>            
             <RuletteButton page={page} thisPage='story' icon='/rulette/long_play.png' reference='/storyMode'/>
             
             <div className='pr-24'>
-                <RuletteButton page={page} thisPage='quickPlay' icon='/rulette/quick_play.png' reference='/'/>
+                <RuletteButton page={page} thisPage='quickGame' icon='/rulette/quick_play.png' reference='/quickGame'/>
             </div>
+            
             <div className='pr-24'>
                 <RuletteButton page={page} thisPage='yourStories' icon='/rulette/your_stories.png' reference='/'/>              
             </div>

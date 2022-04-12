@@ -1,6 +1,7 @@
-import Layout from '../../components/Layout'  
-import Rulette from '../../components/Rulette'
-import StoryList from '../../components/StoryList'
+import Layout from 'components/Layout'  
+import Rulette from 'components/Rulette'
+import StoryList from 'components/StoryList'
+import { useState } from 'react'
 
 const user = {"username": "MrNOPatineto", "password": "12345"}
 
@@ -45,9 +46,10 @@ export default function StoryMode({userInfo}){
         stars:    userInfo.stars,
         coins:    userInfo.coins,
         image_ID: userInfo.picture
-      }
-    
-    
+    }
+        
+    const [visibility, setVisibility] = useState("")
+
     return(
         <Layout data={layoutInfo} > 
             <div className='flex flex-row w-screen items-center h-screen space-x-20 ml-5'>
@@ -63,15 +65,20 @@ export default function StoryMode({userInfo}){
                     <h1 className='commonTitle'>Crear Partida</h1>
                     <div className='taleCrate'>
                         <h1 className='taleTitle'>Partida Pública: </h1>
+                        {visibility=='public'?(
+                            <button type='button' onClick={(e) => setVisibility('private')} className='bg-green-700 text-white w-full rounded-3xl'>Sí</button>
+                        ):(
+                            <button type='button' onClick={(e) => setVisibility('public')} className='bg-red-700 text-white w-full rounded-3xl'>No</button>
+                        )}
                         
                     </div>
                     <div className='taleCrate'>
                         <h1 className='taleTitle'>Turnos: </h1>
-                        <input></input>
+                        <input type='number' min='0' className='text-center w-full rounded-lg'></input>
                     </div>
                     <div className='taleCrate'>
                         <h1 className='taleTitle'>Número Caracteres: </h1>
-                        <input></input>
+                        <input type='number' min='0' className='text-center w-full rounded-lg'></input>
                     </div>
                     <button type='submit' className='bg-red-200'>
                         Crear Partida
@@ -81,6 +88,10 @@ export default function StoryMode({userInfo}){
             </div>            
         </Layout>
     )
+}
+
+function changeVisibility(){
+
 }
 
 export async function getStaticProps () {
@@ -98,4 +109,4 @@ export async function getStaticProps () {
     return {
       props: { userInfo }
     }
-  }
+}

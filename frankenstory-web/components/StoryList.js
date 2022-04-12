@@ -4,7 +4,7 @@ import Image from 'next/image'
 export default function StoryList({stories}){
     if(stories.length > 0){
         return(
-            <div className='flex flex-col space-y-2 w-[100]'>
+            <div className='flex flex-col space-y-2'>
                 {stories.map( (story) => { return <Story key={story.toString()} story={story} />} )}
             </div>
         ) 

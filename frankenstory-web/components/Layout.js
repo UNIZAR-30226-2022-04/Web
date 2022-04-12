@@ -15,7 +15,6 @@ export default function Layout({children, data, inSettingsScreen}) {
 
 function Crates({person, changeSettings}){
     const imageRoute = '/profPic/icon' + person.image_ID + '.png'
-    console.log(imageRoute)
     return(
         <div className='crateGroupHead absolute'>            
             <Crate image='/icons/star.png' text={person.stars}/>
@@ -42,7 +41,7 @@ function Crates({person, changeSettings}){
 function Crate({image, text}){
     return(
         <div className='crateHead'>
-            <Image className='crateHeadPicture' src={image} width="30" height="30"/>
+            <Image src={image} width="30" height="30"/>
             <p className='crateHeadText clickableItem'>{text}</p>
         </div>
     )

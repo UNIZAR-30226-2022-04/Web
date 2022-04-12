@@ -64,7 +64,6 @@
             shadow-lg
             items-center
             p-3
-            pr-1
   }
 
   .crateGroupHead{
@@ -75,10 +74,6 @@
             pl-5
             space-x-3
             w-full
-  }
-
-  .crateHeadPicture{
-    @apply  absolute 
   }
 
   .crateHeadText{
@@ -205,14 +200,13 @@
     @apply  flex
             flex-row
             items-center
-            justify-center
-            space-x-56
+            space-x-56 
   }
 
   .settingsColLayout{
     @apply  flex
             flex-col
-            space-y-2
+            space-y-2 
   }
 
   .buttonStyle{
@@ -222,7 +216,19 @@
             font-bold 
             py-2 
             px-4 
-            rounded
+            rounded-xl
+  }
+
+  .profilePictureGroup{
+    @apply flex flex-row space-x-3
+  }
+
+  .profilePictureSelection{
+    @apply  hover:ring
+          hover:ring-violet-300
+            rounded-full
+            h-12
+            w-12
   }
 
   /* Tale Mode */
