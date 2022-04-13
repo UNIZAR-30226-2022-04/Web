@@ -1,5 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { useLogin } from "contexts/LoginContext"
+import Router from 'next/router'
+import { useEffect } from 'react'
 
 export default function Layout({children, data, inSettingsScreen}) {
     return(
@@ -14,6 +17,8 @@ export default function Layout({children, data, inSettingsScreen}) {
 }
 
 function Crates({person, changeSettings}){
+    const {setctxLogged} = useLogin();
+
     const imageRoute = '/profPic/icon' + person.image_ID + '.png'
     return(
         <div className='absolute flex flex-row justify-end pr-5 pl-5 space-x-3 w-full'>            
@@ -32,7 +37,7 @@ function Crates({person, changeSettings}){
             )}
 
             <Link href='/login'>
-                <a> <Image className='clickableItem' src='/icons/sign-out.png' width="38" height="38"/> </a>
+                <a> <Image className='clickableItem' src='/icons/sign-out.png' width="38" height="38" onClick={() => {setctxLogged(false); Router.push("/login")}}/> </a>
             </Link>
         </div>
     )
