@@ -2,87 +2,70 @@ import Layout from 'components/Layout'
 import FriendStats from 'components/Statistics'
 import Rulette from 'components/Rulette'
 import { useLogin } from "contexts/LoginContext"
-import useSwr from 'swr'
-import { useRouter } from "next/router"
-import Router from 'next/router'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
-// const user = {"username": "MrNOPatineto", "password": "12345"}
-const fetcher = (url, options) => fetch(url, options).then((res) => res.json())
-
-export default function Stats({userInfo}) { 
-  const {ctxUsername, ctxPassword, ctxLogged, setctxLogged} = useLogin()
+export default function Stats() { 
+  const {ctxUsername, ctxPassword, ctxLogged} = useLogin()
   const router = useRouter()
-
-  console.log("Username: ", ctxUsername)
-  console.log("Pass: ",ctxPassword)
-  console.log("Logged: ",ctxLogged)
-
-  if(!ctxLogged){
-    useEffect(() => {
-      Router.push("http://localhost:3000/login")
-    });
-  }  
+  const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
 
   const user = {username: ctxUsername, password: ctxPassword}
 
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user) 
-  }   
+  // Hace fetch de la api
+  useEffect(() => {
+    // Función que llama a la api
+    const getData = async () => {
+      // Opciones para llamar a la api
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user) 
+      }
+    
+      // Llamada a la api
+      const res = await fetch('http://localhost:3000/api/home', options)
+      const data = await res.json()
 
-  const { data, error } = useSwr(['http://localhost:3000/api/home', options], fetcher)
-  
-  if(error){
-    console.log(error)
-    return  <div>FRACASO ABSOLUTO</div>
-  }
+      // Si no ha ido bien o no estoy logeado volvemos a /
+      if(data.result === "error" || !ctxLogged){
+        router.push("/")
+        return
+      }
 
-  if(!data){
+      // Llama al hook que almacena la información del usuario
+      setMyuser(data)
+    }
+    getData()
+  }, [])  // Llama al useState solo una vez usando []
+
+  // Solo la primera vez que se renderiza:  useState(() => {}, []) 
+  // Cada vez que se renderiza              useState(() => {}) 
+  // Cada vez que cambia la variable foo:   useState(() => {}, [foo]) 
+
+  // Si tadavía no hoy usuario, esperamos a que lo haya
+  if(!myuser){
     return <div>loading...</div> 
   }
-
-  console.log(data)
   
+  // Renderizamos la página
   const layoutInfo = {
     username: ctxUsername,
-    stars:    data.stars,
-    coins:    data.coins,
-    image_ID: data.picture
+    stars:    myuser.stars,
+    coins:    myuser.coins,
+    image_ID: myuser.picture
   } 
 
   return (
     <>
         <Layout data={layoutInfo}>
           <div className='flex flex-row w-screen items-center h-screen space-x-20 ml-5'>
-            <FriendStats data={data.bestFour} />            
+            <FriendStats data={myuser.bestFour} />            
             <Rulette /> 
           </div>                        
         </Layout> 
     </>
   )
 }
-
-/*
-  
-
-export async function getStaticProps () {
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(ctxUser) 
-  }
-  
-  const friendStats = await fetch('http://localhost:3000/api/home', options)
-  const userInfo = await friendStats.json()
-
-  return {
-    props: { userInfo }
-  }
-}
-*/

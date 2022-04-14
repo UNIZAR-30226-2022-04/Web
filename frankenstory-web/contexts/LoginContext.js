@@ -1,28 +1,47 @@
 import React, { useContext, useState } from 'react'
 
-export const LoginContext = React.createContext({
-    ctxUsername:"", 
-    ctxPassword:"",
-    ctxTimeLimit:"",
-    ctxLogged: false,
-    setctxUsername: async (ctxUsername) => null,
-    setctxPassword: async (ctxPassword) => null,
-    setctxTime: async (ctxTimeLimit) => null,
-    setctxLogged: async (ctxLogged) => null
-});
+const LoginContext = React.createContext();
+const LoginContextUpdate = React.createContext();
 
-export const useLogin = () => useContext(LoginContext)
+// Hook que devuelve el contexto de almacenaje de usuarios 
+export function useLogin (){ return useContext(LoginContext) }
 
+// Hook que devuelve el contexto de modificación de usuarios 
+export function useLoginUpdate (){ return useContext(LoginContextUpdate) }
+
+// Wrapper que permite a todas lás páginas acceder a esta información y modificarla
 export const LoginProvider = ({ children }) => 
 {
+    // Hooks que permiten guardar información de los usuarios
     const [ctxUsername, setctxUsername] = useState("")
     const [ctxPassword, setctxPassword] = useState("")
-    const [ctxTimeLimit, setctxTime] = useState("")
     const [ctxLogged, setctxLogged] = useState(false)
+    const [ctxFriends, setCtxFriends] = useState([])
 
+
+    //Funciones que modifican los valores de los useState Hooks
+    function logInUser(user, pass){
+        setctxUsername(user)
+        setctxPassword(pass)
+        setctxLogged(true)
+    }
+
+    function addFriends(friends){
+        setCtxFriends(friends)
+    }
+
+    function logOutUser(){
+        setctxLogged(false)
+    }
+
+    // Wrapper
+    // LoginContext.Provider            -> value: varibles (en un futuro puede que sean funciones) que dan información sobre el usuario
+    //   LoginContextUpdate.Provider    -> value: funciones que permiten modificar la información de los usuarios 
     return (
-        <LoginContext.Provider value={{ctxUsername, ctxPassword, ctxTimeLimit, ctxLogged, setctxUsername, setctxPassword, setctxTime, setctxLogged}} >
-            {children}
+        <LoginContext.Provider value={{ctxUsername, ctxPassword, ctxLogged, ctxFriends}} >
+            <LoginContextUpdate.Provider value={{logInUser, logOutUser, addFriends}}>
+                {children}
+            </LoginContextUpdate.Provider>            
         </LoginContext.Provider>
     )    
 }

@@ -1,7 +1,8 @@
 import { useState } from "react"
 import Link from "next/link"
-import { useLogin } from "contexts/LoginContext"
-import Router from 'next/router'
+import {useRouter} from 'next/router'
+import { useLogin, useLoginUpdate } from "contexts/LoginContext"
+import { useEffect } from 'react'
 
 const tryLogin = async (user,pass) => {
 
@@ -23,15 +24,20 @@ const tryLogin = async (user,pass) => {
 }
 
 const Login = () => {
-
-  const {ctxLogged, setctxUsername, setctxPassword, setctxTime, setctxLogged} = useLogin();
-
-  if (ctxLogged){
-    Router.push("http://localhost:3000/profile/stats")
-  }
-
+  const router = useRouter()
+  const { ctxLogged } = useLogin();  // permite saber si el usuario esta logeado
+  const { logInUser } = useLoginUpdate(); // permite logear a un usuario
+  
   const [name, setName] = useState("")
   const [password, setPassword] = useState("")
+
+  // NOT WORKING
+  // Si estás logeado no tienes por que volver a iniciar sesión
+  useEffect(() => {
+    if(ctxLogged){
+      router.push("http://localhost:3000/profile/stats")
+    }
+  })  
 
   const onSubmit = (e) => {
     
@@ -43,9 +49,9 @@ const Login = () => {
     }else{
       tryLogin(name, password).then((res) =>{
         if(res.result == "success"){
-          setctxUsername(name)
-          setctxPassword(password)
-          setctxLogged(true)          
+          logInUser(name, password)
+          router.push("http://localhost:3000/profile/stats")
+          return
         }else{
           if(res.reason == "user_not_found"){
             alert("Usuario desconocido")
@@ -60,7 +66,6 @@ const Login = () => {
     setName("")
     setPassword("")
   }
-
   
   return (
       <form className ="m-auto justify-center p-6 bg-white align-middle" onSubmit={onSubmit}>

@@ -5,7 +5,6 @@ const login = () => {
     <div className="background p-6 h-screen w-screen flex items-center">
       <Login/>
     </div>
-
   )
 }
 
