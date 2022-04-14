@@ -1,10 +1,10 @@
-import Request from "./FriendRequest"
+import FriendRequest from "./FriendRequest"
 
-export default function RequestList({data}) {
+export default function FriendList({notifications, user}) {
     return(
         <>
-            {data.map((request) => 
-            (<Request name={request.username}/>)
+            {notifications.map((request) => 
+            (<FriendRequest name={request.username} user={user}/>)
             )}
         </>
     )

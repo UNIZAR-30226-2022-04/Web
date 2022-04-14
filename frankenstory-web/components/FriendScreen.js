@@ -1,33 +1,28 @@
+import FriendSearch from "./FriendSearch"
 import FriendList from "./FriendList"
 import RequestList from "./RequestList"
-import Friend from "./Friend"
 
-export default function FriendScreen({info}) {
+export default function FriendScreen({friendInfo, user}) {
     return (
     <>
         <div className="friendsBox">
-            <div className="friendsTitle">
-                <div className="franken2">Buscar amigos</div>
-            </div>
-            <input className="friendsSearch" type="text" placeholder="Introduce nombre"/>
-            <Friend isFriend={false}/>
+            <FriendSearch user={user}/>
             <div className="friendsTitle">
                 <div className="franken2">Tus amigos</div>
             </div>
             <div className="scrollBox">
-                <FriendList data={info}/>
+                <FriendList friends={friendInfo.friends} user={user}/>
             </div>
             <div className="friendsTitle">
                 <div className="franken2">Peticiones</div>
             </div>
-
-            
+            <div className="scrollBox h-auto">
+                <RequestList notifications={friendInfo.notifications} user={user}/>
+            </div>
         </div>
     </>
   )
 }
 
-/*            <div className="scrollBox h-auto">
-                <RequestList data={info}/>
-            </div>
-*/
+
+
