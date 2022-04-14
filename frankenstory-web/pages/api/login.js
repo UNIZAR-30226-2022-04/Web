@@ -3,7 +3,7 @@ import { selectPlayerDB } from "../../prisma/queries/SELECT/player";
 // Al ir a http://localhost:3000/api/login te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
-	
+	console.log("API-LOGIN:",message)
 	const user = await selectPlayerDB(message.username);
 
 	if (message.username.length==0||message.password.length==0){

@@ -5,7 +5,7 @@ import {bestN} from "../../lib/Friendships";
 // Al ir a http://localhost:3000/api/home te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
-
+	console.log("API-HOME:",message)
 	const user = await selectPlayerDB(message.username);
 
 	// checks the autenticity
