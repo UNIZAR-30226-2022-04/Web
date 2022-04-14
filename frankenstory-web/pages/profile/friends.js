@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import Layout from '../../components/Layout'
 import FriendScreen from '../../components/FriendScreen'
 import Rulette from '../../components/Rulette'
@@ -8,7 +7,7 @@ const user = {
   "password":"Jaime1234"
 }
 
-export default function friends({userInfo}) {
+export default function Friends({userInfo, friendInfo}) {
 
   const layoutInfo = {
     username: user.username,
@@ -19,7 +18,7 @@ export default function friends({userInfo}) {
 
     return(
         <Layout data={layoutInfo}>
-            <FriendScreen data={user}/>
+            <FriendScreen friendInfo={friendInfo} user={user}/>
             <Rulette />
         </Layout>
     )
@@ -37,8 +36,9 @@ export default function friends({userInfo}) {
     
     const friendStats = await fetch('http://localhost:3000/api/home', options)
     const userInfo = await friendStats.json()
-  
+    const friendList = await fetch('http://localhost:3000/api/friends', options)
+    const friendInfo = await friendList.json()
     return {
-      props: { userInfo }
+      props: { userInfo, friendInfo }
     }
   }
