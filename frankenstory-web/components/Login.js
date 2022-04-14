@@ -1,5 +1,7 @@
 import { useState } from "react"
 import Link from "next/link"
+import { useLogin } from "contexts/LoginContext"
+import Router from 'next/router'
 
 const tryLogin = async (user,pass) => {
 
@@ -22,6 +24,15 @@ const tryLogin = async (user,pass) => {
 
 const Login = () => {
 
+  const {ctxLogged, setctxUsername, setctxPassword, setctxTime, setctxLogged} = useLogin();
+
+  if (ctxLogged){
+    Router.push("http://localhost:3000/profile/stats")
+  }
+
+  const [name, setName] = useState("")
+  const [password, setPassword] = useState("")
+
   const onSubmit = (e) => {
     
     e.preventDefault()
@@ -30,9 +41,11 @@ const Login = () => {
     }else if(password == ""){
       alert("Introduce una contraseña")
     }else{
-      tryLogin(name,password).then((res) =>{
+      tryLogin(name, password).then((res) =>{
         if(res.result == "success"){
-          window.location = `http://localhost:3000/profile/stats`
+          setctxUsername(name)
+          setctxPassword(password)
+          setctxLogged(true)          
         }else{
           if(res.reason == "user_not_found"){
             alert("Usuario desconocido")
@@ -48,9 +61,7 @@ const Login = () => {
     setPassword("")
   }
 
-  const [name, setName] = useState("")
-  const [password, setPassword] = useState("")
-
+  
   return (
       <form className ="m-auto justify-center p-6 bg-white align-middle" onSubmit={onSubmit}>
           <h1 className="pb-3 pt-6 px-10 text-4xl text-blue-800 font-bold">Iniciar sesión</h1>
