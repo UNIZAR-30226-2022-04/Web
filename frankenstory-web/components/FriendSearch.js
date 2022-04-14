@@ -1,22 +1,6 @@
 import { useState } from "react"
 import Friend from "./Friend"
 
-/*{
-  "username":"nombre del usuario",
-  "password":"contraseña",
-  "searchedName":"nombre del usuario buscado"
-}
-
-
-FORMATO DE RESPUESTA
-{
-  "result":("success","error"),
-  "isFound": (boolean) (false,true),
-  "picture": (int) ID de la foto de perfil del usuario buscado,
-  "isFriend": (boolean) (false,true),
-}
-
- */
 const user = {
     username:"Jaime",
     password:"Jaime1234"
@@ -46,7 +30,6 @@ export default function FriendSearch({user}){
         e.preventDefault()
         setSearchedName(name)
         trySearch().then((res) =>{
-            console.log(res)
             if(res.result == "success"){
                 if(res.isFound){
                     setFound(true)
