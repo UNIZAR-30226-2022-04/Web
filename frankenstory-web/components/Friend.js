@@ -1,18 +1,25 @@
 import { useState } from "react"
+import { useFriends, useFriendsUpdate } from "../contexts/FriendsContext"
+import { useLogin } from "../contexts/LoginContext"
 
-export default function Friend({name,isFriend,user}){
+export default function Friend({name,isFriend,type}){
+
+    const { ctxUsername, ctxPassword } = useLogin()
+    const { ctxFriends, ctxNotifications } = useFriends()
+    const [friendState, setFriendState] = useState(isFriend)
+
+    const { changeFriends, changeNotifications } = useFriendsUpdate()
 
     const url = "http://localhost:3000/api/manage_friendship"
     
     var data = {
-        username:user.username,
-        password:user.password,
+        username:ctxUsername,
+        password:ctxPassword,
         targetUser: name,
         type: "add"
     }
 
     const manageFriend = async () => {
-        console.log(data)
         var options = {
             method: 'POST',
             headers: {
@@ -21,43 +28,50 @@ export default function Friend({name,isFriend,user}){
             },
             body: JSON.stringify(data)
           }
-          console.log(options)
           var res = await fetch(url,options)
           return res.json()
     }
 
     const onClick = () => {
-        if (addFriend){
+        if (!friendState){
             data.type = "add"
-            console.log(data)
             manageFriend().then((res) =>{
                 if(res.result == "success"){
-                    setAdd(false)
+                    var petition = (ctxNotifications.filter((friend) => friend.username == data.targetUser))
+                    if((petition.length) != 0 ){
+                        changeFriends([...ctxFriends, data.targetUser])
+                        var updatedNotifications = (ctxNotifications.filter((friend) => friend.username !== data.targetUser))
+                        changeNotifications(updatedNotifications)
+                    }
+                    if(type == "Search"){
+                        setFriendState(!friendState)
+                    }
                 }else{
                     alert("Error enviando petición")
                 }
             })
         }else{
             data.type = "delete"
-            console.log(data)
             manageFriend().then((res) =>{
-                console.log(res)
                 if(res.result == "success"){
-                    setAdd(true)
+                    var updatedFriends = (ctxFriends.filter((friend) => friend !== data.targetUser))
+                    changeFriends(updatedFriends)
+                    if(type == "Search"){
+                        setFriendState(!friendState)
+                    }
                 }else{
                     alert("Error enviando petición")
                 }
             })
-
         }
     }
 
-    const [addFriend, setAdd] = useState(!isFriend)
+
 
     return(
         <div className="friend">
             <div>{name}</div>
-            <button className="float-right" onClick={onClick}> {addFriend ? "+" : "-" } </button>
+            <button className="float-right" onClick={onClick}> {friendState ? "-" : "+" } </button>
         </div>
     )
 }

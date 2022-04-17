@@ -1,11 +1,14 @@
 import FriendRequest from "./FriendRequest"
+import { useFriends } from "../contexts/FriendsContext"
 
-export default function FriendList({notifications, user}) {
+export default function RequestList() {
+
+    const { ctxNotifications } = useFriends()
     return(
-        <>
-            {notifications.map((request) => 
-            (<FriendRequest name={request.username} user={user}/>)
+        <ul>
+            {ctxNotifications.map((request) => 
+            (<FriendRequest name={request.username} />)
             )}
-        </>
+        </ul>
     )
 }

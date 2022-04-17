@@ -16,18 +16,12 @@ export const LoginProvider = ({ children }) =>
     const [ctxUsername, setctxUsername] = useState("")
     const [ctxPassword, setctxPassword] = useState("")
     const [ctxLogged, setctxLogged] = useState(false)
-    const [ctxFriends, setCtxFriends] = useState([])
-
 
     //Funciones que modifican los valores de los useState Hooks
     function logInUser(user, pass){
         setctxUsername(user)
         setctxPassword(pass)
         setctxLogged(true)
-    }
-
-    function addFriends(friends){
-        setCtxFriends(friends)
     }
 
     function logOutUser(){
@@ -38,8 +32,8 @@ export const LoginProvider = ({ children }) =>
     // LoginContext.Provider            -> value: varibles (en un futuro puede que sean funciones) que dan información sobre el usuario
     //   LoginContextUpdate.Provider    -> value: funciones que permiten modificar la información de los usuarios 
     return (
-        <LoginContext.Provider value={{ctxUsername, ctxPassword, ctxLogged, ctxFriends}} >
-            <LoginContextUpdate.Provider value={{logInUser, logOutUser, addFriends}}>
+        <LoginContext.Provider value={{ctxUsername, ctxPassword, ctxLogged}} >
+            <LoginContextUpdate.Provider value={{logInUser, logOutUser}}>
                 {children}
             </LoginContextUpdate.Provider>            
         </LoginContext.Provider>

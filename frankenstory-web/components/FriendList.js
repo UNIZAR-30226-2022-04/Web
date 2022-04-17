@@ -1,11 +1,14 @@
 import Friend from "./Friend"
+import { useFriends } from "../contexts/FriendsContext"
 
-export default function FriendList({friends,user}) {
+export default function FriendList() {
 
+    const{ ctxFriends } = useFriends()
+    const hasFriends = ((ctxFriends.lenght) != 0)
     return(
         <ul>
-            {friends.map((friend) => 
-            <Friend key={friend} name={friend} isFriend={true} user={user}/>
+            {ctxFriends.map((friend) => 
+            <Friend name={friend} isFriend={true} type={"List"}/>
             )}
         </ul>
     )

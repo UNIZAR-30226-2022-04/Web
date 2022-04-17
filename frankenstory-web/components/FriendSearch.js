@@ -1,13 +1,12 @@
 import { useState } from "react"
 import Friend from "./Friend"
+import { useLogin } from "../contexts/LoginContext"
 
-const user = {
-    username:"Jaime",
-    password:"Jaime1234"
-}
+export default function FriendSearch(){
 
-export default function FriendSearch({user}){
+    const { ctxUsername, ctxPassword } = useLogin()
     const url = "http://localhost:3000/api/search_friends"
+    const user = {username: ctxUsername, password: ctxPassword}
     const trySearch = async () => {
         const data = {
             username:user.username,
@@ -28,12 +27,14 @@ export default function FriendSearch({user}){
 
     const onSubmit = (e) => {
         e.preventDefault()
+        setFound(false)
         setSearchedName(name)
         trySearch().then((res) =>{
+            console.log(res)
             if(res.result == "success"){
                 if(res.isFound){
-                    setFound(true)
                     setFriend(res.isFriend)
+                    setFound(true)
                 }else{
                     setFound(false)
                 }
@@ -56,7 +57,7 @@ export default function FriendSearch({user}){
             <form onSubmit={onSubmit}>
                 <input className="friendsSearch" value={name} type="text" placeholder="Introduce nombre" onChange={(e) => setName(e.target.value)}/>
             </form>
-            {found ? <Friend name={searchedName} isFriend={isFriend} user={user}/> : "" }
+            {found ? <Friend name={searchedName} isFriend={isFriend} user={user} type={"Search"}/> : "" }
             
         </>
     )
