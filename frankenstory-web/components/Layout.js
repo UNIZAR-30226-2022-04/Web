@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { useLoginUpdate } from "contexts/LoginContext"
 import Router from 'next/router'
 import { useEffect } from 'react'
 
@@ -17,8 +16,6 @@ export default function Layout({children, data, inSettingsScreen}) {
 }
 
 function Crates({person, changeSettings}){
-    const {logOutUser} = useLoginUpdate();
-
     const imageRoute = '/profPic/icon' + person.image_ID + '.png'
     return(
         <div className='absolute flex flex-row justify-end pr-5 pl-5 space-x-3 w-full'>            
@@ -37,7 +34,7 @@ function Crates({person, changeSettings}){
             )}
 
             <Link href='/login'>
-                <a> <Image className='clickableItem' src='/icons/sign-out.png' width="38" height="38" onClick={() => {logOutUser(); Router.push("/login")}}/> </a>
+                <a> <Image className='clickableItem' src='/icons/sign-out.png' width="38" height="38" onClick={() => {localStorage.setItem("logged","No"); Router.push("/login")}}/> </a>
             </Link>
         </div>
     )
