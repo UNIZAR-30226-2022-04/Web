@@ -1,6 +1,7 @@
 import Layout from 'components/Layout'
 import FriendStats from 'components/Statistics'
 import Rulette from 'components/Rulette'
+
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
@@ -21,9 +22,7 @@ export default function Stats() {
       router.push("/")
     }
   }, [])
-  
-  console.log("paso a hacer fetch con:")
-  console.log(windowUser)    
+     
   // Hace fetch de la api
   useEffect(() => {
     // Función que llama a la api
@@ -58,15 +57,11 @@ export default function Stats() {
       setMyuser(data)
     }
     getData()
-  }, [windowUser])  // Llama al useState solo una vez usando []
-
-  // Solo la primera vez que se renderiza:  useState(() => {}, []) 
-  // Cada vez que se renderiza              useState(() => {}) 
-  // Cada vez que cambia la variable foo:   useState(() => {}, [foo]) 
+  }, [windowUser])
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!myuser){
-    return <div>loading...</div> 
+    return <div className='background'>loading...</div> 
   }
   
   // Renderizamos la página
@@ -78,13 +73,11 @@ export default function Stats() {
   } 
 
   return (
-    <>
-        <Layout data={layoutInfo}>
-          <div className='flex flex-row w-screen items-center h-screen space-x-20 ml-5'>
-            <FriendStats data={myuser.bestFour} />            
-            <Rulette /> 
-          </div>                        
-        </Layout> 
-    </>
+    <Layout data={layoutInfo}>
+      <div className='flex flex-row w-screen items-center h-screen space-x-20 ml-5'>
+        <FriendStats data={myuser.bestFour} />            
+        <Rulette /> 
+      </div>                        
+    </Layout> 
   )
 }

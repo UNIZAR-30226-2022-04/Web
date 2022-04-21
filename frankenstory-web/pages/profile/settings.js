@@ -1,22 +1,81 @@
 import Layout from 'components/Layout'
-import { useState } from 'react'
 import Image from 'next/image'
 
-const user = {username: "MrNOPatineto", password: "12345"}
-const testDelete = {username: "dabumm", password: "adios"}
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
 
-export default function Settings({userInfo}) {
-  const layoutInfo = {
-    username: user.username,
-    stars:    userInfo.stars,
-    coins:    userInfo.coins,
-    image_ID: userInfo.picture
-  }
-
+export default function Settings() {
   const [passwd, setPass] = useState("")
   const [passwdRep, setPassRep] = useState("")
   const [icon, setIcon] = useState("")
   const [deleteCheck, setDeleteCheck] = useState("")
+
+  const router = useRouter()
+  const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
+
+  const [windowUser, setWindowUser] = useState({}) 
+
+  useEffect(()=>{
+    if(localStorage.getItem("logged") == "si"){
+      const username = localStorage.getItem("username")
+      const password = localStorage.getItem("password")
+      setWindowUser({username: username, password: password})
+      console.log("SACO DATOS")
+    }else{
+      console.log("VOY A LOGIN")
+      router.push("/")
+    }
+  }, [])
+     
+  // Hace fetch de la api
+  useEffect(() => {
+    console.log("Extraigo DAtos")
+    
+    // Función que llama a la api
+    if(windowUser.username == undefined){
+      console.log("no permito sacar datos")
+      return
+    }
+    
+    const getData = async () => {
+      // Opciones para llamar a la api
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(windowUser) 
+      }
+    
+      // Llamada a la api
+      const res = await fetch('http://localhost:3000/api/home', options)
+      const data = await res.json()
+
+      console.log(data)
+
+      // Si no ha ido bien o no estoy logeado volvemos a /
+      if(data.result === "error"){
+        router.push("/")
+        return
+      }
+
+      // Llama al hook que almacena la información del usuario
+      setMyuser(data)
+    }
+    getData()
+  }, [windowUser])
+
+  // Si tadavía no hoy usuario, esperamos a que lo haya
+  if(!myuser){
+    return <div className='background'>loading...</div> 
+  }
+
+  const layoutInfo = {
+    username: windowUser.username,
+    stars:    myuser.stars,
+    coins:    myuser.coins,
+    image_ID: myuser.picture
+  }  
 
   return(
     <Layout data={layoutInfo} inSettingsScreen='true'>  
@@ -34,7 +93,7 @@ export default function Settings({userInfo}) {
               <input type="password" value={passwd} placeholder="**********" onChange={(e) => setPass(e.target.value)}/>
               <div className='commonTitle' >Repita la Conteseña</div>
               <input type="password" value={passwdRep} placeholder="**********" onChange={(e) => setPassRep(e.target.value)}/>
-              <button className='buttonStyle bg-green-800 hover:bg-green-400' type="button" onClick={() => changePassword(passwd, passwdRep)}>Cambiar Contraseña</button>
+              <button className='buttonStyle bg-green-800 hover:bg-green-400' type="button" onClick={() => changePassword(user, passwd, passwdRep)}>Cambiar Contraseña</button>
           </form>
 
           <div className='flex flex-col space-y-2 '>
@@ -59,11 +118,11 @@ export default function Settings({userInfo}) {
                   <ProfilePic iconId='9' path='/profPic/icon9.png' selectedIcon={icon} setIcon={setIcon}/>
                 </div>
             </div>  
-            <button className='buttonStyle bg-blue-800 hover:bg-blue-400' type="button" onClick={() => changeIcon(icon)}>Cambiar Icono</button>
+            <button className='buttonStyle bg-blue-800 hover:bg-blue-400' type="button" onClick={() => changeIcon(windowUser, icon)}>Cambiar Icono</button>
             {deleteCheck == ''?(
-              <button className='buttonStyle bg-red-800 hover:bg-red-400 ' type="button" onClick={() => deleteUser(deleteCheck, setDeleteCheck)}>Eliminar Cuenta</button>
+              <button className='buttonStyle bg-red-800 hover:bg-red-400 ' type="button" onClick={() => deleteUser(windowUser, deleteCheck, setDeleteCheck)}>Eliminar Cuenta</button>
             ):(
-              <button className='buttonStyle bg-red-800 hover:bg-red-400 ' type="button" onClick={() => deleteUser(deleteCheck, setDeleteCheck)}>Estoy seguro</button>
+              <button className='buttonStyle bg-red-800 hover:bg-red-400 ' type="button" onClick={() => deleteUser(windowUser, deleteCheck, setDeleteCheck)}>Estoy seguro</button>
             )}
             
           </div>
@@ -92,7 +151,7 @@ function ProfilePic({iconId, path, selectedIcon, setIcon}){
   
 }
 
-async function changeIcon(icon){
+async function changeIcon(user, icon){
   if(icon != ''){
     const info = {
       "username": user.username,
@@ -119,7 +178,7 @@ async function changeIcon(icon){
 }
 
 // cambiar alerts por algo mejor
-async function changePassword(passwd, passwdRep){
+async function changePassword(user, passwd, passwdRep){
   if(passwd == ''){
     alert("Las contraseñas no puede estar vacía")
   }else if(passwd != passwdRep){
@@ -151,7 +210,7 @@ async function changePassword(passwd, passwdRep){
   }
 }
 
-async function deleteUser(deleteCheck, setDeleteCheck){
+async function deleteUser(user, deleteCheck, setDeleteCheck){
   if(deleteCheck == ''){
     alert("Seguro que quieres borrar la cuenta, esta acción no se puede deshacer")
     setDeleteCheck("estoy seguro")
@@ -159,8 +218,8 @@ async function deleteUser(deleteCheck, setDeleteCheck){
     setDeleteCheck('')
     
     const info = {
-      "username": testDelete.username,
-      "password": testDelete.password
+      "username": user.username,
+      "password": user.password
     }
 
     const options = {
@@ -178,22 +237,5 @@ async function deleteUser(deleteCheck, setDeleteCheck){
     }else{
       alert("Cuenta no borrada")
     }
-  }
-}
-
-export async function getStaticProps () {
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(user) 
-  }
-  
-  const friendStats = await fetch('http://localhost:3000/api/home', options)
-  const userInfo = await friendStats.json()
-
-  return {
-    props: { userInfo }
   }
 }
