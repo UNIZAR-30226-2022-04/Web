@@ -142,7 +142,36 @@
             flex
             min-w-full
   }
+
+  /* STORIES */
+
+  .storyBox{
+    @apply  absolute
+            flex
+            justify-center
+            w-screen
+            mt-10
+            row-start-auto
+            grid
+            grid-cols-1
+  }
+  .titleWrite{
+    @apply  relative
+            block
+            h-auto
+            bg-transparent
+  }
+  .storyWrite{
+    @apply  relative
+            block
+            w-11/12
+            border-blue-400
+            border-2
+  }
 }
+
+
+
 
 .txtShadw {
   text-shadow: 5px 4px green

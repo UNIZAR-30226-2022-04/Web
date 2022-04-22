@@ -67,11 +67,11 @@ const Register = () => {
           <div>Nombre de usuario</div>
           <input className="p-2 w-full bg-blue-100 text-blue-400" type="text" value={name} placeholder="Nombre de usuario" onChange={(e) => setName(e.target.value)}/>
           <div>Email</div>
-          <input className="p-2 w-full bg-blue-100 text-blue-400" type="text" value={mail} placeholder="Email" onChange={(e) => setMail(e.target.value)}/>
+          <input className="p-2 w-full bg-blue-100 text-blue-400" type="email" value={mail} placeholder="Email" onChange={(e) => setMail(e.target.value)}/>
           <div>Contraseña</div>
-          <input className="p-2 w-full bg-blue-100 text-blue-400" type="text" value={password} placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)}/>
+          <input className="p-2 w-full bg-blue-100 text-blue-400" type="password" value={password} placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)}/>
           <div>Repita la contraseña</div>
-          <input className="p-2 w-full bg-blue-100 text-blue-400" type="text" value={passwordR} placeholder="Repita la contraseña" onChange={(e) => setPasswordR(e.target.value)}/>
+          <input className="p-2 w-full bg-blue-100 text-blue-400" type="password" value={passwordR} placeholder="Repita la contraseña" onChange={(e) => setPasswordR(e.target.value)}/>
           <div className="py-2 font-bold text-blue-800"><Link  href="/login">Iniciar sesión</Link></div>
           <button className="ml-20 bg-center text-white justify-self-center bg-blue-900 rounded-md px-4 py-2" type="submit">Crear cuenta</button>
       </form>

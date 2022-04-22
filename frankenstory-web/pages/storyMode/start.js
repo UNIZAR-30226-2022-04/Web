@@ -1,13 +1,10 @@
-import Layout from '../../components/Layout'
-import FriendScreen from '../../components/FriendScreen'
-import Rulette from '../../components/Rulette'
-import { useEffect, useState } from 'react'
+import Layout from 'components/Layout'
+import WriteStory from 'components/WriteStory'
+import { useLogin } from "contexts/LoginContext"
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useLogin } from '../../contexts/LoginContext'
-import { FriendsProvider } from "../../contexts/FriendsContext"
 
-export default function Friends() {
-
+export default function Stats() { 
   const {ctxUsername, ctxPassword, ctxLogged} = useLogin()
   const router = useRouter()
   const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
@@ -43,10 +40,16 @@ export default function Friends() {
     getData()
   }, [])  // Llama al useState solo una vez usando []
 
-  if(!myuser){
-    return <div>loading...</div>
-  }
+  // Solo la primera vez que se renderiza:  useState(() => {}, []) 
+  // Cada vez que se renderiza              useState(() => {}) 
+  // Cada vez que cambia la variable foo:   useState(() => {}, [foo]) 
 
+  // Si tadavía no hoy usuario, esperamos a que lo haya
+  if(!myuser){
+    return <div>loading...</div> 
+  }
+  
+  // Renderizamos la página
   const layoutInfo = {
     username: ctxUsername,
     stars:    myuser.stars,
@@ -54,12 +57,11 @@ export default function Friends() {
     image_ID: myuser.picture
   } 
 
-    return(
-      <FriendsProvider>
-          <Layout data={layoutInfo}>
-            <FriendScreen/>
-            <Rulette page="friends" />
-          </Layout>
-      </FriendsProvider>
-    )
+  return (
+    <>
+        <Layout data={layoutInfo}>
+                    <WriteStory user={user} first={true}/>
+        </Layout> 
+    </>
+  )
 }

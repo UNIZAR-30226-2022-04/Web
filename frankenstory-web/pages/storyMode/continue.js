@@ -2,7 +2,6 @@ import Layout from 'components/Layout'
 import Rulette from 'components/Rulette'
 import StoryList from 'components/StoryList'
 import { useState } from 'react'
-import { useRouter } from 'next/router'
 
 const user = {"username": "MrNOPatineto", "password": "12345"}
 
@@ -42,21 +41,6 @@ const relatosDebug = {
 }
 
 export default function StoryMode({userInfo}){
-
-
-    /*M O D I F I C A C I Ó N    H E C H A    P A R A    P R U E B A S
-    *
-    *
-    */
-    const router = useRouter()
-    const onSubmit = (e) =>{
-        e.preventDefault()
-        router.push("/storyMode/start")
-    }
-    /*
-    *
-    *
-    */
     const layoutInfo = {
         username: user.username,
         stars:    userInfo.stars,
@@ -76,11 +60,6 @@ export default function StoryMode({userInfo}){
                     <StoryList stories={relatosDebug.friendTales} />
                     <h1 className='commonTitle'>Relatos Públicos</h1>
                     <StoryList stories={relatosDebug.publicTales} />
-
-
-                    <button type="button" onClick={onSubmit} className='buttonStyle bg-red-300'>BOTON AÑADIDO POR JESÚS PARA PRUEBAS</button>
-
-
                 </div>
                 <form className='flex flex-col space-y-3'>
                     <h1 className='commonTitle'>Crear Partida</h1>
@@ -108,7 +87,7 @@ export default function StoryMode({userInfo}){
                     <button type='submit' className='buttonStyle bg-red-300'>
                         Crear Partida
                     </button>
-                </form>
+                </form>                
                 <Rulette page='story'/>
             </div>            
         </Layout>
