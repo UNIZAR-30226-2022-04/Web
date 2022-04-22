@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import {useRouter} from 'next/router'
-import { useLogin, useLoginUpdate } from "contexts/LoginContext"
 
 const tryLogin = async (user,pass) => {
 
@@ -23,20 +22,16 @@ const tryLogin = async (user,pass) => {
 }
 
 const Login = () => {
-  const router = useRouter()
-  const { ctxLogged } = useLogin();  // permite saber si el usuario esta logeado
-  const { logInUser } = useLoginUpdate(); // permite logear a un usuario
-  
+  const router = useRouter()  
   const [name, setName] = useState("")
   const [password, setPassword] = useState("")
 
-  // NOT WORKING
-  // Si estás logeado no tienes por que volver a iniciar sesión
-  useEffect(() => {
-    if(ctxLogged){
-      router.push("http://localhost:3000/profile/stats")
+  useEffect(()=>{
+    if(localStorage.getItem("logged") == "si"){
+      router.push("/profile/stats")
     }
-  })  
+  }, [])
+
 
   const onSubmit = (e) => {
     
@@ -48,9 +43,11 @@ const Login = () => {
     }else{
       tryLogin(name, password).then((res) =>{
         if(res.result == "success"){
-          logInUser(name, password)
+          localStorage.setItem("logged", "si")
+          localStorage.setItem("username", name)
+          localStorage.setItem("password",password)
           router.push("http://localhost:3000/profile/stats")
-          return
+          return 
         }else{
           if(res.reason == "user_not_found"){
             alert("Usuario desconocido")

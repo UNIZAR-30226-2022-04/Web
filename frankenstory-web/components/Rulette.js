@@ -11,7 +11,7 @@ export default function Rulette({page}) {
             </div>
             
             <div className='pr-24'>
-                <RuletteButton page={page} thisPage='yourStories' icon='/rulette/your_stories.png' reference='/'/>              
+                <RuletteButton page={page} thisPage='yourStories' icon='/rulette/your_stories.png' reference='/profile/saved_tales'/>              
             </div>
 
             <RuletteButton page={page} thisPage='friends' icon='/rulette/friends.png' reference='/profile/friends'/>
