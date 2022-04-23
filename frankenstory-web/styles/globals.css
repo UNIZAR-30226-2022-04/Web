@@ -150,23 +150,41 @@
             flex
             justify-center
             w-screen
-            mt-10
+            pt-10
             row-start-auto
             grid
             grid-cols-1
+            h-screen
+            pb-32
   }
   .titleWrite{
     @apply  relative
             block
             h-auto
             bg-transparent
+            mx-48
+            mb-10
+            text-center
   }
   .storyWrite{
     @apply  relative
             block
-            w-11/12
             border-blue-400
             border-2
+            text-center
+            mx-48
+  }
+
+  /* YOUR STORIES*/
+
+  .savedStory{
+    @apply  relative
+            bg-scroll
+            bg-contain
+            overflow-auto
+            text-center
+            mx-32
+            h-auto
   }
 }
 
