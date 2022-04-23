@@ -1,10 +1,8 @@
 import { useState } from "react"
 import { useFriends, useFriendsUpdate } from "../contexts/FriendsContext"
-import { useLogin } from "../contexts/LoginContext"
 
 export default function Friend({name,isFriend,type}){
 
-    const { ctxUsername, ctxPassword } = useLogin()
     const { ctxFriends, ctxNotifications } = useFriends()
     const [friendState, setFriendState] = useState(isFriend)
 
@@ -13,8 +11,8 @@ export default function Friend({name,isFriend,type}){
     const url = "http://localhost:3000/api/manage_friendship"
     
     var data = {
-        username:ctxUsername,
-        password:ctxPassword,
+        username:localStorage.getItem("username"),
+        password:localStorage.getItem("password"),
         targetUser: name,
         type: "add"
     }

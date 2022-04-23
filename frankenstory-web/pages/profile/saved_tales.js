@@ -2,6 +2,14 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 
+//
+//
+//
+import Link from 'next/link'
+//
+//
+//
+
 import Layout from 'components/Layout'
 import Rulette from 'components/Rulette'
 
@@ -53,6 +61,7 @@ export default function SavedTales(){
         const password = localStorage.getItem("password")
         setWindowUser({username: username, password: password})
         console.log("SACO DATOS")
+        router.push("http://localhost:3000/profile/see_tale")
         }else{
         console.log("VOY A LOGIN")
         router.push("/")
@@ -116,7 +125,7 @@ export default function SavedTales(){
     return(
         <Layout data={layoutInfo}>
             <TalesList quicks={myStories.quick_stories} tales={myStories.tale_stories}/>
-            <Rulette />
+            <Rulette page="yourStories"/> 
         </Layout>
     )
 } 
@@ -135,7 +144,6 @@ function TalesList({quicks, tales}){
                         }
                     </div>
                 </div>
-                
                 <div className='flex flex-col space-y-3 items-center justify-center align-middle'>
                     <h1>Relatos</h1>
                     <div className='flex flex-col space-y-3 justify-start items-center'>

@@ -1,12 +1,10 @@
 import { useState } from "react"
 import Friend from "./Friend"
-import { useLogin } from "../contexts/LoginContext"
 
 export default function FriendSearch(){
 
-    const { ctxUsername, ctxPassword } = useLogin()
     const url = "http://localhost:3000/api/search_friends"
-    const user = {username: ctxUsername, password: ctxPassword}
+    const user = {username: localStorage.getItem("username"), password: localStorage.getItem("password")}
     const trySearch = async () => {
         const data = {
             username:user.username,

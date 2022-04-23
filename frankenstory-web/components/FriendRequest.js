@@ -1,18 +1,16 @@
 import { useFriends ,useFriendsUpdate } from "../contexts/FriendsContext"
-import { useLogin } from "../contexts/LoginContext"
 
 export default function FriendRequest({name}){
 
     const { ctxFriends, ctxNotifications } = useFriends()
-    const { ctxUsername, ctxPassword } = useLogin()
 
     const { changeFriends, changeNotifications } = useFriendsUpdate()
 
     const url = "http://localhost:3000/api/answer_petition"
 
     var data = {
-        username:ctxUsername,
-        password:ctxPassword,
+        username:localStorage.getItem("username"),
+        password:localStorage.getItem("password"),
         targetUser: name,
         answer: 0
     }

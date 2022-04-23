@@ -1,20 +1,17 @@
 import FriendSearch from "./FriendSearch"
 import FriendList from "./FriendList"
 import RequestList from "./RequestList"
-import { useLogin } from "../contexts/LoginContext"
 import { useFriendsUpdate } from "../contexts/FriendsContext"
 import { useEffect } from "react"
 import { useRouter } from "next/router"
 
 export default function FriendScreen() {
 
-    const { ctxUsername, ctxPassword } = useLogin()
-
     const router = useRouter()
     const { changeFriends } = useFriendsUpdate()
     const { changeNotifications } = useFriendsUpdate()
 
-    const user = {username: ctxUsername, password: ctxPassword}
+    const user = {username: localStorage.getItem("username"), password: localStorage.getItem("password")}
     useEffect(() => {
         // Función que llama a la api
         const getData = async () => {
