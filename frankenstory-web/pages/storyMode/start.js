@@ -3,10 +3,9 @@ import WriteStory from 'components/WriteStory'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-export default function Stats() { 
+export default function Start() { 
   const router = useRouter()
   const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
-
   const [windowUser, setWindowUser] = useState({}) 
 
   useEffect(()=>{

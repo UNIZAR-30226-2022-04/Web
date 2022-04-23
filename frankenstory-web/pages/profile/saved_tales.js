@@ -61,7 +61,6 @@ export default function SavedTales(){
         const password = localStorage.getItem("password")
         setWindowUser({username: username, password: password})
         console.log("SACO DATOS")
-        router.push("http://localhost:3000/profile/see_tale")
         }else{
         console.log("VOY A LOGIN")
         router.push("/")

@@ -121,7 +121,7 @@ export default function StoryMode({userInfo}){
                     <StoryList stories={relatosDebug.publicTales} />
 
 
-                    <button type="button" onClick={onSubmit} className='buttonStyle bg-red-300'>BOTON AÑADIDO POR JESÚS PARA PRUEBAS</button>
+                    <button type="button" onClick={() => {router.push("/storyMode/start")}} className='buttonStyle bg-red-300'>BOTON AÑADIDO POR JESÚS PARA PRUEBAS</button>
 
 
                 </div>
