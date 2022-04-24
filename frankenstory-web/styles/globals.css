@@ -4,6 +4,13 @@
 
 @layer components {
   /* COMMON STYLES */
+  .centered{
+    @apply  relative 
+            flex
+            flex-row
+            justify-center
+            mb-10
+  }
   .scrollBox{
     @apply  relative
             h-40
@@ -159,20 +166,18 @@
   }
   .titleWrite{
     @apply  relative
-            block
             h-auto
             bg-transparent
-            mx-48
-            mb-10
             text-center
+            mb-10
   }
   .storyWrite{
     @apply  relative
-            block
-            border-blue-400
-            border-2
+            border-blue-800
+            border-4
+            rounded-2xl
             text-center
-            mx-48
+            mb-10
   }
 
   /* YOUR STORIES*/
