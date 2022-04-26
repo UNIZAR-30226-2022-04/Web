@@ -47,7 +47,6 @@ const Login = () => {
           localStorage.setItem("username", name)
           localStorage.setItem("password",password)
           router.push("http://localhost:3000/profile/stats")
-          return 
         }else{
           if(res.reason == "user_not_found"){
             alert("Usuario desconocido")

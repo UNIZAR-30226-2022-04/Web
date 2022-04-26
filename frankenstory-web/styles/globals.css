@@ -9,7 +9,7 @@
             flex
             flex-row
             justify-center
-            mb-10
+            mb-5
   }
   .scrollBox{
     @apply  relative
@@ -177,7 +177,6 @@
             border-4
             rounded-2xl
             text-center
-            mb-10
   }
 
   /* YOUR STORIES*/
