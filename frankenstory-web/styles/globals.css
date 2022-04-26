@@ -193,7 +193,25 @@
   }
 }
 
+@font-face {
+  font-family: "ARIAL-BOLD";
+  src: url("./fonts/arial_bold.ttf");
+}
 
+@font-face {
+  font-family: "ARIAL-REGULAR";
+  src: url("./fonts/arial_regular.ttf");
+}
+
+@font-face {
+  font-family: "BANGERS-REGULAR";
+  src: url("./fonts/bangers_regular.ttf");
+}
+
+@font-face {
+  font-family: "GRADUATE";
+  src: url("./fonts/graduate.ttf");
+}
 
 
 .txtShadw {
