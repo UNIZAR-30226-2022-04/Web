@@ -46,6 +46,7 @@ model Friendship {
 model Story {
   story_id    Int           @id @default(autoincrement())
   story       Participant[] @relation("story")
+  date        DateTime      @default(now())
   tale        Tale_mode[]   @relation("tale")
   quick_match Quick_match[] @relation("quick_match")
   contributed Paragraph[]   @relation("contributed")
@@ -56,7 +57,7 @@ model Participant {
   username    String  @db.VarChar(30)
   story       Story   @relation(name: "story", fields: [story_id], references: [story_id], onDelete: Cascade)
   story_id    Int
-  voted       String  @unique @db.VarChar(30)
+  voted       String  @db.VarChar(30)
   creator     Boolean
 
   @@id([username, story_id])
@@ -66,6 +67,7 @@ model Tale_mode {
   tale                Story   @relation(name: "tale", fields: [story_id], references: [story_id], onDelete: Cascade) //Prisma no permite herencia
   story_id            Int     @id
   max_turns           Int     @default(1)
+  turn                Int     @default(0)
   max_paragraph_chars Int     @default(50)
   privacy             Boolean @default(false)//1=private, 0=public
   finished            Boolean @default(false)
@@ -75,8 +77,8 @@ model Tale_mode {
 
 model Quick_match {
   quick_match Story @relation(name: "quick_match", fields: [story_id], references: [story_id], onDelete: Cascade) //Prisma no permite herencia
-  story_id    Int //0=normal, 1=tendencias Twitter, 2=palabras obligatorias
-  mode        Int   @unique
+  story_id    Int   @unique
+  mode        Int   //0=normal, 1=tendencias Twitter, 2=palabras obligatorias
 }
 
 model Paragraph {
