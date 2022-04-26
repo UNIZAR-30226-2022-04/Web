@@ -1,9 +1,10 @@
 import Layout from 'components/Layout'
 import FriendStats from 'components/Statistics'
-import Rulette from 'components/Rulette'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+
+import Image from 'next/image'
 
 export default function Stats() { 
   const router = useRouter()
@@ -74,10 +75,28 @@ export default function Stats() {
 
   return (
     <Layout data={layoutInfo}>
-      <div className='flex flex-row w-screen items-center h-screen space-x-20 ml-5'>
-        <FriendStats className ="pl-20" data={myuser.bestFour} />
-        <Rulette /> 
-      </div>                        
+        
+        <div className='centered'>
+            <div className="commonTitle mt-2">Resultados</div>
+        </div>
+        <div className="centered">
+            <div className="grid grid-cols-2">
+                <div>
+                    <Image src="/icons/star.png" width={100} height={100}/>
+                </div>
+                <div>
+                    <div className="text-centered">{windowUser.username}</div>
+                    <div className="inline-grid grid-cols-3">
+                        <Image src="/profPic/icon0.png" width={38} height={38}/>
+                        <div className="text-2xl">+500</div>
+                        <Image src="/icons/stats.png" width={38} height={38}/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className='centered px-20'>
+            <FriendStats className="pl-0" data={myuser.bestFour}/>
+        </div>                        
     </Layout> 
   )
 }

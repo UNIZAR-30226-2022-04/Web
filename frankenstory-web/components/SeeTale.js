@@ -4,7 +4,7 @@ export default function SeeTale() {
 
     const url = "http://localhost:3000/api/general/watch_story"
     var title = "Titulo"
-    var textBody = "Parrafo"
+    var textBody = `Parrafaco`
 
     useEffect (()=>{
         const getData = async () =>{
@@ -32,7 +32,7 @@ export default function SeeTale() {
     return(
         <div className="storyBox">
             <div className="titleWrite franken">{title}</div>
-            <div className="savedStory max-h-full">{textBody}</div>
+            <div className="savedStory max-h-full text-xl">{textBody}</div>
         </div>
     )
 }

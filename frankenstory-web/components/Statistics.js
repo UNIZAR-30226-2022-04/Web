@@ -4,7 +4,7 @@ let best = true
 
 export default function Stats({data}) {
     return(
-        <div className='absolute h-screen flex flex-col justify-center pl-20 space-y-2'>
+        <div className='relative pl-20 h-screen flex flex-col justify-center space-y-2'>
             <div className='relative flex flex-row h-auto w-auto'>
                 <Image src='/icons/stats.png' width="40" height="25" />
                 <h1 className='franken'>Statistics</h1>
