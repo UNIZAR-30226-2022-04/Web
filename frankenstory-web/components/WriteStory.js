@@ -22,7 +22,7 @@ const WriteStory = ({user,first}) => {
               :<div className="mb-10">{body}</div> }
             </div>
             <div className="centered">
-              <input className="storyWrite h-auto w-8/12" type="text" maxLength={200} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+              <textarea className="storyWrite h-48 w-8/12" type="text" maxLength={200} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
             </div>
             <div className="clickable-item centered">
               <input className="bg-blue-400 w-32 rounded-xl" type="submit" value="Enviar parrafo"/>
