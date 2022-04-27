@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin')
+
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}', 
@@ -11,7 +13,23 @@ module.exports = {
         'bangers': ['BANGERS-REGULAR'] ,
         'graduate': ['GRADUATE'] ,
       },
+      textShadow: {
+        sm: '1px 1px 2px var(--tw-shadow-color)',
+        DEFAULT: '2px 2px 2px var(--tw-shadow-color)',
+        lg: '4px 4px 2px var(--tw-shadow-color)',
+      },
     },
   },
-  plugins: []
+  plugins: [
+  plugin(function ({ matchUtilities, theme }) {
+    matchUtilities(
+      {
+        'text-shadow': (value) => ({
+          textShadow: value,
+        }),
+      },
+      { values: theme('textShadow') }
+    )
+  }),
+],
 }
