@@ -119,11 +119,6 @@ export default function StoryMode({userInfo}){
                     <StoryList stories={relatosDebug.friendTales} />
                     <h1 className='commonTitle'>Relatos Públicos</h1>
                     <StoryList stories={relatosDebug.publicTales} />
-
-
-                    <button type="button" onClick={() => {router.push("/storyMode/start")}} className='buttonStyle bg-red-300'>BOTON AÑADIDO POR JESÚS PARA PRUEBAS</button>
-
-
                 </div>
                 <form className='flex flex-col space-y-3'>
                     <h1 className='commonTitle'>Crear Partida</h1>

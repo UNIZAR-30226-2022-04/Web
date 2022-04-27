@@ -17,7 +17,7 @@ export default function Start() {
   return (
     <>
         <Layout data={layoutInfo}>
-                    <WriteStory first={true} creator={"No tu"}/>
+          <WriteStory first={true} creator={"No tu"}/>
         </Layout> 
     </>
   )

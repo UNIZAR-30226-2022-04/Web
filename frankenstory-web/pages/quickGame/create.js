@@ -1,45 +1,10 @@
 import Layout from 'components/Layout'  
 import Rulette from 'components/Rulette'
-import StoryList from 'components/StoryList'
+import CreateQuickGame from 'components/CreateQuickGame'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 const user = {"username": "MrNOPatineto", "password": "12345"}
-
-const relatosDebug = {
-    myTales: [
-    ],
-
-    friendTales: [
-        {
-            id: 0,
-            title: "El Pepe",
-            creator: "Fernando",
-            maxTurns: 10,
-            turn: 4
-        },
-        {
-            id: 1,
-            title: "Federico",
-            creator: "GarciaLorca",
-            maxTurns: 15,
-            turn: 2
-        },
-        {
-            id: 2,
-            title: "Feliz Cumpleaños",
-            creator: "Hg",
-            maxTurns: 200,
-            turn: 80
-        }
-    ],
-
-    publicTales: [
-    ],
-
-    talesForVote: [
-    ]
-}
 
 export default function StoryMode({userInfo}){
     const router = useRouter()
@@ -86,6 +51,7 @@ export default function StoryMode({userInfo}){
 
         // Si no ha ido bien o no estoy logeado volvemos a /
         if(data.result === "error"){
+            alert("Not logged")
             router.push("/")
             return
         }
@@ -110,11 +76,11 @@ export default function StoryMode({userInfo}){
     } 
 
     return(
-        <Layout data={layoutInfo} > 
-            <div>
-                <button onClick={router.push("/quickGame/create")}></button>
+        <Layout data={layoutInfo}>
+            <div className='flex flex-row w-screen items-center h-screen space-x-20 ml-5'>
+                <CreateQuickGame/>
+                <Rulette page='quickGame'/>
             </div>
-            <Rulette page='story'/>            
         </Layout>
     )
 }

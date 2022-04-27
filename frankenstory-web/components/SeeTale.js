@@ -31,7 +31,7 @@ export default function SeeTale() {
 
     return(
         <div className="storyBox">
-            <div className="titleWrite franken">{title}</div>
+            <div className="titleWrite">{title}</div>
             <div className="savedStory max-h-full text-xl">{textBody}</div>
         </div>
     )

@@ -14,6 +14,7 @@ const WriteStory = ({first,creator,id}) => {
   var body = "Parrafo por defecto"
   var user
   var password
+  var isLast
 
   useEffect(()=>{
     user = localStorage.getItem("username")
@@ -77,7 +78,7 @@ const WriteStory = ({first,creator,id}) => {
       password:localStorage.getItem("password"),
       id:id_historia,
       body:currentText,
-      isLast:false
+      isLast:isLast
     }
     var options = {
       method: 'POST',
@@ -108,6 +109,14 @@ const WriteStory = ({first,creator,id}) => {
     router.push("/storyMode")
   }
 
+  const setLast = () => {
+    isLast = true
+  }
+
+  const notLast = () => {
+    isLast = false
+  }
+
   return (
       <div className="storyBox">
         <form onSubmit={onSubmit}>
@@ -115,18 +124,18 @@ const WriteStory = ({first,creator,id}) => {
               <div className="commonTitle h-auto">{first ? <>Empieza tu relato</> : <>{title}</> } </div>
             </div>
             <div className="centered text-lg">
-              {first ? <input className="titleWrite w-6/12 mx-0 bg-gray-200" type="text" maxLength={100} value={currentTitle} placeholder="Titulo del relato" onChange={(e) => setCurrentTitle(e.target.value)}/>
+              {first ? <input className="titleWrite w-6/12 mx-0 bg-gray-200" type="text" required="true" maxLength={100} value={currentTitle} placeholder="Titulo del relato" onChange={(e) => setCurrentTitle(e.target.value)}/>
               :<div className="mb-10">{body}</div> }
             </div>
             <div className="centered">
-              <textarea className="storyWrite inline-flex text-lg flex-col h-48 w-6/12" type="text" maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+              <textarea className="storyWrite inline-flex text-lg flex-col h-48 w-6/12" type="text" required="true" maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
             </div>
             <div className="clickable-item centered">
-              <input className="bg-blue-400 w-32 rounded-xl" type="submit" value="Enviar parrafo"/>
+              <input className="bg-blue-400 w-32 rounded-xl" type="submit" value="Enviar parrafo" onClick={notLast}/>
             </div>
             { (!first && (creator == user) ) ? 
             <div className="clickable-item centered">
-              <input className ="bg-red-400 w-32 rounded-xl" type="submit" value = "Terminar relato"/>
+              <input className ="bg-red-400 w-32 rounded-xl" type="submit" value = "Terminar relato" onClick={setLast}/>
             </div>
             : ""}
         </form>

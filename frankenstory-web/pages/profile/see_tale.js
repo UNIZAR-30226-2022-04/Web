@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 
 import Layout from "../../components/Layout"
 import SeeTale from "../../components/SeeTale"
+import Rulette from "../../components/Rulette"
 
 export default function See_Tale() {
     const router = useRouter()
@@ -74,6 +75,7 @@ export default function See_Tale() {
 return(
         <Layout data={layoutInfo}>
           <SeeTale/>
+          <Rulette thispage="yourStories"/>
         </Layout>
   )
 }
