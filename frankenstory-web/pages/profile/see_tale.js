@@ -1,11 +1,10 @@
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 
-import Layout from "../../components/Layout"
-import SeeTale from "../../components/SeeTale"
-import Rulette from "../../components/Rulette"
+import Layout from "components/Layout"
+import SeeTale from "components/SeeTale"
 
-export default function See_Tale() {
+export default function See_Tale(id, type) {
     const router = useRouter()
     const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
   
@@ -42,7 +41,7 @@ export default function See_Tale() {
         }
       
         // Llamada a la api
-        const res = await fetch('http://localhost:3000/api/home', options)
+        const res = await fetch('http://localhost:3000/api/general/home', options)
         const data = await res.json()
   
         console.log(data)
@@ -74,8 +73,7 @@ export default function See_Tale() {
 
 return(
         <Layout data={layoutInfo}>
-          <SeeTale/>
-          <Rulette thispage="yourStories"/>
+          <SeeTale id={id} type={type}/>
         </Layout>
   )
 }

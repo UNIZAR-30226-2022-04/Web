@@ -6,7 +6,7 @@ export default function FriendRequest({name}){
 
     const { changeFriends, changeNotifications } = useFriendsUpdate()
 
-    const url = "http://localhost:3000/api/answer_petition"
+    const url = "http://localhost:3000/api/general/answer_petition"
 
     var data = {
         username:localStorage.getItem("username"),

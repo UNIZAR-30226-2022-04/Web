@@ -48,7 +48,7 @@ export default function Settings() {
       }
     
       // Llamada a la api
-      const res = await fetch('http://localhost:3000/api/home', options)
+      const res = await fetch('http://localhost:3000/api/general/home', options)
       const data = await res.json()
 
       console.log(data)
@@ -167,7 +167,7 @@ async function changeIcon(user, icon){
       body: JSON.stringify(info) 
     }
     
-    const result = await fetch('http://localhost:3000/api/change_picture', options)
+    const result = await fetch('http://localhost:3000/api/general/change_picture', options)
     const resultJson = await result.json()
     if(resultJson.result == 'success'){
       window.location.reload()
@@ -200,7 +200,7 @@ async function changePassword(user, passwd, passwdRep){
       body: JSON.stringify(info) 
     }
     
-    const result = await fetch('http://localhost:3000/api/change_password', options)
+    const result = await fetch('http://localhost:3000/api/general/change_password', options)
     const resultJson = await result.json()
     if(resultJson.result == 'success'){
       window.location.reload()
@@ -230,7 +230,7 @@ async function deleteUser(user, deleteCheck, setDeleteCheck){
       body: JSON.stringify(info) 
     }
     
-    const result = await fetch('http://localhost:3000/api/delete_user', options)
+    const result = await fetch('http://localhost:3000/api/general/delete_user', options)
     const resultJson = await result.json()
     if(resultJson.result == 'success'){
       window.location.reload()

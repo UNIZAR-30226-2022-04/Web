@@ -96,7 +96,7 @@ export async function getStaticProps () {
       body: JSON.stringify(user) 
     }
     
-    const friendStats = await fetch('http://localhost:3000/api/home', options)
+    const friendStats = await fetch('http://localhost:3000/api/general/home', options)
     const userInfo = await friendStats.json()
   
     return {

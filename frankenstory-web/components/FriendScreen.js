@@ -26,7 +26,7 @@ export default function FriendScreen() {
         
           // Llamada a la api
           console.log(user)
-          const res = await fetch('http://localhost:3000/api/friends', options)
+          const res = await fetch('http://localhost:3000/api/general/friends', options)
           const data = await res.json()
           console.log(data)
     

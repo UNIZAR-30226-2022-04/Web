@@ -8,7 +8,7 @@ const tryRegister = async (user,pass,mail) => {
     password:pass,
     email:mail
   }
-  const url ="http://localhost:3000/api/register"
+  const url ="http://localhost:3000/api/general/register"
   const options = {
     method: 'POST',
     headers: {

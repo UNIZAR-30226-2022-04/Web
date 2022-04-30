@@ -1,18 +1,20 @@
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 
 export default function SeeTale() {
-
+    const [story, setStory] = useState("")
     const url = "http://localhost:3000/api/general/watch_story"
-    var title = "Titulo"
-    var textBody = `Parrafaco`
+    const queryParams = new URLSearchParams(window.location.search);
+    const title = queryParams.get('title')
+    const id = queryParams.get('id')
+    const type = queryParams.get('type')
 
     useEffect (()=>{
         const getData = async () =>{
             const data = {
                 username:localStorage.getItem("username"),
                 password:localStorage.getItem("password"),
-                id:1,
-                type:"tale"
+                id:parseInt(id),
+                type:type
             }
             var options = {
                 method: 'POST',
@@ -24,15 +26,19 @@ export default function SeeTale() {
             }
             var res = await fetch(url,options)
             res = await res.json()
-            textBody = res.body
+            setStory(res)
         }
         getData()
     },[])
 
+    if(!story){
+        return(<div className="background">loading...</div>)
+    }
+
     return(
         <div className="storyBox">
             <div className="titleWrite">{title}</div>
-            <div className="savedStory max-h-full text-xl">{textBody}</div>
+            <div className="savedStory max-h-full text-xl">{story.body}</div>
         </div>
     )
 }

@@ -8,7 +8,7 @@ export default function Friend({name,isFriend,type}){
 
     const { changeFriends, changeNotifications } = useFriendsUpdate()
 
-    const url = "http://localhost:3000/api/manage_friendship"
+    const url = "http://localhost:3000/api/general/manage_friendship"
     
     var data = {
         username:localStorage.getItem("username"),

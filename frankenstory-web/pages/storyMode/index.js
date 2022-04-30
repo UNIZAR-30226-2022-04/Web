@@ -79,7 +79,7 @@ export default function StoryMode({userInfo}){
         }
         
         // Llamada a la api
-        const res = await fetch('http://localhost:3000/api/home', options)
+        const res = await fetch('http://localhost:3000/api/general/home', options)
         const data = await res.json()
 
         console.log(data)
@@ -155,21 +155,4 @@ export default function StoryMode({userInfo}){
 
 function changeVisibility(){
 
-}
-
-export async function getStaticProps () {
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user) 
-    }
-    
-    const friendStats = await fetch('http://localhost:3000/api/home', options)
-    const userInfo = await friendStats.json()
-  
-    return {
-      props: { userInfo }
-    }
 }

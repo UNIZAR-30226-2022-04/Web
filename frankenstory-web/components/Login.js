@@ -8,7 +8,7 @@ const tryLogin = async (user,pass) => {
     username:user,
     password:pass
   }
-  const url ="http://localhost:3000/api/login"
+  const url ="http://localhost:3000/api/general/login"
   const options = {
     method: 'POST',
     headers: {

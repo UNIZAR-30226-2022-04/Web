@@ -3,7 +3,7 @@ import Friend from "./Friend"
 
 export default function FriendSearch(){
 
-    const url = "http://localhost:3000/api/search_friends"
+    const url = "http://localhost:3000/api/general/search_friends"
     const user = {username: localStorage.getItem("username"), password: localStorage.getItem("password")}
     const trySearch = async () => {
         const data = {
