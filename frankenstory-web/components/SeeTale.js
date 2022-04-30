@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import Link from "next/link";
 
 export default function SeeTale() {
     const [story, setStory] = useState("")
@@ -39,6 +40,13 @@ export default function SeeTale() {
         <div className="storyBox">
             <div className="titleWrite">{title}</div>
             <div className="savedStory max-h-full text-xl">{story.body}</div>
+            <div className="centered">
+                <Link href="/profile/saved_tales">
+                    <div className="clickableItem border-2 border-green-900 rounded-xl w-48 text-center bg-green-700 h-6 text-white">
+                        Volver a libreria
+                    </div>
+                </Link>
+            </div>
         </div>
     )
 }
