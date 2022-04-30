@@ -24,7 +24,7 @@ const WriteStory = ({first,creator,id}) => {
   useEffect(()=>{
     const getPrevious = async () =>{
       if(!first){
-        url="https://mooncode-frankenstory-dev.herokuapp.com/api/tale_mode/resume_tale"  
+        url="http://localhost:3000/api/tale_mode/resume_tale"
         var data = {
           username: user,
           password: password,
@@ -38,18 +38,25 @@ const WriteStory = ({first,creator,id}) => {
           },
           body: JSON.stringify(data)
         }
+        console.log(options)
         var res = await fetch(url,options)
         res = await res.json()
-        maxChar = res.maxCharacters
-        title = res.title
-        body = res.paragraphs[res.paragraphs.lenght()].text
+        if(res.result != "error"){
+          maxChar = res.maxCharacters
+          title = res.title
+          console.log(res)
+          body = res.paragraphs[res.paragraphs.lenght()].text
+        }else{
+          alert("No se ha encontrado la historia")
+          router.push("/storyMode")
+        }
       }
     }
     getPrevious()
   }, [user])
 
   const create_tale = async () => {
-    url = "https://mooncode-frankenstory-dev.herokuapp.com/api/tale_mode/create_tale"
+    url = "http://localhost:3000/api/tale_mode/create_tale"
     var data = {
       username: user,
       password: password,
@@ -72,7 +79,7 @@ const WriteStory = ({first,creator,id}) => {
   }
 
   const add_tale_paragraph = async () => {
-    url = "https://mooncode-frankenstory-dev.herokuapp.com/api/tale_mode/add_tale_paragraph"
+    url = "http://localhost:3000/api/tale_mode/add_tale_paragraph"
     var data = {
       username:localStorage.getItem("username"),
       password:localStorage.getItem("password"),
@@ -124,11 +131,11 @@ const WriteStory = ({first,creator,id}) => {
               <div className="commonTitle h-auto">{first ? <>Empieza tu relato</> : <>{title}</> } </div>
             </div>
             <div className="centered text-lg">
-              {first ? <input className="titleWrite w-6/12 mx-0 bg-gray-200" type="text" required="true" maxLength={100} value={currentTitle} placeholder="Titulo del relato" onChange={(e) => setCurrentTitle(e.target.value)}/>
+              {first ? <input className="titleWrite w-6/12 mx-0 bg-gray-200" type="text" required={true} maxLength={100} value={currentTitle} placeholder="Titulo del relato" onChange={(e) => setCurrentTitle(e.target.value)}/>
               :<div className="mb-10">{body}</div> }
             </div>
             <div className="centered">
-              <textarea className="storyWrite inline-flex text-lg flex-col h-48 w-6/12" type="text" required="true" maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+              <textarea className="storyWrite inline-flex text-lg flex-col h-48 w-6/12" type="text" required={true} maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
             </div>
             <div className="clickable-item centered">
               <input className="bg-blue-400 w-32 rounded-xl" type="submit" value="Enviar parrafo" onClick={notLast}/>
