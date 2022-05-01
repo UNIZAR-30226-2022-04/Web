@@ -1,47 +1,12 @@
-import Layout from 'components/Layout'  
-import Rulette from 'components/Rulette'
-import StoryList from 'components/StoryList'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-const user = {"username": "MrNOPatineto", "password": "12345"}
+import Layout from 'components/Layout'  
+import Rulette from 'components/Rulette'
+import StoryList from 'components/StoryList'
+import Spinner from 'components/Spinner'
 
-const relatosDebug = {
-    myTales: [
-    ],
-
-    friendTales: [
-        {
-            id: 0,
-            title: "El Pepe",
-            creator: "Fernando",
-            maxTurns: 10,
-            turn: 4
-        },
-        {
-            id: 1,
-            title: "Federico",
-            creator: "GarciaLorca",
-            maxTurns: 15,
-            turn: 2
-        },
-        {
-            id: 2,
-            title: "Feliz Cumpleaños",
-            creator: "Hg",
-            maxTurns: 200,
-            turn: 80
-        }
-    ],
-
-    publicTales: [
-    ],
-
-    talesForVote: [
-    ]
-}
-
-export default function StoryMode({userInfo}){
+export default function StoryMode(){
     const router = useRouter()
     const [visibility, setVisibility] = useState(1)
     const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
@@ -100,7 +65,7 @@ export default function StoryMode({userInfo}){
 
     // Si tadavía no hoy usuario, esperamos a que lo haya
     if(!myuser || !myTales){
-        return <div className='background'>loading...</div> 
+        return <Spinner />
     }
     
     // Renderizamos la página

@@ -6,6 +6,8 @@ import Link from 'next/link'
 import Layout from 'components/Layout'
 import Rulette from 'components/Rulette'
 import separateStories from 'lib/separateStories'
+import Spinner from 'components/Spinner'
+
 export default function SavedTales(){
 
     const router = useRouter()
@@ -66,7 +68,7 @@ export default function SavedTales(){
 
     // Si tadavía no hoy usuario, esperamos a que lo haya
     if(!myuser || !myStories){
-        return <div className='background'>loading...</div> 
+        return <Spinner />
     }
     
     // Renderizamos la página

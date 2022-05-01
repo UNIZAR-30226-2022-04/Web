@@ -1,8 +1,9 @@
-import Layout from 'components/Layout'
 import Image from 'next/image'
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+
+import Layout from 'components/Layout'
+import Spinner from 'components/Spinner'
 
 export default function Settings() {
   const [passwd, setPass] = useState("")
@@ -67,7 +68,7 @@ export default function Settings() {
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!myuser){
-    return <div className='background'>loading...</div> 
+    return <Spinner />
   }
 
   const layoutInfo = {
