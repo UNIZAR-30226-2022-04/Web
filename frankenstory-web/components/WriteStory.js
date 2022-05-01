@@ -12,7 +12,7 @@ const WriteStory = ({first,creator}) => {
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
   const queryParams = new URLSearchParams(window.location.search);
-  var isLast = queryParams.get("lastTurn")
+  var isLast = (queryParams.get("lastTurn")==0)
 
   useEffect(()=>{
     setUser(localStorage.getItem("username"))
