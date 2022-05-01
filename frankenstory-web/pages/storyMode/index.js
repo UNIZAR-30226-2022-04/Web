@@ -158,12 +158,16 @@ function createGame(privacy, router){
     const chars = document.getElementById('chars').value
 
     console.log("T:",turns," C:",chars)
-
-    if(turns < 0 || turns > 10){
-        alert("No puede haber menos de 1 turno o más de 10")
-    }else if(chars < 0 || chars > '120'){
-        alert("No puede haber menos de 1 carácter o más de 120")
+    if(turns && chars){
+        if(turns < 0 || turns > 10){
+            alert("No puede haber menos de 1 turno o más de 10")
+        }else if(chars < 0 || chars > '120'){
+            alert("No puede haber menos de 1 carácter o más de 120")
+        }else{
+            router.push(`/storyMode/start?turns=${turns}&characters=${chars}&privacy=${privacy}`)
+        }
     }else{
-        router.push(`/storyMode/start?turns=${turns}&characters=${chars}&privacy=${privacy}`)
+        alert("Los campos no pueden estar vacíos")
     }
+    
 }
