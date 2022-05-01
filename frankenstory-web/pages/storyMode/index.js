@@ -43,7 +43,7 @@ const relatosDebug = {
 
 export default function StoryMode({userInfo}){
     const router = useRouter()
-    const [visibility, setVisibility] = useState("")
+    const [visibility, setVisibility] = useState(1)
     const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
 
     const [windowUser, setWindowUser] = useState({}) 
@@ -125,25 +125,25 @@ export default function StoryMode({userInfo}){
                     
                     <div className='commonCrate'>
                         <h1 className='commonFont w-32'>Partida Pública: </h1>
-                        {visibility=='public'?(
-                            <button type='button' onClick={(e) => setVisibility('private')} className='bg-green-700 text-white w-full rounded-3xl'>Sí</button>
+                        {visibility==0?(
+                            <button type='button' onClick={(e) => setVisibility(1)} className='bg-green-700 text-white w-full rounded-3xl'>Sí</button>
                         ):(
-                            <button type='button' onClick={(e) => setVisibility('public')} className='bg-red-700 text-white w-full rounded-3xl'>No</button>
+                            <button type='button' onClick={(e) => setVisibility(0)} className='bg-red-700 text-white w-full rounded-3xl'>No</button>
                         )}
                         
                     </div>
 
                     <div className='commonCrate'>
                         <h1 className='commonFont w-32'>Turnos: </h1>
-                        <input type='number' min='0' className='text-center w-full rounded-lg'></input>
+                        <input id='turns' type='number' min='0' className='text-center w-full rounded-lg' />
                     </div>
 
                     <div className='commonCrate'>
                         <h1 className='commonFont w-32'>Número Caracteres: </h1>
-                        <input type='number' min='0' className='text-center w-full rounded-lg'></input>
+                        <input id='chars' type='number' min='0' className='text-center w-full rounded-lg' />
                     </div>
 
-                    <button type='submit' className='buttonStyle bg-red-300'>
+                    <button type='button' className='buttonStyle bg-red-300' onClick={() => createGame(visibility, router)}>
                         Crear Partida
                     </button>
                 </form>
@@ -153,6 +153,17 @@ export default function StoryMode({userInfo}){
     )
 }
 
-function changeVisibility(){
+function createGame(privacy, router){
+    const turns = document.getElementById('turns').value
+    const chars = document.getElementById('chars').value
 
+    console.log("T:",turns," C:",chars)
+
+    if(turns < 0 || turns > 10){
+        alert("No puede haber menos de 1 turno o más de 10")
+    }else if(chars < 0 || chars > '120'){
+        alert("No puede haber menos de 1 carácter o más de 120")
+    }else{
+        router.push(`/storyMode/start?turns=${turns}&characters=${chars}&privacy=${privacy}`)
+    }
 }
