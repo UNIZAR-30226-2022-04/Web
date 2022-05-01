@@ -45,6 +45,7 @@ export default function StoryMode({userInfo}){
     const router = useRouter()
     const [visibility, setVisibility] = useState(1)
     const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
+    const [myTales, setMyTales] = useState("")
 
     const [windowUser, setWindowUser] = useState({}) 
 
@@ -64,40 +65,41 @@ export default function StoryMode({userInfo}){
     useEffect(() => {
         // Función que llama a la api
         if(windowUser.username == undefined){
-        console.log("no permito sacar datos")
-        return
+            console.log("no permito sacar datos")
+            return
         }
         
         const getData = async () => {
-        // Opciones para llamar a la api
-        const options = {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(windowUser) 
-        }
-        
-        // Llamada a la api
-        const res = await fetch('http://localhost:3000/api/general/home', options)
-        const data = await res.json()
+            // Opciones para llamar a la api
+            const options = {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(windowUser) 
+            }
+            
+            // Llamada a la api
+            const res1 = await fetch('http://localhost:3000/api/general/home', options)
+            const data1 = await res1.json()
+            const res2 = await fetch('http://localhost:3000/api/tale_mode/get_tales', options)
+            const data2 = await res2.json() 
 
-        console.log(data)
+            // Si no ha ido bien o no estoy logeado volvemos a /
+            if(data1.result === "error" || data2.result === 'error'){
+                router.push("/")
+                return
+            }
 
-        // Si no ha ido bien o no estoy logeado volvemos a /
-        if(data.result === "error"){
-            router.push("/")
-            return
-        }
-
-        // Llama al hook que almacena la información del usuario
-        setMyuser(data)
+            // Llama al hook que almacena la información del usuario
+            setMyuser(data1)
+            setMyTales(data2)
         }
         getData()
     }, [windowUser])
 
     // Si tadavía no hoy usuario, esperamos a que lo haya
-    if(!myuser){
+    if(!myuser || !myTales){
         return <div className='background'>loading...</div> 
     }
     
@@ -114,11 +116,11 @@ export default function StoryMode({userInfo}){
             <div className='flex flex-row w-screen items-center h-screen space-x-20 ml-5'>
                 <div className='flex flex-col ml-5'>
                     <h1 className='commonTitle'>Tus Relatos</h1>
-                    <StoryList stories={relatosDebug.myTales} />
+                    <StoryList stories={myTales.myTales} />
                     <h1 className='commonTitle'>Relatos de Amigos</h1>
-                    <StoryList stories={relatosDebug.friendTales} />
+                    <StoryList stories={myTales.friendTales} />
                     <h1 className='commonTitle'>Relatos Públicos</h1>
-                    <StoryList stories={relatosDebug.publicTales} />
+                    <StoryList stories={myTales.publicTales} />
                 </div>
                 <form className='flex flex-col space-y-3'>
                     <h1 className='commonTitle'>Crear Partida</h1>

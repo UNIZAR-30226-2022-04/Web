@@ -1,6 +1,6 @@
 import Layout from 'components/Layout'
 import WriteStory from 'components/WriteStory'
-import { useEffect,useState } from 'react/cjs/react.production.min'
+import { useEffect,useState } from 'react'
 import { useRouter } from 'next/router'
 
 export default function Start() {
