@@ -4,42 +4,7 @@ import StoryList from 'components/StoryList'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-const user = {"username": "MrNOPatineto", "password": "12345"}
 
-const relatosDebug = {
-    myTales: [
-    ],
-
-    friendTales: [
-        {
-            id: 0,
-            title: "El Pepe",
-            creator: "Fernando",
-            maxTurns: 10,
-            turn: 4
-        },
-        {
-            id: 1,
-            title: "Federico",
-            creator: "GarciaLorca",
-            maxTurns: 15,
-            turn: 2
-        },
-        {
-            id: 2,
-            title: "Feliz Cumpleaños",
-            creator: "Hg",
-            maxTurns: 200,
-            turn: 80
-        }
-    ],
-
-    publicTales: [
-    ],
-
-    talesForVote: [
-    ]
-}
 
 export default function StoryMode({userInfo}){
     const router = useRouter()
@@ -54,9 +19,7 @@ export default function StoryMode({userInfo}){
         const username = localStorage.getItem("username")
         const password = localStorage.getItem("password")
         setWindowUser({username: username, password: password})
-        console.log("SACO DATOS")
         }else{
-        console.log("VOY A LOGIN")
         router.push("/")
         }
     }, [])
@@ -65,7 +28,6 @@ export default function StoryMode({userInfo}){
     useEffect(() => {
         // Función que llama a la api
         if(windowUser.username == undefined){
-            console.log("no permito sacar datos")
             return
         }
         
@@ -78,7 +40,7 @@ export default function StoryMode({userInfo}){
                 },
                 body: JSON.stringify(windowUser) 
             }
-            
+
             // Llamada a la api
             const res1 = await fetch('http://localhost:3000/api/general/home', options)
             const data1 = await res1.json()
@@ -159,11 +121,10 @@ function createGame(privacy, router){
     const turns = document.getElementById('turns').value
     const chars = document.getElementById('chars').value
 
-    console.log("T:",turns," C:",chars)
     if(turns && chars){
         if(turns < 0 || turns > 10){
             alert("No puede haber menos de 1 turno o más de 10")
-        }else if(chars < 0 || chars > '120'){
+        }else if(chars < 0 || chars > 120){
             alert("No puede haber menos de 1 carácter o más de 120")
         }else{
             router.push(`/storyMode/start?turns=${turns}&characters=${chars}&privacy=${privacy}`)

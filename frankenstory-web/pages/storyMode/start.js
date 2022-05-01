@@ -1,14 +1,14 @@
 import Layout from 'components/Layout'
 import WriteStory from 'components/WriteStory'
-import { useEffect,useState } from 'react/cjs/react.production.min'
+import { useEffect,useState } from 'react'
 import { useRouter } from 'next/router'
 
-export default function Start() {
+export default function Continue() {
   const router = useRouter()
-
-  const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
-  const [windowUser, setWindowUser] = useState({}) 
   
+  const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
+  const [windowUser, setWindowUser] = useState({})
+
   var creator = "Not you"
 
   useEffect(()=>{
@@ -70,7 +70,7 @@ export default function Start() {
     stars:    myuser.stars,
     coins:    myuser.coins,
     image_ID: myuser.picture
-  }
+  } 
 
   return (
     <>

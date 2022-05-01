@@ -3,7 +3,7 @@ import WriteStory from 'components/WriteStory'
 import { useEffect,useState } from 'react'
 import { useRouter } from 'next/router'
 
-export default function Start() {
+export default function Continue() {
   const router = useRouter()
   
   const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
@@ -16,9 +16,7 @@ export default function Start() {
       const username = localStorage.getItem("username")
       const password = localStorage.getItem("password")
       setWindowUser({username: username, password: password})
-      console.log("SACO DATOS")
     }else{
-      console.log("VOY A LOGIN")
       router.push("/")
     }
   }, [])
@@ -27,7 +25,6 @@ export default function Start() {
   useEffect(() => {
     // Función que llama a la api
     if(windowUser.username == undefined){
-      console.log("no permito sacar datos")
       return
     }
     
@@ -44,8 +41,6 @@ export default function Start() {
       // Llamada a la api
       const res = await fetch('http://localhost:3000/api/general/home', options)
       const data = await res.json()
-
-      console.log(data)
 
       // Si no ha ido bien o no estoy logeado volvemos a /
       if(data.result === "error"){

@@ -54,7 +54,7 @@ export default function See_Tale(id, type) {
   
         // Llama al hook que almacena la información del usuario
         setMyuser(data)
-      }
+      } 
       getData()
     }, [windowUser])
   

@@ -12,6 +12,8 @@ export default async (req, res) => {
 	
 	const fields = ['username','password','id','body','isLast'];
 
+	console.log(message)
+
 	if (!checkFields(message,fields)){
 		res.status(200).json({ result: "error", reason: "invalid credentials" });
 		return;
@@ -50,7 +52,7 @@ export default async (req, res) => {
 			};
 
 			await createParagraphDB(dataParagraph);
-
+			const noVoting = tale.turn==0
 			if (message.isLast) {
 				const dataTale = {
 					story_id: tale.story_id,
@@ -60,6 +62,7 @@ export default async (req, res) => {
 					privacy: tale.privacy,
 					title: tale.title,
 					finished: true,
+					scored: noVoting
 				};
 				await updateTaleDB(message.id, dataTale);
 			} else {
