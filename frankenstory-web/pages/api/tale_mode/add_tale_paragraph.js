@@ -12,8 +12,6 @@ export default async (req, res) => {
 	
 	const fields = ['username','password','id','body','isLast'];
 
-	console.log(message)
-
 	if (!checkFields(message,fields)){
 		res.status(200).json({ result: "error", reason: "invalid credentials" });
 		return;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 
-const WriteStory = ({first,creator}) => {
+const WriteStory = ({first}) => {
 
   var url
   const router = useRouter()
@@ -12,7 +12,8 @@ const WriteStory = ({first,creator}) => {
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
   const queryParams = new URLSearchParams(window.location.search);
-  var isLast = (queryParams.get("lastTurn")==0)
+  var isLast = (queryParams.get("lastTurn")!=0)
+  const creator = queryParams.get("creator")
 
   useEffect(()=>{
     setUser(localStorage.getItem("username"))

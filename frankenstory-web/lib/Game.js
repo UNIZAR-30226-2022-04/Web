@@ -17,11 +17,16 @@ export default class Game {
 	}
 
 	deletePlayer(player) {
-		this.players = this.players.filter((p) => (p = player));
+		this.players.splice(this.players.indexOf(player));
+		//this.players = this.players.filter((p) => (p = player));
 	}
 }
 
 export function createGame(id, host, time, isPrivate, mode, state) {
+	const game = gamesList.find((game) => game.host.username == host.username);
+	if (game != undefined){
+		gamesList.splice(gamesList.indexOf(game))
+	}
 	gamesList.push(new Game(id, host, time, isPrivate, mode, state));
 	//console.log(gamesList); //debug
 }
