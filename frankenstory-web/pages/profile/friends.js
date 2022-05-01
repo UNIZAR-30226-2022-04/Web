@@ -1,9 +1,11 @@
-import Layout from '../../components/Layout'
-import FriendScreen from '../../components/FriendScreen'
-import Rulette from '../../components/Rulette'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { FriendsProvider } from "../../contexts/FriendsContext"
+
+import Layout from '../../components/Layout'
+import FriendScreen from '../../components/FriendScreen'
+import Rulette from '../../components/Rulette'
+import Spinner from 'components/Spinner'
 
 export default function Friends() {
 
@@ -62,7 +64,7 @@ export default function Friends() {
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!myuser){
-    return <div className='background'>loading...</div> 
+    return <Spinner />
   }
   
   // Renderizamos la página

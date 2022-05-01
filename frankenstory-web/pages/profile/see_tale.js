@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 
 import Layout from "components/Layout"
 import SeeTale from "components/SeeTale"
+import Spinner from 'components/Spinner'
 
 export default function See_Tale(id, type) {
     const router = useRouter()
@@ -60,7 +61,7 @@ export default function See_Tale(id, type) {
   
     // Si tadavía no hoy usuario, esperamos a que lo haya
     if(!myuser){
-      return <div className='background'>loading...</div> 
+      return <Spinner />
     }
     
     // Renderizamos la página

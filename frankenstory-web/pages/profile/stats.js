@@ -1,9 +1,10 @@
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+
 import Layout from 'components/Layout'
 import FriendStats from 'components/Statistics'
 import Rulette from 'components/Rulette'
-
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import Spinner from 'components/Spinner'
 
 export default function Stats() { 
   const router = useRouter()
@@ -61,7 +62,7 @@ export default function Stats() {
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!myuser){
-    return <div className='background'>loading...</div> 
+    return <Spinner />
   }
   
   // Renderizamos la página

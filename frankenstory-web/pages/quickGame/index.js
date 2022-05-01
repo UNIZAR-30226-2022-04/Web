@@ -1,7 +1,9 @@
-import Layout from 'components/Layout'  
-import Rulette from 'components/Rulette'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+
+import Layout from 'components/Layout'  
+import Rulette from 'components/Rulette'
+import Spinner from 'components/Spinner'
 
 const user = {"username": "MrNOPatineto", "password": "12345"}
 
@@ -96,7 +98,7 @@ export default function StoryMode(){
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!myuser){
-    return <div className='background'>loading...</div> 
+    return <Spinner />
   }
   
   // Renderizamos la página
