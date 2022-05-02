@@ -109,14 +109,36 @@ export default function StoryMode(){
     image_ID: myuser.picture
   }
 
-  const create = () =>{
-      router.push("/quickGame/create")
+  const create = (e) =>{
+    e.preventDefault()
+    router.push("/quickGame/create")
+  }
+
+  const join = (e) =>{
+    e.preventDefault()
+    alert("Partida por codigo no implementada")
+  }
+
+  const random = (e) =>{
+    e.preventDefault()
+    alert("Partida aleatoria no implementada")
   }
 
     return(
         <Layout data={layoutInfo} > 
             <div className='centered'>
                 <button onClick={create}>Crear partida</button>
+            </div>
+            <form onSubmit={join}>
+              <div className='centered'>
+                  <input type="text" placeholder='Código'/>
+              </div>
+              <div className="centered">
+                  <button type="submit">Unirse a sala</button>
+              </div>
+            </form>
+            <div className='centered'>
+                <button onClick={random}>Partida aleatoria</button>
             </div>
             <Rulette page='story'/>            
         </Layout>
