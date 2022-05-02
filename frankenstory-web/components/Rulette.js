@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export default function Rulette({page}) {
     return(
-        <div className='absolute flex flex-col right-0 justify-center h-full w-auto items-end pr-12 space-y-3'>            
+        <div className='flex flex-col justify-center items-end pr-12 space-y-3 absolute right-0'>            
             <RuletteButton page={page} thisPage='story' icon='/rulette/long_play.png' reference='/storyMode'/>
             
             <div className='pr-24'>

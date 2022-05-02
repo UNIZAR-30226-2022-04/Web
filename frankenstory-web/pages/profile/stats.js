@@ -75,10 +75,8 @@ export default function Stats() {
 
   return (
     <Layout data={layoutInfo}>
-      <div className='flex flex-row w-screen items-center h-screen space-x-20 ml-5'>
         <FriendStats className ="pl-20" data={myuser.bestFour} />
-        <Rulette /> 
-      </div>                        
+        <Rulette />    
     </Layout> 
   )
 }

@@ -2,6 +2,7 @@ import Layout from 'components/Layout'
 import WriteStory from 'components/WriteStory'
 import { useEffect,useState } from 'react'
 import { useRouter } from 'next/router'
+import Spinner from 'components/Spinner'
 
 export default function Continue() {
   const router = useRouter()
@@ -56,7 +57,7 @@ export default function Continue() {
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!myuser){
-    return <div className='background'>loading...</div> 
+    return <Spinner />
   }
   
   // Renderizamos la página

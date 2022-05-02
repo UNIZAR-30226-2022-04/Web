@@ -5,14 +5,16 @@ import Router from 'next/router'
 export default function Layout({children, data, inSettingsScreen}) {
     return(
         <div className='background'>            
-            <div className='relative flex bg-slate-900 shadow-lg items-center p-3'>
+            <div className='flex bg-slate-900 shadow-lg items-center p-3'>
                 <div className='relative w-full h-auto'>
                     <Image src='/frankenstory.png' width="200" height="50"/>
                 </div>
                 <Crates person={data} changeSettings={inSettingsScreen} />
-            </div> 
-            {children}
-        </div>        
+            </div>
+            <div className='flex flex-row w-screen h-screen items-center ml-5'>
+                {children}
+            </div>            
+        </div>
     )
 }
 

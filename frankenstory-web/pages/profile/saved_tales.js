@@ -96,7 +96,7 @@ export default function SavedTales(){
 function TalesList({quicks, tales}){
     return(
         <>
-            <div className='absolute h-screen w-screen flex flex-row justify-start ml-32 items-center space-x-20 align-middle text-center'>
+            <div className='flex flex-row justify-start ml-32 items-center space-x-20 align-middle text-center'>
                 <div className='flex flex-col space-y-3 items-center justify-center align-middle'>
                     <h1 className='commonTitle'>Partidas Rápidas</h1>
                     <div className="bg-scroll bg-contain overflow-auto">

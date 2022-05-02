@@ -74,7 +74,7 @@ export default function StoryMode(){
 
     return(
         <Layout data={layoutInfo} > 
-            <div className='flex flex-row w-screen items-center h-screen space-x-20 ml-5'>
+            <div className='flex flex-row items-center space-x-20 ml-5'>
                 <div className='flex flex-col ml-5'>
                     <h1 className='commonTitle'>Tus Relatos</h1>
                     <StoryList stories={myTales.myTales} />
@@ -110,8 +110,8 @@ export default function StoryMode(){
                         Crear Partida
                     </button>
                 </form>
-                <Rulette page='story'/>
-            </div>            
+            </div>         
+            <Rulette page='story'/>   
         </Layout>
     )
 }

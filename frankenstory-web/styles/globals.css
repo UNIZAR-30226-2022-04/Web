@@ -23,7 +23,9 @@
     @apply  fixed
             h-screen 
             w-screen 
-            bg-gradient-to-tr 
+            bg-gradient-to-tr
+            flex
+            flex-col
             from-teal-600 
             to-green-400
   }

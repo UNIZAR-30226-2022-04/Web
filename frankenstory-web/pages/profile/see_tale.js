@@ -74,7 +74,7 @@ export default function See_Tale(id, type) {
 
 return(
         <Layout data={layoutInfo}>
-          <SeeTale id={id} type={type}/>
+          <SeeTale/>
         </Layout>
   )
 }
