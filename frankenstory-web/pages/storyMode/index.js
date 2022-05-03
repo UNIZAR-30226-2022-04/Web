@@ -8,21 +8,31 @@ import Spinner from 'components/Spinner'
 export default function StoryMode(){
     const router = useRouter()
     const [visibility, setVisibility] = useState(1)
-    const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
     const [myTales, setMyTales] = useState("")
 
     const [windowUser, setWindowUser] = useState({}) 
 
     useEffect(()=>{
         if(localStorage.getItem("logged") == "si"){
-        const username = localStorage.getItem("username")
-        const password = localStorage.getItem("password")
-        setWindowUser({username: username, password: password})
+          const username = localStorage.getItem("username")
+          const password = localStorage.getItem("password")
+          const picture = localStorage.getItem("picture")
+          const coins = localStorage.getItem("coins")
+          const stars = localStorage.getItem("stars")
+    
+          setWindowUser({
+            username: username, 
+            password: password,
+            picture: picture,
+            coins: coins,
+            stars: stars
+          })
+          console.log("SACO DATOS")
         }else{
-        router.push("/")
+          console.log("VOY A LOGIN")
+          router.push("/")
         }
     }, [])
-        
     // Hace fetch de la api
     useEffect(() => {
         // Función que llama a la api
@@ -41,35 +51,33 @@ export default function StoryMode(){
             }
 
             // Llamada a la api
-            const res1 = await fetch('http://localhost:3000/api/general/home', options)
-            const data1 = await res1.json()
-            const res2 = await fetch('http://localhost:3000/api/tale_mode/get_tales', options)
-            const data2 = await res2.json() 
+            const res = await fetch('http://localhost:3000/api/tale_mode/get_tales', options)
+            const data = await res.json() 
 
             // Si no ha ido bien o no estoy logeado volvemos a /
-            if(data1.result === "error" || data2.result === 'error'){
+            if(data.result === "error"){
+                localStorage.setItem("logged", "no")
                 router.push("/")
                 return
             }
 
             // Llama al hook que almacena la información del usuario
-            setMyuser(data1)
-            setMyTales(data2)
+            setMyTales(data)
         }
         getData()
-    }, [windowUser])
+    })
 
     // Si tadavía no hoy usuario, esperamos a que lo haya
-    if(!myuser || !myTales){
+    if(!myTales){
         return <Spinner />
     }
     
     // Renderizamos la página
     const layoutInfo = {
         username: windowUser.username,
-        stars:    myuser.stars,
-        coins:    myuser.coins,
-        image_ID: myuser.picture
+        stars:    windowUser.stars,
+        coins:    windowUser.coins,
+        image_ID: windowUser.picture
     } 
 
     return(
@@ -77,11 +85,13 @@ export default function StoryMode(){
             <div className='flex flex-row items-center space-x-20 ml-5'>
                 <div className='flex flex-col ml-5'>
                     <h1 className='commonTitle'>Tus Relatos</h1>
-                    <StoryList stories={myTales.myTales} />
+                    <StoryList stories={myTales.myTales} isVoteStory={false}/>
                     <h1 className='commonTitle'>Relatos de Amigos</h1>
-                    <StoryList stories={myTales.friendTales} />
+                    <StoryList stories={myTales.friendTales} isVoteStory={false}/>
                     <h1 className='commonTitle'>Relatos Públicos</h1>
-                    <StoryList stories={myTales.publicTales} />
+                    <StoryList stories={myTales.publicTales} isVoteStory={false}/>
+                    <h1 className='commonTitle'>Relatos a Votar</h1>
+                    <StoryList stories={myTales.talesForVote} isVoteStory={true}/>
                 </div>
                 <form className='flex flex-col space-y-3'>
                     <h1 className='commonTitle'>Crear Partida</h1>
@@ -121,10 +131,10 @@ function createGame(privacy, router){
     const chars = document.getElementById('chars').value
 
     if(turns && chars){
-        if(turns < 0 || turns > 10){
-            alert("No puede haber menos de 1 turno o más de 10")
-        }else if(chars < 0 || chars > 120){
-            alert("No puede haber menos de 1 carácter o más de 120")
+        if(turns < 3 || turns > 1000){
+            alert("No puede haber menos de 3 turnos")
+        }else if(chars < 30 || chars > 120){
+            alert("No puede haber menos de 10 carácter o más de 120")
         }else{
             router.push(`/storyMode/start?turns=${turns}&characters=${chars}&privacy=${privacy}`)
         }
