@@ -25,7 +25,7 @@ function Story({story, isVoteStory}){
                         <a><Image src="/icons/pencil.png" width="20" height="20"/></a>
                     </Link>
                 ):(
-                    <Link href={`/storyMode/continue?id=${story.story_id}&lastTurn=${lastTurn}&creator=${story.creator}`}>
+                    <Link href={`/storyMode/vote?id=${story.story_id}&creator=${story.creator}`}>
                         <a><Image src="/icons/pencil.png" width="20" height="20"/></a>
                     </Link>
                 )}

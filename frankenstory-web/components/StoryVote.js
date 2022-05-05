@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react"
+import { useRouter } from "next/router"
 import Image from "next/image"
 
 const StoryVote = ({user}) => {
+    const router = useRouter()
     const [vote, setVote] = useState(-1)
     const [story, setStory] = useState({title:"",paragraphs:[]})
-    const [creator, setCreator] = useState("Creador")
+    const [creator, setCreator] = useState("")
     const queryParams = new URLSearchParams(window.location.search);
 
     useEffect(() => {
+        setCreator(queryParams.get("creator"))
         const getStory = async () => {
             // Opciones para llamar a la api
             const body = {
@@ -27,47 +30,28 @@ const StoryVote = ({user}) => {
             const res = await fetch('http://localhost:3000/api/tale_mode/get_paragraphs', options)
             var data = await res.json()
   
-            console.log(data)
-  
             // Si no ha ido bien o no estoy logeado volvemos a /
             if(data.result === "error"){
                 router.push("/")
                 return
             }
-            data = {
-                title:"Titulo",
-                paragraphs:[{
-                    text:"Cuerpo 1",
-                    username:"Pepe",
-                    turn_number:1
-                },{
-                    text:"Cuerpo 2",
-                    username:"Pepe",
-                    turn_number:2
-                },{
-                    text:"Cuerpo 3",
-                    username:"Pepe",
-                    turn_number:3
-                },{
-                    text:"Cuerpo 4",
-                    username:"Pepe",
-                    turn_number:4
-                },]
-            }
             // Llama al hook que almacena la información del usuario
-            console.log("Aqui")
-            console.log(data)
             setStory(data)
         }
         getStory()
 
     },[])
 
-    function Paragraph({body,turn}) {
+    function Paragraph({body,turn,creator}) {
         const voteParagraph = (e) =>{
             e.preventDefault()
-            setVote(turn)
+            if(creator != localStorage.getItem("username")){
+                setVote(turn)
+            }else{
+                alert("No te puedes votar a ti mismo Jaime")
+            }
         }
+        /**/ 
         return(
             <div className="mb-2 w-full">
                 <input className={`rounded-xl ${ vote == turn ? `bg-green-600` : `bg-green-800`}`} type="button" onClick={(voteParagraph)} value={body}/>
@@ -93,6 +77,7 @@ const StoryVote = ({user}) => {
   
         // Llamada a la api
         const res = await fetch('http://localhost:3000/api/tale_mode/get_paragraphs', options)
+        console.log(res)
         return res.json()
     }
 
@@ -115,7 +100,7 @@ const StoryVote = ({user}) => {
             <div className="scrollBox h-auto text-center">
                 <ul>
                     {story.paragraphs.map((paragraph) => 
-                    <Paragraph body={paragraph.text} turn={paragraph.turn_number}/>
+                    <Paragraph body={paragraph.text} turn={paragraph.turn_number} creator={paragraph.username}/>
                     )}
                 </ul>
             </div>

@@ -129,12 +129,11 @@ export default function StoryMode(){
 function createGame(privacy, router){
     const turns = document.getElementById('turns').value
     const chars = document.getElementById('chars').value
-
     if(turns && chars){
         if(turns < 3 || turns > 1000){
             alert("No puede haber menos de 3 turnos")
         }else if(chars < 30 || chars > 120){
-            alert("No puede haber menos de 10 carácter o más de 120")
+            alert("No puede haber menos de 30 carácter o más de 120")
         }else{
             router.push(`/storyMode/start?turns=${turns}&characters=${chars}&privacy=${privacy}`)
         }
