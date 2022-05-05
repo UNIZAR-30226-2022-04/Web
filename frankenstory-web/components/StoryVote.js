@@ -3,16 +3,8 @@ import Image from "next/image"
 
 const StoryVote = ({user}) => {
     const [vote, setVote] = useState(-1)
-    /*const [story, setStory] = useState({
-        title:"Titulo",
-        paragraphs:[{
-            text:"Cuerpo 1",
-            username:"Pepe",
-            turn_number:1
-        },]})*/
-    const [story, setStory] = useState({
-        title:"",
-        paragraphs:[]})
+    const [story, setStory] = useState({title:"",paragraphs:[]})
+    const [creator, setCreator] = useState("Creador")
     const queryParams = new URLSearchParams(window.location.search);
 
     useEffect(() => {
@@ -21,7 +13,7 @@ const StoryVote = ({user}) => {
             const body = {
                 username:user.username,
                 password:user.password,
-                id:queryParams.get("id"),
+                id:parseInt(queryParams.get("id")),
             }
             const options = {
                 method: 'POST',
@@ -93,7 +85,7 @@ const StoryVote = ({user}) => {
         <div className="friendsBox w-2/3">
             <div className="centered">Votaciones</div>
             <div className="centered">Elige el párrafo que más te guste</div>
-            <div className="centered">Historia de Mr Patinente</div>
+            <div className="centered">Historia de {creator}</div>
             <div className="centered">Titulo:{story.title}</div>
             <div className="scrollBox h-auto text-center">
                 <ul>
