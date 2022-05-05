@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import Image from "next/image"
 
-const StoryVote = ({user}) => {
+const QuickVote = ({user}) => {
     const router = useRouter()
     const [vote, setVote] = useState(-1)
     const [story, setStory] = useState({title:"",paragraphs:[]})
@@ -109,4 +109,4 @@ const StoryVote = ({user}) => {
     )
 }
 
-export default StoryVote
+export default QuickVote

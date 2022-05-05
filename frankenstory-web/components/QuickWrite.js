@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 
-const WriteStory = ({first}) => {
+const WriteStory = ({first,type}) => {
 
   var url
   const router = useRouter()
@@ -128,7 +128,7 @@ const WriteStory = ({first}) => {
       <div className="storyBox">
         <form onSubmit={onSubmit}>
             <div className="centered">
-              <div className="commonTitle h-auto">{first ? <>Empieza tu relato</> : <>{currentTitle}</> } </div>
+              <div className="commonTitle h-auto">{first ? <>Comienza la historia</> : <>{currentTitle}</> } </div>
             </div>
             <div className="centered text-lg">
               {first ? <input className="titleWrite w-6/12 mx-0 bg-gray-200" type="text" required={true} maxLength={100} value={currentTitle} placeholder="Titulo del relato" onChange={(e) => setCurrentTitle(e.target.value)}/>
