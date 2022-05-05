@@ -12,8 +12,6 @@ export default function StoryMode(){
     const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
     const [windowUser, setWindowUser] = useState({})
   
-    var creator = "Not you"
-  
     useEffect(()=>{
       if(localStorage.getItem("logged") == "si"){
         const username = localStorage.getItem("username")
@@ -36,6 +34,7 @@ export default function StoryMode(){
       
       const getData = async () => {
         // Opciones para llamar a la api
+        
         const options = {
           method: 'POST',
           headers: {

@@ -44,6 +44,7 @@ export default function QuickGame(){
         }
         const queryParams = new URLSearchParams(window.location.search);
         setCode(queryParams.get('code'))
+        console.log(`code:${code}`)
     }, [])
         
     // Hace fetch de la api

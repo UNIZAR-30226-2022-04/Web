@@ -1,13 +1,17 @@
-import Layout from 'components/Layout'
-import WriteStory from 'components/WriteStory'
-import { useEffect,useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-export default function Continue() {
+import Layout from 'components/Layout'  
+import Rulette from 'components/Rulette'
+import Spinner from 'components/Spinner'
+import StoryVote from "components/StoryVote"
+
+export default function StoryMode(){
   const router = useRouter()
-  
   const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
   const [windowUser, setWindowUser] = useState({})
+  const [story, setStory ] = useState([])
+
 
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
@@ -59,7 +63,7 @@ export default function Continue() {
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!myuser){
-    return <div className='background'>loading...</div> 
+    return <Spinner />
   }
   
   // Renderizamos la página
@@ -68,13 +72,12 @@ export default function Continue() {
     stars:    myuser.stars,
     coins:    myuser.coins,
     image_ID: myuser.picture
-  } 
+  }
 
-  return (
-    <>
-        <Layout data={layoutInfo}>
-          <WriteStory first={true} creator={windowUser.username}/>
-        </Layout> 
-    </>
-  )
+    return(
+        <Layout data={layoutInfo} > 
+            <StoryVote user={windowUser}/>
+            <Rulette page='quickGame'/>            
+        </Layout>
+    )
 }

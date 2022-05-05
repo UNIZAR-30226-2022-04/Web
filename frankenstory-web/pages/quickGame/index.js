@@ -140,7 +140,7 @@ export default function StoryMode(){
             <div className='centered'>
                 <button onClick={random}>Partida aleatoria</button>
             </div>
-            <Rulette page='story'/>            
+            <Rulette page='quickGame'/>            
         </Layout>
     )
 }
