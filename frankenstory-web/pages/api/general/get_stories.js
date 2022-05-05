@@ -1,22 +1,27 @@
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { selectStoriesDB } from "../../../prisma/queries/SELECT/stories";
-import {checkFields} from "../../../lib/checkFields";
+import { checkFields } from "../../../lib/checkFields";
 
 // Al ir a http://localhost:3000/api/get_stories te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
-	
-	const fields = ['username','password'];
 
-	if (!checkFields(message,fields)){
-		res.status(200).json({ result: "error", reason: "invalid credentials" });
+	const fields = ["username", "password"];
+
+	const rest = checkFields(message,fields)
+	if (rest.length != 0){
+		const msg = "invalid credentials, expected: " + rest
+		res.status(200).json({ result: "error", reason: msg });
 		return;
 	}
 
 	const user = await selectPlayerDB(message.username);
 
-	if (message.username.length==0||message.password.length==0){
-		res.status(200).json({ result: "error", reason: "invalid credentials" });
+	if (message.username.length == 0 || message.password.length == 0) {
+		res.status(200).json({
+			result: "error",
+			reason: "invalid credentials",
+		});
 	}
 
 	// checks if the requested user exists
@@ -24,34 +29,54 @@ export default async (req, res) => {
 		// checks password
 		if (user.password_hash == message.password) {
 			//cambiar por password + anadir mecanismo hash
-            const query = await selectStoriesDB(message.username);
-			var stories = []
-			for (const st in query){
-				var title
-				var type
-				var store = true
-				if (query[st].story.quick_match.length != 0){
-					title = ''
-					type = query[st].story.quick_match[0].mode
-				} else if (query[st].story.tale.length != 0){
-					const tale = query[st].story.tale[0]
-					title = tale.title
-					store = tale.finished
-					type = 'tale'
+			const query = await selectStoriesDB(message.username);
+			var stories = [];
+/*
+			if (message.username == 'Mercutio'){
+				const fc = {
+					id: 1,
+					title: 'FELIZ CUMPLEAÑOS!',
+					type: 'tale',
+					date: 'TODOS LOS DIAS',
+				};
+				stories.push(fc);
+			}*/
+			
+			for (const st in query) {
+				var title;
+				var type;
+				var store = true;
+
+				if (query[st].story.quick_match != null) {
+					title = "";
+					type = query[st].story.quick_match.mode;
+				} else if (query[st].story.tale != null) {
+					const tale = query[st].story.tale;
+					title = tale.title;
+					store = tale.finished;
+					type = "tale";
 				}
-				if (store){
-					const [month, day, year]       = [query[st].story.date.getUTCMonth(), query[st].story.date.getUTCDate(), query[st].story.date.getUTCFullYear()];
+				if (store) {
+					const [month, day, year] = [
+						query[st].story.date.getUTCMonth(),
+						query[st].story.date.getUTCDate(),
+						query[st].story.date.getUTCFullYear(),
+					];
 
 					const story = {
 						id: query[st].story.story_id,
 						title: title,
 						type: type,
-						date: day + "/" + month + "/" + year
-					}
-					stories.push(story)
+						date: day + "/" + month + "/" + year,
+					};
+					stories.push(story);
 				}
 			}
-			res.status(200).json({ result: "success", stories: stories, reason: "" });
+			res.status(200).json({
+				result: "success",
+				stories: stories,
+				reason: "",
+			});
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });
 		}

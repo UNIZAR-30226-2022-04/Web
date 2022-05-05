@@ -94,7 +94,7 @@ const StoryVote = ({user}) => {
                     )}
                 </ul>
             </div>
-            <input className="clickableItem bg-green-800 rounded-xl w-30" type="button" onClick={(sendVote)} value="Enviar voto"/>
+            <input className="clickableItem bg-green-800 rounded-xl" type="button" onClick={(sendVote)} value="Enviar voto"/>
         </div>
     )
 }

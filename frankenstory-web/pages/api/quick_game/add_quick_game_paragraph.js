@@ -6,11 +6,11 @@ import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { selectTaleDB } from "../../../prisma/queries/SELECT/tale_mode";
 import {checkFields} from "../../../lib/checkFields";
 
-// Al ir a http://localhost:3000/api/add_tale_paragraph te devuelve el siguiente json
+// Al ir a http://localhost:3000/api/add_quick_game_paragraph te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
 	
-	const fields = ['username','password','id','body','isLast'];
+	const fields = ['username','password','id','body','turn','isLast','punetas'];
 
 	const rest = checkFields(message,fields)
 	if (rest.length != 0){
@@ -24,25 +24,6 @@ export default async (req, res) => {
 	// checks if username exists
 	if (user != undefined) {
 		if (user.password_hash == message.password) {
-			const tale = await selectTaleDB(message.id);
-
-			const participant = await selectParticipantDB(
-				message.username,
-				message.id
-			);
-
-			if (
-				participant[0] == undefined ||
-				participant[0].username == undefined
-			) {
-				const dataParticipant = {
-					username: message.username,
-					story_id: message.id,
-					creator: false,
-					voted: "",
-				};
-				await createParticipantDB(dataParticipant);
-			}
 
 			const dataParagraph = {
 				text: message.body,
@@ -52,19 +33,9 @@ export default async (req, res) => {
 			};
 
 			await createParagraphDB(dataParagraph);
-			const noVoting = tale.turn==0
+            
 			if (message.isLast) {
-				const dataTale = {
-					story_id: tale.story_id,
-					max_turns: tale.maxTurns,
-					turn: tale.turn + 1,
-					max_paragraph_chars: tale.maxCharacters,
-					privacy: tale.privacy,
-					title: tale.title,
-					finished: true,
-					scored: noVoting
-				};
-				await updateTaleDB(message.id, dataTale);
+				// 
 			} else {
 				const dataTale = {
 					story_id: tale.story_id,

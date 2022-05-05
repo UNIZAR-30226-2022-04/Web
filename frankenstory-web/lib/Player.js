@@ -5,9 +5,19 @@ export default class Player {
 		this.picture = picture;
 		this.stars = stars;
 		this.mooncoins = mooncoins;
+		this.paragraphs = []
 	}
+
+	addParagraph(paragraph){
+		this.paragraphs.push(paragraph);
+	}
+
 	friends() {
 		return 0;
 		//return getFriends(this.username);
 	}
+}
+
+export function addParagraphPlayer(player,id,paragraph){
+	
 }

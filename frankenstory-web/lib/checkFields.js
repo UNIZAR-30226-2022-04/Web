@@ -1,12 +1,12 @@
 
 
 export function checkFields(msg,fields){
-    var hasFields = true;
+    var rest = "";
     for (const field in fields) {
 		if (!msg.hasOwnProperty(fields[field])) {
-			hasFields=false;
+			rest += ", " + fields[field]
             console.log('ERROR: expected field \'', fields[field], '\' not found on message')
 		}
 	}
-    return hasFields;
+    return rest;
 }

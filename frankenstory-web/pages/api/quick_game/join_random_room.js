@@ -10,11 +10,10 @@ export default async (req, res) => {
 
 	const fields = ["username", "password"];
 
-	if (!checkFields(message, fields)) {
-		res.status(200).json({
-			result: "error",
-			reason: "invalid credentials",
-		});
+	const rest = checkFields(message, fields);
+	if (rest.length != 0) {
+		const msg = "invalid credentials, expected: " + rest;
+		res.status(200).json({ result: "error", reason: msg });
 		return;
 	}
 
@@ -37,7 +36,7 @@ export default async (req, res) => {
 					reason: "no_rooms_available",
 				});
 			} else {
-				const id = gamesList[0].id;
+				const id = gamesList[0].room_id;
 				if (addPlayerGame(id, p)) {
 					res.status(200).json({ result: "success", id: id });
 				} else {
