@@ -76,9 +76,34 @@ const StoryVote = ({user}) => {
         )
     }
 
+    const trySend = async () => {
+        const body = {
+            username:user.username,
+            password:user.password,
+            id:parseInt(queryParams.get("id")),
+            indexParagraph: vote
+        }
+        const options = {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body) 
+        }
+  
+        // Llamada a la api
+        const res = await fetch('http://localhost:3000/api/tale_mode/get_paragraphs', options)
+        return res.json()
+    }
+
     const sendVote = (e) => {
         e.preventDefault()
-        console.log(vote)
+        trySend().then((res) =>{
+            if(res.result !=  "success"){
+                alert("Error al enviar voto")
+            }
+            router.push("/storyMode")
+        })
     }
 
     return(
