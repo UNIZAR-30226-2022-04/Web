@@ -50,6 +50,7 @@ export default function Stats() {
 
       // Si no ha ido bien o no estoy logeado volvemos a /
       if(data.result === "error"){
+        localStorage.setItem("logged", "no")
         router.push("/")
         return
       }
@@ -60,11 +61,20 @@ export default function Stats() {
     getData()
   }, [windowUser])
 
+  useEffect(() => {
+    if(myuser){
+      localStorage.setItem("picture", myuser.picture)
+      localStorage.setItem("stars", myuser.stars)
+      localStorage.setItem("coins", myuser.coins)
+    }
+  })
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!myuser){
     return <Spinner />
   }
   
+  
+
   // Renderizamos la página
   const layoutInfo = {
     username: windowUser.username,

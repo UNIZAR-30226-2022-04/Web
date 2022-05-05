@@ -11,19 +11,29 @@ import Spinner from 'components/Spinner'
 export default function SavedTales(){
 
     const router = useRouter()
-    const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
     const [myStories, setMyStories] = useState("")
     const [windowUser, setWindowUser] = useState({}) 
 
+    // Recoge los datos guardados
     useEffect(()=>{
         if(localStorage.getItem("logged") == "si"){
-        const username = localStorage.getItem("username")
-        const password = localStorage.getItem("password")
-        setWindowUser({username: username, password: password})
-        console.log("SACO DATOS")
+            const username = localStorage.getItem("username")
+            const password = localStorage.getItem("password")
+            const picture = localStorage.getItem("picture")
+            const coins = localStorage.getItem("coins")
+            const stars = localStorage.getItem("stars")
+
+            setWindowUser({
+            username: username, 
+            password: password,
+            picture: picture,
+            coins: coins,
+            stars: stars
+            })
+            console.log("SACO DATOS")
         }else{
-        console.log("VOY A LOGIN")
-        router.push("/")
+            console.log("VOY A LOGIN")
+            router.push("/")
         }
     }, [])
     
@@ -47,36 +57,32 @@ export default function SavedTales(){
             }
             
             // Llamada a la api
-            const res1 = await fetch('http://localhost:3000/api/general/home', options)
-            const data1 = await res1.json()
-
-            const res2 = await fetch('http://localhost:3000/api/general/get_stories', options)
-            const data2 = await res2.json()
+            const res = await fetch('http://localhost:3000/api/general/get_stories', options)
+            const data = await res.json()
 
             // Si no ha ido bien o no estoy logeado volvemos a /
-            if(data1.result === "error" || data2.result === "error"){
+            if(data.result === "error"){
                 router.push("/")
                 return
             }
 
             // Llama al hook que almacena la información del usuario
-            setMyuser(data1)
-            setMyStories(data2)
+            setMyStories(data)
         }
         getData()
     }, [windowUser])
 
     // Si tadavía no hoy usuario, esperamos a que lo haya
-    if(!myuser || !myStories){
+    if(!myStories){
         return <Spinner />
     }
     
     // Renderizamos la página
     const layoutInfo = {
         username: windowUser.username,
-        stars:    myuser.stars,
-        coins:    myuser.coins,
-        image_ID: myuser.picture
+        stars:    windowUser.stars,
+        coins:    windowUser.coins,
+        image_ID: windowUser.picture
     } 
 
     console.log("my stories",myStories)
