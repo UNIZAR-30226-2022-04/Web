@@ -5,48 +5,14 @@ import Layout from 'components/Layout'
 import Rulette from 'components/Rulette'
 import Spinner from 'components/Spinner'
 
-const user = {"username": "MrNOPatineto", "password": "12345"}
-
-const relatosDebug = {
-    myTales: [
-    ],
-
-    friendTales: [
-        {
-            id: 0,
-            title: "El Pepe",
-            creator: "Fernando",
-            maxTurns: 10,
-            turn: 4
-        },
-        {
-            id: 1,
-            title: "Federico",
-            creator: "GarciaLorca",
-            maxTurns: 15,
-            turn: 2
-        },
-        {
-            id: 2,
-            title: "Feliz Cumpleaños",
-            creator: "Hg",
-            maxTurns: 200,
-            turn: 80
-        }
-    ],
-
-    publicTales: [
-    ],
-
-    talesForVote: [
-    ]
-}
-
 export default function StoryMode(){
     const router = useRouter()
 
   const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
-  const [windowUser, setWindowUser] = useState({}) 
+  const [windowUser, setWindowUser] = useState({})
+  const [code, setCode] = useState("")
+  const [errorJ, setErrorJ] = useState("")
+  const [errorR, setErrorR] = useState("")
 
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
@@ -114,31 +80,82 @@ export default function StoryMode(){
     router.push("/quickGame/create")
   }
 
+  const tryJoin = async () => {
+    const body = {
+      username:windowUser.username,
+      password:windowUser.password,
+      id:code
+    }
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body) 
+    }
+    const data = await fetch("http://localhost:3000/api/quick_game/join_room",options)
+    return data.json()
+  }
+
   const join = (e) =>{
+    setErrorR("")
     e.preventDefault()
-    alert("Partida por codigo no implementada")
+    tryJoin().then((res)=>{
+      if(res.result != "success"){
+        setErrorJ(res.reason)
+      }else{
+        router.push(`quickGame/lobby?id=${code}`)
+      }
+    })
+  }
+
+  const tryRandom = async () => {
+    const body = {
+      username:windowUser.username,
+      password:windowUser.password,
+    }
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body) 
+    }
+    const data = await fetch("http://localhost:3000/api/quick_game/join_random_room",options)
+    return data.json()
   }
 
   const random = (e) =>{
+    setErrorJ("")
     e.preventDefault()
-    alert("Partida aleatoria no implementada")
+    tryRandom().then((res)=>{
+      if(res.result != "success"){
+        setErrorR(res.reason)
+      }else{
+        router.push(`quickGame/lobby?id=${res.id}`)
+      }
+    })
   }
 
     return(
         <Layout data={layoutInfo} > 
-            <div className='centered'>
-                <button onClick={create}>Crear partida</button>
-            </div>
-            <form onSubmit={join}>
+            <div className="w-2/3 ml-30">
               <div className='centered'>
-                  <input type="text" placeholder='Código'/>
+                  <button className='rounded-xl bg-green-800 text-white p-2 border-2 border-white' onClick={create}>Crear partida</button>
               </div>
-              <div className="centered">
-                  <button type="submit">Unirse a sala</button>
+              <form onSubmit={join}>
+                <div className='centered'>
+                    <input type="text" placeholder='Código' value={code} onChange={(e) => setCode(e.target.value)}/>
+                </div>
+                { errorJ != "" ? <div className="centered text-red-700">{errorJ}</div> : ""}
+                <div className="centered">
+                    <button className="rounded-xl bg-green-800 text-white p-2 border-2 border-white" type="submit">Unirse a sala</button>
+                </div>
+              </form>
+              <div className='centered'>
+                <button className='rounded-xl bg-green-800 text-white p-2 border-2 border-white' onClick={random}>Partida aleatoria</button>
               </div>
-            </form>
-            <div className='centered'>
-                <button onClick={random}>Partida aleatoria</button>
+              { errorR != "" ? <div className="centered text-red-700">{errorR}</div> : ""}
             </div>
             <Rulette page='quickGame'/>            
         </Layout>

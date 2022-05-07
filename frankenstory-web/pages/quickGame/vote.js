@@ -10,7 +10,6 @@ export default function StoryMode(){
   const router = useRouter()
   const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
   const [windowUser, setWindowUser] = useState({})
-  const [story, setStory ] = useState([])
 
 
   useEffect(()=>{
@@ -76,8 +75,7 @@ export default function StoryMode(){
 
     return(
         <Layout data={layoutInfo} > 
-            <QuickVote user={windowUser}/>
-            <Rulette page='quickGame'/>            
+            <QuickVote user={windowUser}/>    
         </Layout>
     )
 }

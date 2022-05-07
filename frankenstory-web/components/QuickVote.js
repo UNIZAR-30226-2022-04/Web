@@ -42,7 +42,7 @@ const QuickVote = ({user}) => {
 
     },[])
 
-    function Paragraph({body,turn,user}) {
+    function Paragraph({body,words,turn}) {
         const voteParagraph = (e) =>{
             e.preventDefault()
             if(user != localStorage.getItem("username")){
@@ -65,7 +65,7 @@ const QuickVote = ({user}) => {
             username:user.username,
             password:user.password,
             id:parseInt(queryParams.get("id")),
-            indexParagraph: vote
+            paragraph: vote
         }
         const options = {
             method: 'POST',
@@ -87,7 +87,7 @@ const QuickVote = ({user}) => {
             if(res.result !=  "success"){
                 alert("Error al enviar voto")
             }
-            router.push("/storyMode")
+            router.push("/quickGame")
         })
     }
 
@@ -99,8 +99,8 @@ const QuickVote = ({user}) => {
             <div className="centered">Titulo:{story.title}</div>
             <div className="scrollBox h-auto text-center">
                 <ul>
-                    {story.paragraphs.map((paragraph) => 
-                    <Paragraph body={paragraph.text} turn={paragraph.turn_number} user={paragraph.username}/>
+                    {story.paragraphs.map((paragraph, num) => 
+                    <Paragraph body={paragraph.text} words={paragraph.words} turn={num}/>
                     )}
                 </ul>
             </div>
