@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import {Router, useRouter} from 'next/router'
+import { useState } from "react"
+import { useRouter } from 'next/router'
 
 const CreateQuickGame = () => {
 
@@ -9,7 +8,7 @@ const CreateQuickGame = () => {
     const router = useRouter()
 
     const [publicGame, setPublicGame] = useState(true)
-    const [gameMode, setGameMode] = useState("normal")
+    const [gameMode, setGameMode] = useState("random")
     const [time, setTime ] = useState(120)
 
     const setPublic = () => {
@@ -26,10 +25,6 @@ const CreateQuickGame = () => {
 
     const setModeTwitter = () => {
         setGameMode("twitter")
-    }
-
-    const setModeNormal = () => {
-        setGameMode("normal")
     }
 
     const timeUp = (e) => {
@@ -76,24 +71,33 @@ const CreateQuickGame = () => {
  
   return (
       <form className ="m-auto justify-center p-6 align-middle" onSubmit={onSubmit}>
-          <div>
+          <div className="centered">
             <p>Tiempo de escritura</p>
-            <>{parseInt(time/60)} : {time % 60}</>
-            <button onClick={timeUp}>+</button>
-            <button onClick={timeDown}>-</button>
           </div>
-          <div>
+          <div className="flex">
+              <div>
+                <p className="text-2xl float-left text-white">{parseInt(time/60)}min:{time % 60}seg</p>
+                <div className="absolute ml-36 text-2xl">
+                    <button onClick={timeDown}>-</button>
+                    <button className="ml-2" onClick={timeUp}>+</button>
+                </div>
+              </div>
+          </div>
+          <div className="centered" >
             <p>Tipo de partida</p>
-            <input className={ publicGame ? "bg-green-800" : "bg-green-600"} type="button" value="publica" onClick={setPublic}/><> </>
-            <input className={ !publicGame ? "bg-green-800" : "bg-green-600"} type="button" value="privada" onClick={setPrivate}/>
           </div>
-          <div>
-            <p>Modo de juego</p>
-            <input className={ gameMode == "random" ? "bg-green-800" : "bg-green-600"} type="button" value="aleatorio" onClick={setModeRandom}/><> </>
-            <input className={ gameMode == "twitter" ? "bg-green-800" : "bg-green-600"} type="button" value="twitter" onClick={setModeTwitter}/><> </>
-            <input className={ gameMode == "normal" ? "bg-green-800" : "bg-green-600"} type="button" value="normal" onClick={setModeNormal}/>
+          <div className="centered">
+            <input className={`py-1 px-2 text-white ${ publicGame ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="PUBLICA" onClick={setPublic}/>
+            <input className={`py-1 px-2 text-white ${ !publicGame ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="PRIVADA" onClick={setPrivate}/>
           </div>
-          <div>
+          <div className = "centered ">
+                <>Modo de juego</>
+          </div>
+          <div className = "centered">
+            <input className={`py-1 px-2 text-white ${ gameMode=="random" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="ALEATORIAS" onClick={setModeRandom}/><> </>
+            <input className={`py-1 px-2 text-white ${ gameMode=="twitter" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="TWITTER" onClick={setModeTwitter}/><> </>
+          </div>
+          <div className = "centered">
             <input className="clickableItem"type="submit" value="Crear partida"/>
           </div>
       </form>
