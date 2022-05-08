@@ -223,6 +223,11 @@
   src: url("./fonts/AdobeBlank.ttf");
 }
 
+@font-face {
+  font-family: "REVERSE";
+  src: url("./fonts/Reverse.ttf");
+}
+
 .font-blank{
   font-family: "blank";
 }

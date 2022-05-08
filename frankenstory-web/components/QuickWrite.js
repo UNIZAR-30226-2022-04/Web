@@ -12,7 +12,7 @@ const WriteStory = ({first,type}) => {
   const [maxChar, setMaxChar ] = useState(200)
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
-  const [handicap, setHandicap] = useState("ciego")
+  const [handicap, setHandicap] = useState("reves")
   const [mode, setMode] = useState("")
   const [time, setTime] = useState(200)
   const queryParams = new URLSearchParams(window.location.search);
@@ -153,7 +153,7 @@ const WriteStory = ({first,type}) => {
             </div>
 
             <div className="centered">
-              <textarea className={`storyWrite inline-flex flex-col h-48 w-6/12 ${ handicap== "reves" ? "" : ""}${ handicap == "ciego" ? "font-blank" : ""}`} type="password" required={true} maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+              <textarea className={`storyWrite text-2xl font-arial inline-flex flex-col h-48 w-6/12 ${ handicap== "reves" ? "font-reverse" : ""}${ handicap == "ciego" ? "font-blank" : ""}`} type="password" required={true} maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
             </div>
 
             <div className="clickable-item centered">
