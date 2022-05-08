@@ -77,7 +77,7 @@ const CreateQuickGame = () => {
           <div className="flex">
               <div>
                 <p className="text-2xl float-left text-white">{parseInt(time/60)}min:{time % 60}seg</p>
-                <div className="absolute ml-36 text-2xl">
+                <div className="absolute ml-36 text-2xl text-white">
                     <button onClick={timeDown}>-</button>
                     <button className="ml-2" onClick={timeUp}>+</button>
                 </div>

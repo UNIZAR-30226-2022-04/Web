@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
+import Image from "next/image"
 
 const WriteStory = ({first,type}) => {
 
@@ -11,9 +12,11 @@ const WriteStory = ({first,type}) => {
   const [maxChar, setMaxChar ] = useState(200)
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
+  const [handicap, setHandicap] = useState("ciego")
+  const [mode, setMode] = useState("")
+  const [time, setTime] = useState(200)
   const queryParams = new URLSearchParams(window.location.search);
   var isLast = (queryParams.get("lastTurn")!=0)
-  const creator = queryParams.get("creator")
 
   useEffect(()=>{
     setUser(localStorage.getItem("username"))
@@ -120,31 +123,43 @@ const WriteStory = ({first,type}) => {
     router.push("/storyMode")
   }
 
-  const setLast = () => {
-    isLast = true
-  }
-
   return (
       <div className="storyBox">
         <form onSubmit={onSubmit}>
+
             <div className="centered">
-              <div className="commonTitle h-auto">{first ? <>Comienza la historia</> : <>{currentTitle}</> } </div>
+              <div className="commonTitle h-auto">{first ? <>Comienza la historia</> : <>Párrafo anterior</> } </div>
             </div>
-            <div className="centered text-lg">
-              {first ? <input className="titleWrite w-6/12 mx-0 bg-gray-200" type="text" required={true} maxLength={100} value={currentTitle} placeholder="Titulo del relato" onChange={(e) => setCurrentTitle(e.target.value)}/>
-              :<div className="mb-10">{previous}</div> }
+
+            <div className='centered text-lg'>
+              { !first ? <div></div>:"" }
             </div>
+
+            <div className="">
+              { mode != "twitter" ? 
+                <div className="centered">
+                  <div>Tema de la historia</div>
+                  <div className="rounded bg-blue-400 ml-4">
+                  #Temazo tremendo
+                  <Image className="ml-4" src="/quick-game/twitter_trend.png" width={30} height={30}/>
+                  </div>
+                </div>
+                :
+                ""}
+            </div>
+
             <div className="centered">
-              <textarea className="storyWrite inline-flex text-lg flex-col h-48 w-6/12" type="text" required={true} maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+              <Image className="ml-4" src="/quick-game/clock.png" width={30} height={30}/>{parseInt(time/60)}min:{time % 60}seg
             </div>
+
+            <div className="centered">
+              <textarea className={`storyWrite inline-flex flex-col h-48 w-6/12 ${ handicap== "reves" ? "" : ""}${ handicap == "ciego" ? "font-blank" : ""}`} type="password" required={true} maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+            </div>
+
             <div className="clickable-item centered">
               <input className="bg-blue-400 w-32 rounded-xl" type="submit" value="Enviar parrafo"/>
             </div>
-            { (!first && (creator == user) ) ? 
-            <div className="clickable-item centered">
-              <input className ="bg-red-400 w-32 rounded-xl" type="submit" value = "Terminar relato" onClick={setLast}/>
-            </div>
-            : ""}
+
         </form>
       </div>
   )

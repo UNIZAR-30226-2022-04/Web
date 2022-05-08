@@ -218,6 +218,14 @@
   src: url("./fonts/graduate.ttf");
 }
 
+@font-face {
+  font-family: "BLANK";
+  src: url("./fonts/AdobeBlank.ttf");
+}
+
+.font-blank{
+  font-family: "blank";
+}
 
 .txtShadw {
   text-shadow: 5px 4px green

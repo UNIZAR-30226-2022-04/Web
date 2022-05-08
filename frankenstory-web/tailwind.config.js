@@ -12,6 +12,7 @@ module.exports = {
         'arial-r': ['ARIAL-REGULAR'] ,
         'bangers': ['BANGERS-REGULAR'] ,
         'graduate': ['GRADUATE'] ,
+        'blank': ['BLANK'],
       },
       textShadow: {
         sm: '1px 1px 2px var(--tw-shadow-color)',
