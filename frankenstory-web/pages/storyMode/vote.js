@@ -5,13 +5,12 @@ import Layout from 'components/Layout'
 import Spinner from 'components/Spinner'
 import StoryParagraphs from "components/StoryParagraphs"
 
-export default function StoryMode(){
+export default function StoryVote(){
   const [windowUser, setWindowUser] = useState({})
   const [id, setId] = useState("")
   const [story, setStory] = useState("")
-  const [type, setType] = useState("")
   const router = useRouter()
-  const [chosenStory, setChosenStory] = useState(1);
+  const [chosenStory, setChosenStory] = useState(0);
 
   const info = {
     username: windowUser.username,
@@ -23,7 +22,6 @@ export default function StoryMode(){
     if(localStorage.getItem("logged") == "si"){
       const queryParams = new URLSearchParams(window.location.search);
       setId(queryParams.get('id'))
-      setType(queryParams.get('type'))
 
       const username = localStorage.getItem("username")
       const password = localStorage.getItem("password")
@@ -65,17 +63,9 @@ export default function StoryMode(){
         body: JSON.stringify(info) 
       }
       
-      var data = {}
-      if(type == "quick"){
-        const res = await fetch('http://localhost:3000/api/quick_game/resume_vote_quick_game', options)
-        data = await res.json()      
-      
-      }else if(type == "tale"){
-        const res = await fetch('http://localhost:3000/api/tale_mode/get_paragraphs', options)
-        data = await res.json()   
-      }else{
-        router.push("/profile/stats")
-      }
+      const res = await fetch('http://localhost:3000/api/tale_mode/get_paragraphs', options)
+      const data = await res.json()   
+  
       // Si no ha ido bien o no estoy logeado volvemos a /
       if(data.result === "error"){
         localStorage.setItem("logged", "no")
@@ -105,18 +95,18 @@ export default function StoryMode(){
 
   return(
       <Layout data={layoutInfo} > 
-        <div className='w-screen justify-center align-middle items-center text-center space-y-4'>
+        <div className='w-screen justify-top h-full align-middle items-center text-center space-y-4'>
           <h1 className='commonTitle'>VOTACIONES</h1>
           <h2 className='commonSubtitle'>Elige el párrafo que más te guste</h2>
           <h2 className='commonSubtitle'> {story.title}, de {story.paragraphs[0].username} </h2>
           <StoryParagraphs story={story} chosenStory={chosenStory} setChosenStory={setChosenStory}/>
-          <button className='bg-white rounded-full p-2' onClick={() => (enviarVoto(info, type, chosenStory))}>Enviar Voto</button>
+          <button className='bg-white rounded-full p-2' onClick={() => (enviarVoto(info, chosenStory))}>Enviar Voto</button>
         </div>        
       </Layout>
   )
 }
 
-async function enviarVoto(info, tipo, voto){
+async function enviarVoto(info, voto){
   const options = {
     method: 'POST',
     headers: {
@@ -125,15 +115,9 @@ async function enviarVoto(info, tipo, voto){
     body: JSON.stringify(info) 
   }
 
-  let data
-  if(tipo == "tale"){
-    const res = await fetch('http://localhost:3000/api/quick_game/¿?¿?¿¿?¿?¿?', options)
-    data = await res.json();
-  }else if(tipo=="quick"){
-    const res = await fetch('http://localhost:3000/api/quick_game/¿?¿?¿¿?¿?¿?', options)
-    data = await res.json();
-  }
-
+  const res = await fetch('http://localhost:3000/api/quick_game/¿?¿?¿¿?¿?¿?', options)
+  const data = await res.json();
+  
   if(!data){
 
   }else if(data.result === "error"){
