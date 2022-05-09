@@ -9,7 +9,7 @@ export default function Stats({data}) {
                 <Image src='/icons/stats.png' width="40" height="25" />
                 <h1 className='franken'>Statistics</h1>
             </div>  
-            <ListOfPeople data={data} />
+            <ListOfPeople data={data} showFaces={false}/>
         </div>
     )
 }

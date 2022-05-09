@@ -83,7 +83,7 @@ export default function StoryMode(){
     return(
         <Layout data={layoutInfo} > 
             <div className='flex flex-row items-center space-x-20 ml-5'>
-                <div className='flex flex-col ml-5'>
+                <div className='flex flex-col ml-5 bg-scroll bg-contain overflow-auto h-[400px] pr-2'>
                     <h1 className='commonTitle'>Tus Relatos</h1>
                     <StoryList stories={myTales.myTales} isVoteStory={false}/>
                     <h1 className='commonTitle'>Relatos de Amigos</h1>

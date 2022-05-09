@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export default function Home() {
-  return (
+    return (
       <>
         <div className='background'>
           <Link href='/login'>
