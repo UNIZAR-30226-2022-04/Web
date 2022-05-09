@@ -11,7 +11,14 @@ export default function StoryMode(){
   const [story, setStory] = useState("")
   const [type, setType] = useState("")
   const router = useRouter()
+  const [chosenStory, setChosenStory] = useState(1);
 
+  const info = {
+    username: windowUser.username,
+    password: windowUser.password,
+    id: parseInt(id)
+  }
+  
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
       const queryParams = new URLSearchParams(window.location.search);
@@ -47,11 +54,7 @@ export default function StoryMode(){
     }
     
     const getData = async () => {
-      const info = {
-        username: windowUser.username,
-        password: windowUser.password,
-        id: parseInt(id)
-      }
+      
 
       // Opciones para llamar a la api
       const options = {
@@ -86,6 +89,8 @@ export default function StoryMode(){
     getData()
   }, [windowUser])
 
+  console.log(story)
+
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!windowUser || !story){
     return <Spinner />
@@ -100,12 +105,40 @@ export default function StoryMode(){
 
   return(
       <Layout data={layoutInfo} > 
-        <div className='w-screen justify-center align-middle'>
+        <div className='w-screen justify-center align-middle items-center text-center space-y-4'>
           <h1 className='commonTitle'>VOTACIONES</h1>
           <h2 className='commonSubtitle'>Elige el párrafo que más te guste</h2>
-          <h2 className='commonSubtitle'>historia de </h2>
-          <StoryParagraphs story={story}/>
+          <h2 className='commonSubtitle'> {story.title}, de {story.paragraphs[0].username} </h2>
+          <StoryParagraphs story={story} chosenStory={chosenStory} setChosenStory={setChosenStory}/>
+          <button className='bg-white rounded-full p-2' onClick={() => (enviarVoto(info, type, chosenStory))}>Enviar Voto</button>
         </div>        
       </Layout>
   )
+}
+
+async function enviarVoto(info, tipo, voto){
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(info) 
+  }
+
+  let data
+  if(tipo == "tale"){
+    const res = await fetch('http://localhost:3000/api/quick_game/¿?¿?¿¿?¿?¿?', options)
+    data = await res.json();
+  }else if(tipo=="quick"){
+    const res = await fetch('http://localhost:3000/api/quick_game/¿?¿?¿¿?¿?¿?', options)
+    data = await res.json();
+  }
+
+  if(!data){
+
+  }else if(data.result === "error"){
+
+  }else{
+
+  }
 }
