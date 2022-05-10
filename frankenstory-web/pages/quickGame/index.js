@@ -127,6 +127,7 @@ export default function StoryMode(){
 
   const random = (e) =>{
     router.push("quickGame/write")
+    return
     setErrorJ("")
     e.preventDefault()
     tryRandom().then((res)=>{
