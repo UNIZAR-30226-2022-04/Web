@@ -280,6 +280,56 @@ export default function Continue() {
     )
   }
 
+  function SpecialInputBox(){
+
+    function SpecialText(){
+      var fullText = currentText
+      randomWords.map((palabraClave) => {
+          const textSplit = fullText.split(palabraClave)
+          textSplit.map((trozo, index) => {
+              if(index == 0){
+                  fullText = trozo
+              }else{
+                  fullText += ";" + palabraClave + ";" + trozo
+              }
+          });
+          
+      });
+  
+      return(
+          <div className="flex flex-row flex-wrap justify-center space-x-2 w-full">
+              {fullText.split(";").map(
+                  (trozo, index) => (
+                      <>
+                          {index % 2 == 0 ? (
+                              <div key={index}>
+                                  {trozo}
+                              </div>
+                          ):(
+                              <div key={index} className="text-green-600 font-bold">
+                                  {trozo}
+                              </div>
+                          )}
+                      </>
+                  )
+              )}
+          </div>
+      )
+    }
+    return(
+      <div className="storyWrite text-2xl font-arial inline-flex flex-col h-48 w-8/12 bg-white">
+        <SpecialText/>
+      </div>
+    )
+  }
+
+  function DisplayPalabraClave({palabra}){
+    var incluida = currentText.includes(palabra)
+    return(
+      <div className={`px-1 mx-2 ${ incluida ? "bg-green-800 text-white" : "bg-green-600"}`}>{palabra}</div>
+    )
+  }
+
   return (
     <>
         <Layout data={layoutInfo}>
@@ -309,9 +359,9 @@ export default function Continue() {
                     Palabras a introducir
                   </div>
                   <div className="centered">
-                    <div className="bg-green-600 px-1">{randomWords[0]}</div>
-                    <div className="bg-green-600 px-1 mx-2">{randomWords[1]}</div>
-                    <div className="bg-green-600 px-1">{randomWords[2]}</div>
+                    <DisplayPalabraClave palabra={randomWords[0]}/>
+                    <DisplayPalabraClave palabra={randomWords[1]}/>
+                    <DisplayPalabraClave palabra={randomWords[2]}/>
                   </div>
                 </>
               }
@@ -321,8 +371,19 @@ export default function Continue() {
               <Image className="ml-4" src="/quick-game/clock.png" width={30} height={30}/>{parseInt(clock/60)}min:{clock % 60}seg
             </div>
 
+            <div className="centered font-blank bg-transparent">
+              
+            </div>
+
             <div className="centered">
-              <textarea className={`storyWrite text-2xl font-arial inline-flex flex-col h-48 w-6/12 ${ handicap== "reves" ? "font-reverse" : ""}${ handicap == "ciego" ? "font-blank" : ""}`} type="password" required={true} maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+              { mode=="aleatorio" ? 
+              <>
+                <SpecialInputBox/>
+                <input className ="absolute w-8/12 h-48 bg-transparent font-blank" required={true} maxLength={maxChar} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+              </> 
+              :
+              <textarea className={`storyWrite text-2xl font-arial inline-flex flex-col h-48 w-8/12 ${ handicap== "reves" ? "font-reverse" : ""}${ handicap == "ciego" ? "font-blank" : ""}`} type="password" required={true} maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+              }
             </div>
 
             <div className="clickable-item centered">
