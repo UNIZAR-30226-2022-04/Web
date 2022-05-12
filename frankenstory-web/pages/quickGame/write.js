@@ -39,7 +39,7 @@ export default function Continue() {
   const [previous, setPrevious] = useState("")
   const [currentText, setCurrentText] = useState("")
   const [maxChar, setMaxChar ] = useState(200)
-  const [handicap, setHandicap] = useState("")
+  const [handicap, setHandicap] = useState("ciego")
   const [mode, setMode] = useState("aleatorio")
   const [topic, setTopic] = useState("Topicazo")
   const [randomWords, setWords] = useState(["Rayo","Fuego","Hielo"])
@@ -297,7 +297,7 @@ export default function Continue() {
       });
   
       return(
-          <div className="flex flex-row flex-wrap justify-center space-x-2 w-full">
+          <div className={`${ handicap== "reves" ? "font-reverse" : ""} ${ handicap == "ciego" ? "font-blank" : ""} flex flex-row flex-wrap justify-center space-x-2 w-full`}>
               {fullText.split(";").map(
                   (trozo, index) => (
                       <>
