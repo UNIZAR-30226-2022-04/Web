@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react"
 import {useRouter} from 'next/router'
 import Link from "next/link"
+import Image from 'next/image'
+
+import Lottie from 'react-lottie'
+import registerLottie from '/public/lottie/register.json'
 
 export default function register () {
   const [name, setName] = useState("")
@@ -8,21 +12,40 @@ export default function register () {
   const [password, setPassword] = useState("")
   const [passwordR, setPasswordR] = useState("")
 
+  const options = {
+    loop: true,
+    autoplay: true,
+    animationData: registerLottie,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  }
+
   return (
-    <div className="background p-6 h-screen w-screen flex items-center">
-      <form className ="m-auto justify-center p-6 bg-white align-middle" onSubmit={(e) => (onSubmit(e, name, mail, password, passwordR, router))}>
-          <h1 className="pb-3 pt-6 px-10 text-4xl text-blue-800 font-bold">Crear cuenta</h1>
-          <div>Nombre de usuario</div>
-          <input className="p-2 w-full bg-blue-100 text-blue-400" type="text" value={name} placeholder="Nombre de usuario" onChange={(e) => setName(e.target.value)}/>
-          <div>Email</div>
-          <input className="p-2 w-full bg-blue-100 text-blue-400" type="email" value={mail} placeholder="Email" onChange={(e) => setMail(e.target.value)}/>
-          <div>Contraseña</div>
-          <input className="p-2 w-full bg-blue-100 text-blue-400" type="password" value={password} placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)}/>
-          <div>Repita la contraseña</div>
-          <input className="p-2 w-full bg-blue-100 text-blue-400" type="password" value={passwordR} placeholder="Repita la contraseña" onChange={(e) => setPasswordR(e.target.value)}/>
-          <div className="py-2 font-bold text-blue-800"><Link  href="/login">Iniciar sesión</Link></div>
-          <button className="ml-20 bg-center text-white justify-self-center bg-blue-900 rounded-md px-4 py-2" type="submit">Crear cuenta</button>
-      </form>
+    <div className="background h-screen w-screen flex items-center">
+      <Image src={'/frankenstory.png'} height={200} width={800} />
+      <div className="flex flex-row">
+        <Lottie 
+            options = {options}
+            height = {400}
+            width = {400}
+          />
+        <form className ="p-6 align-middle space-y-2 flex flex-col items-center justify-center" onSubmit={(e) => (onSubmit(e, name, mail, password, passwordR, router))}>
+            <h1 className="pb-3 pt-6 px-10 text-3xl justify-start text-white txtShadw font-arial-b">REGISTER</h1>
+            <div className="flex flex-col">
+              <div className="commonSubtitle">Nombre de usuario</div>
+              <input className="w-96 p-2 bg-white text-blue-400 rounded-lg" type="text" value={name} placeholder="Nombre de usuario" onChange={(e) => setName(e.target.value)}/>
+              <div className="commonSubtitle">Email</div>
+              <input className="p-2 w-full bg-white text-blue-400 rounded-lg" type="email" value={mail} placeholder="Email" onChange={(e) => setMail(e.target.value)}/>
+              <div className="commonSubtitle">Contraseña</div>
+              <input className="p-2 w-full bg-white text-blue-400 rounded-lg" type="password" value={password} placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)}/>
+              <div className="commonSubtitle">Repita la contraseña</div>
+              <input className="p-2 w-full bg-white text-blue-400 rounded-lg" type="password" value={passwordR} placeholder="Repita la contraseña" onChange={(e) => setPasswordR(e.target.value)}/>
+              <button className="commonButton bg-verde_top mt-2" type="submit">Crear cuenta</button>
+            </div>
+        </form>
+      </div>
+      <button className="absolute bottom-0 left-0 m-10 commonButton bg-verde_top " > {'<-'} Iniciar Sesión</button>
     </div>
 
   )
@@ -69,7 +92,7 @@ async function onSubmit (e, name, mail, password, passwordR, router) {
     const res = await tryRegister(name, password, mail)
 
     if(res.result == "success"){
-      window.location = `http://localhost:3000/profile/stats`
+      window.location = `http://localhost:3000/profile`
     
     }else{
       console.log(res)
@@ -85,4 +108,8 @@ async function onSubmit (e, name, mail, password, passwordR, router) {
     }
     
   }
+}
+
+function inputGroup () {
+
 }

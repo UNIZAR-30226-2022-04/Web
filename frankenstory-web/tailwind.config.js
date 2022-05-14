@@ -20,6 +20,22 @@ module.exports = {
         DEFAULT: '2px 2px 2px var(--tw-shadow-color)',
         lg: '4px 4px 2px var(--tw-shadow-color)',
       },
+      colors: {
+        "degradado_arriba": '#31ECCF',
+        "degradado_abajo": '#AAEF5E',
+
+        "degradado_layout-arriba": '#5ec1b2',
+        "degradado_layout-abajo": '#a5d570',
+
+        "verde_letras": '#0ca789',
+        "verde_publico_seleccionado": '#09cc8d',
+        "verde_top": '#32d298',
+        "verde_parrafo": '#3fb78f',
+        "verde_parrafo_seleccionado": '#8fd14f',
+        "verde_punetas": '#015d52',
+        "verde_plus_minus": '#2ecc71',
+        "verde_plus_minus_back": '#27ae60',
+      },
     },
   },
   plugins: [

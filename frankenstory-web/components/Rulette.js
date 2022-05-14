@@ -24,7 +24,7 @@ function RuletteButton({page, thisPage, icon, reference}){
     return(
         <>
             {page == thisPage?(
-                <Link href='/profile/stats'>
+                <Link href='/profile'>
                     <div className='flex flex-row  items-center space-x-3'>
                         <p className='2xl:text-3xl text-2xl font-bold text-black '>Volver </p>
                         <div className='clickableItem flex  h-28 w-28 items-center justify-center bg-slate-800 bg-opacity-10 rounded-full'>

@@ -5,10 +5,10 @@ import Router from 'next/router'
 export default function Layout({children, data, inSettingsScreen}) {
     return(
         <div className='background'>            
-            <div className='flex bg-slate-900 shadow-lg items-center p-3'>
-                <Link href={'/profile/stats'}>
-                    <div className='clickableItem'>
-                        <Image src='/frankenstory.png' width="200" height="50"/>
+            <div className='flex bg-black bg-opacity-30 shadow-lg items-center p-3'>
+                <Link href={'/profile'}>
+                    <div className='clickableItem ml-5'>
+                        <Image src='/frankenstory.png' width="300" height="75"/>
                     </div>
                 </Link>
                 <Crates person={data} changeSettings={inSettingsScreen} />
@@ -30,7 +30,7 @@ function Crates({person, changeSettings}){
             
             {changeSettings ? (
                 <div className='clickableItem'>
-                    <Link href='/profile/stats'>
+                    <Link href='/profile'>
                         <a> <Image className='clickableItem' src='/icons/home.png' width="38" height="38"/> </a>                    
                     </Link> 
                 </div>
@@ -42,7 +42,7 @@ function Crates({person, changeSettings}){
                 </div>
             )}
                 <div className='clickableItem' >
-                    <Image className='clickableItem' src='/icons/sign-out.png' width="38" height="38" onClick={() => {localStorage.setItem("logged","No"); Router.push("/login")}}/> 
+                    <Image className='clickableItem' src='/icons/logout.png' width="38" height="38" onClick={() => {localStorage.setItem("logged","No"); Router.push("/login")}}/> 
                 </div>               
         </div>
     )
@@ -50,7 +50,7 @@ function Crates({person, changeSettings}){
 
 function Crate({image, text}){
     return(
-        <div className='relative flex flex-row items-center rounded-lg h-10 xl:w-56 w-40 pl-3 bg-gradient-to-r from-teal-600 to-green-400'>
+        <div className='relative flex flex-row shadow-lg items-center rounded-lg h-10 xl:w-56 w-40 pl-3 bg-gradient-to-r from-teal-600 to-green-400'>
             <Image src={image} width="30" height="30"/>
             <p className='absolute right-3 text-white text-xl text-center font-bold clickableItem'>{text}</p>
         </div>

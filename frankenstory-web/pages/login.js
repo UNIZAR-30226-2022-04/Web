@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react"
 import {useRouter} from 'next/router'
 import Link from "next/link"
+import Image from 'next/image'
+
+import Lottie from 'react-lottie'
+import loginLottie from '/public/lottie/login.json'
 
 export default function login() {
   const router = useRouter()  
@@ -10,24 +14,41 @@ export default function login() {
   // Check de que el usuario no esté ya logueado
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
-      router.push("/profile/stats")
+      router.push("/profile")
     }
   }, [])
 
+  const options = {
+    loop: true,
+    autoplay: true,
+    animationData: loginLottie,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice"
+    }
+  }
 
   return (
-    <div className="background p-6 h-screen w-screen flex items-center">
-      <form className ="m-auto justify-center p-6 bg-white align-middle" onSubmit={(e) => (onSubmit(e, name, password, router))}>
-          <h1 className="pb-3 pt-6 px-10 text-4xl text-blue-800 font-bold">Iniciar sesión</h1>
-          <div>Usuario</div>
-          <input className="p-2 w-full bg-blue-100 text-blue-400" maxLength={30} type="text" value={name} placeholder="Usuario" onChange={(e) => setName(e.target.value)}/>
-          <div>Contraseña</div>
-          <input className="p-2 w-full bg-blue-100 text-blue-400" maxLength={30} type="password" value={password} placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)}/>
-          <div className="py-2 font-bold text-blue-800">
-            <Link  href="/register">Crear Cuenta</Link>
-          </div>
-          <button className="ml-20 bg-center text-white justify-self-center bg-blue-900 rounded-md px-4 py-2" type="submit">Iniciar sesión</button>
-      </form>
+    <div className="background p-6 h-screen w-screen flex flex-col items-center justify-center space-y-4">
+      <Image src={'/frankenstory.png'} height={150} width={600} />
+      <div className="flex flex-row">
+        <Lottie 
+          options = {options}
+          height = {400}
+          width = {400}
+        />
+        <form className ="justify-center p-6 bg-white align-middle" onSubmit={(e) => (onSubmit(e, name, password, router))}>
+            <h1 className="pb-3 pt-6 px-10 text-4xl text-blue-800 font-bold">Iniciar sesión</h1>
+            <div>Usuario</div>
+            <input className="p-2 w-full bg-blue-100 text-blue-400" maxLength={30} type="text" value={name} placeholder="Usuario" onChange={(e) => setName(e.target.value)}/>
+            <div>Contraseña</div>
+            <input className="p-2 w-full bg-blue-100 text-blue-400" maxLength={30} type="password" value={password} placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)}/>
+            <div className="py-2 font-bold text-blue-800">
+              <Link  href="/register">Crear Cuenta</Link>
+            </div>
+            <button className="ml-20 bg-center text-white justify-self-center bg-blue-900 rounded-md px-4 py-2" type="submit">Iniciar sesión</button>
+        </form>
+      </div>
+      
     </div>
   )
 }
@@ -47,7 +68,7 @@ const onSubmit = (e, name, password, router) => {
         localStorage.setItem("logged", "si")
         localStorage.setItem("username", name)
         localStorage.setItem("password",password)
-        router.push("http://localhost:3000/profile/stats")
+        router.push("http://localhost:3000/profile")
       
       }else{
         if(res.reason == "user_not_found"){

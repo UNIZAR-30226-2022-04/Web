@@ -62,9 +62,9 @@ export default function Settings() {
         
         <div className='flex flex-row items-center space-x-56 '>
           <form className='flex flex-col space-y-2 '>       
-              <div className='commonTitle'>Conteseña</div>
+              <div className='commonTitle'>Contraseña</div>
               <input type="password" value={passwd} placeholder="**********" onChange={(e) => setPass(e.target.value)}/>
-              <div className='commonTitle' >Repita la Conteseña</div>
+              <div className='commonTitle' >Repita la Contraseña</div>
               <input type="password" value={passwdRep} placeholder="**********" onChange={(e) => setPassRep(e.target.value)}/>
               <button className='buttonStyle bg-green-800 hover:bg-green-400' type="button" onClick={() => changePassword(user, passwd, passwdRep)}>Cambiar Contraseña</button>
           </form>
@@ -192,8 +192,8 @@ async function deleteUser(user, deleteCheck, setDeleteCheck){
     setDeleteCheck('')
     
     const info = {
-      "username": user.username,
-      "password": user.password
+      username: user.username,
+      password: user.password
     }
 
     const options = {

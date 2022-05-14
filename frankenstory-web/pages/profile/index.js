@@ -69,13 +69,12 @@ export default function Stats() {
       localStorage.setItem("coins", myuser.coins)
     }
   })
+  
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!myuser){
     return <Spinner />
   }
   
-  
-
   // Renderizamos la página
   const layoutInfo = {
     username: windowUser.username,
@@ -86,14 +85,11 @@ export default function Stats() {
 
   return (
     <Layout data={layoutInfo}>
-        <div className='pl-20 flex flex-col justify-center space-y-2 left-0'>
-            <div className='relative flex flex-row h-auto w-auto'>
-                <Image src='/icons/stats.png' width="40" height="25" />
-                <h1 className='franken'>Statistics</h1>
-            </div>  
+        <div className='pl-20 flex flex-col justify-center left-0 space-y-3'>
+            <h1 className='commonTitle'>Estadísticas</h1>
             <ListOfPeople data={myuser.bestFour} showFaces={false}/>
         </div>
-        <Rulette />    
+        <Rulette />
     </Layout> 
   )
 }

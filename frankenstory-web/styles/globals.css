@@ -26,8 +26,8 @@
             bg-gradient-to-tr
             flex
             flex-col
-            from-teal-600 
-            to-green-400
+            from-degradado_abajo
+            to-degradado_arriba 
   }
 
   .clickableItem{
@@ -38,7 +38,7 @@
   .commonTitle{
     @apply  text-3xl 
             justify-start
-            text-cyan-50 
+            text-white
             font-bold
             txtShadw
   }
@@ -46,9 +46,22 @@
   .commonSubtitle{
     @apply  text-xl 
             justify-start
-            text-cyan-50 
+            text-white
             font-bold
             txtShadw
+  }
+
+  
+
+  .commonButton{ 
+    @apply  rounded-lg
+            shadow-lg 
+            shadow-verde_letras
+            font-bangers
+            text-white
+            text-2xl
+            px-4 
+            py-2
   }
 
   .franken{
@@ -190,7 +203,7 @@
 }
 
 .txtShadw {
-  text-shadow: 5px 4px green
+  text-shadow: 3px 3px #0ca789
 }
 
 html,
