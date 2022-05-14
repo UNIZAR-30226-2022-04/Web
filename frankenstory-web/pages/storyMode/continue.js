@@ -8,6 +8,7 @@ export default function Continue() {
   const router = useRouter()
 
   const [windowUser, setWindowUser] = useState({}) 
+  const [creator, setCreator] = useState()
 
 
   useEffect(()=>{
@@ -25,7 +26,9 @@ export default function Continue() {
         coins: coins,
         stars: stars
       })
-      console.log("SACO DATOS")
+      const queryParams = new URLSearchParams(window.location.search);
+      setCreator(queryParams.get("creator"))
+      
     }else{
       console.log("VOY A LOGIN")
       router.push("/")

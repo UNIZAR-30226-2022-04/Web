@@ -6,12 +6,14 @@ export default function Layout({children, data, inSettingsScreen}) {
     return(
         <div className='background'>            
             <div className='flex bg-slate-900 shadow-lg items-center p-3'>
-                <div className='relative w-full h-auto'>
-                    <Image src='/frankenstory.png' width="200" height="50"/>
-                </div>
+                <Link href={'/profile/stats'}>
+                    <div className=' '>
+                        <Image src='/frankenstory.png' width="200" height="50"/>
+                    </div>
+                </Link>
                 <Crates person={data} changeSettings={inSettingsScreen} />
             </div>
-            <div className='flex flex-row w-screen h-screen items-center ml-5'>
+            <div className='flex flex-row w-full h-full items-center justify-between'>
                 {children}
             </div>            
         </div>
@@ -21,7 +23,7 @@ export default function Layout({children, data, inSettingsScreen}) {
 function Crates({person, changeSettings}){
     const imageRoute = '/profPic/icon' + person.image_ID + '.png'
     return(
-        <div className='absolute flex flex-row justify-end pr-5 pl-5 space-x-3 w-full items-center'>            
+        <div className='flex flex-row justify-end pr-5 pl-5 space-x-3 w-full items-center'>            
             <Crate image='/icons/star.png' text={person.stars}/>
             <Crate image='/icons/mooncoin.png' text={person.coins}/>
             <Crate image={imageRoute} text={person.username}/>            

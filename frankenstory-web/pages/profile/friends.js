@@ -9,8 +9,8 @@ import Spinner from 'components/Spinner'
 export default function Friends() {
   const router = useRouter()
   const [windowUser, setWindowUser] = useState({})
-  const [notification, useNotifications] = useState([])
-  const [friends, useFriends] = useState([])
+  const [notification, useNotifications] = useState()
+  const [friends, useFriends] = useState()
 
   const [name, setName] = useState("")
   const [found, setFound] = useState(false)
@@ -89,7 +89,7 @@ export default function Friends() {
 
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
-  if(!windowUser | !friends | !notification){
+  if(!windowUser || !friends || !notification){
     return <Spinner />
   }
 
@@ -115,7 +115,7 @@ export default function Friends() {
             <div className="commonTitle">Tus amigos</div>
             
             <div className="scrollBox">
-              <ul className='flex flex-col space-y-2'>
+              <ul className='flex flex-col space-y-2 w-96'>
                   {friends.map((friend, index) => 
                     <Friend key={index} username={windowUser.username} password={windowUser.password} friend={friend} new_friend={false} setFound={setFound} reloaderState={mustReload} reloader={setMustReload} />
                   )}
@@ -144,7 +144,9 @@ function Friend({username, password, friend, setFound, new_friend, reloaderState
   
   return(
     <div className="flex flex-row text-2xl items-center justify-between  px-2 text-blue-900 font-bold bg-teal-500 rounded border-white border-2 ">
+        
         <div>{friend}</div>
+
         <button className="" onClick={() => (manageFriend(username, password, friend, new_friend, setFound, reloaderState, reloader))}> 
           {new_friend ? (
             <div>

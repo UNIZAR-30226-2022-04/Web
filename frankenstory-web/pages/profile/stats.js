@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 import Layout from 'components/Layout'
-import FriendStats from 'components/Statistics'
+import ListOfPeople from 'components/ListOfPeople'
 import Rulette from 'components/Rulette'
 import Spinner from 'components/Spinner'
 
@@ -85,7 +86,13 @@ export default function Stats() {
 
   return (
     <Layout data={layoutInfo}>
-        <FriendStats className ="pl-20" data={myuser.bestFour} />
+        <div className='pl-20 flex flex-col justify-center space-y-2 left-0'>
+            <div className='relative flex flex-row h-auto w-auto'>
+                <Image src='/icons/stats.png' width="40" height="25" />
+                <h1 className='franken'>Statistics</h1>
+            </div>  
+            <ListOfPeople data={myuser.bestFour} showFaces={false}/>
+        </div>
         <Rulette />    
     </Layout> 
   )

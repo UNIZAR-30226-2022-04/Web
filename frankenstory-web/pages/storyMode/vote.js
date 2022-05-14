@@ -47,7 +47,6 @@ export default function StoryVote(){
   useEffect(() => {
     // Función que llama a la api
     if(windowUser.username == undefined){
-      console.log("no permito sacar datos")
       return
     }
     
@@ -79,8 +78,6 @@ export default function StoryVote(){
     getData()
   }, [windowUser])
 
-  console.log(story)
-
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!windowUser || !story){
     return <Spinner />
@@ -100,13 +97,21 @@ export default function StoryVote(){
           <h2 className='commonSubtitle'>Elige el párrafo que más te guste</h2>
           <h2 className='commonSubtitle'> {story.title}, de {story.paragraphs[0].username} </h2>
           <StoryParagraphs story={story} chosenStory={chosenStory} setChosenStory={setChosenStory}/>
-          <button className='bg-white rounded-full p-2' onClick={() => (enviarVoto(info, chosenStory))}>Enviar Voto</button>
+          <button className='bg-white rounded-full p-2' onClick={() => (enviarVoto(info, chosenStory, router))}>Enviar Voto</button>
         </div>        
       </Layout>
   )
 }
 
-async function enviarVoto(info, voto){
+async function enviarVoto(tale_info, voto, router){
+  
+  const info = {
+    username: tale_info.username,
+    password: tale_info.password,
+    id: tale_info.id,
+    indexParagraph: voto
+  }
+
   const options = {
     method: 'POST',
     headers: {
@@ -115,14 +120,14 @@ async function enviarVoto(info, voto){
     body: JSON.stringify(info) 
   }
 
-  const res = await fetch('http://localhost:3000/api/quick_game/¿?¿?¿¿?¿?¿?', options)
+  const res = await fetch('http://localhost:3000/api/tale_mode/vote_story', options)
   const data = await res.json();
   
-  if(!data){
+  console.log(data)
 
-  }else if(data.result === "error"){
+  if(data.result === "error"){
 
   }else{
-
+    router.push("http://localhost:3000/storyMode")
   }
 }

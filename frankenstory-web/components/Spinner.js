@@ -5,7 +5,6 @@ export default function Spinner(){
         <div className="flex flex-col background w-screen h-screen items-center justify-center align-middle">
             <h1 className="commonTitle">LOADING</h1>
             <Image src="/mooncodeLoading.gif" width={500} height={500}/>
-            <h1 className="commonTitle">BE PATIENT</h1>
         </div>
     )
 }
