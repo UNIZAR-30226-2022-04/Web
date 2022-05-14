@@ -1,13 +1,19 @@
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
+import Link from 'next/link'
 
 import Layout from "components/Layout"
-import SeeTale from "components/SeeTale"
 import Spinner from 'components/Spinner'
 
-export default function See_Tale(id, type) {
+export default function See_Tale() {
   const router = useRouter()
   const [windowUser, setWindowUser] = useState({}) 
+  const [story, setStory] = useState({})
+  
+  const queryParams = new URLSearchParams(window.location.search);
+  const title = queryParams.get('title')
+  const id = queryParams.get('id')
+  const type = queryParams.get('type')
 
 
   useEffect(()=>{
@@ -32,8 +38,31 @@ export default function See_Tale(id, type) {
     }
   }, [])
 
+  useEffect (()=>{
+      const getData = async () =>{
+          const info = {
+              username:localStorage.getItem("username"),
+              password:localStorage.getItem("password"),
+              id:parseInt(id),
+              type:type
+          }
+          var options = {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json' 
+              },
+              body: JSON.stringify(info)
+          }
+          const res = await fetch("http://localhost:3000/api/general/watch_story", options)
+          const data = await res.json()
+          setStory(data)
+      }
+      getData()
+  },[])
+
   // Si tadavía no hoy usuario, esperamos a que lo haya
-  if(!windowUser){
+  if(!windowUser || !story){
     return <Spinner />
   }
 
@@ -45,8 +74,18 @@ export default function See_Tale(id, type) {
   }  
 
 return(
-        <Layout data={layoutInfo}>
-          <SeeTale/>
-        </Layout>
+    <Layout data={layoutInfo}>
+        <div className="storyBox">
+          <div className="titleWrite">{title}</div>
+          <div className="savedStory max-h-full text-xl">{story.body}</div>
+          <div className="centered">
+              <Link href="/profile/saved_tales">
+                  <div className="clickableItem border-2 border-green-900 rounded-xl w-48 text-center bg-green-700 h-6 text-white">
+                      Volver a libreria
+                  </div>
+              </Link>
+          </div>
+      </div>
+    </Layout>
   )
 }

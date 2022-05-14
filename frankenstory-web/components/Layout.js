@@ -7,7 +7,7 @@ export default function Layout({children, data, inSettingsScreen}) {
         <div className='background'>            
             <div className='flex bg-slate-900 shadow-lg items-center p-3'>
                 <Link href={'/profile/stats'}>
-                    <div className=' '>
+                    <div className='clickableItem'>
                         <Image src='/frankenstory.png' width="200" height="50"/>
                     </div>
                 </Link>

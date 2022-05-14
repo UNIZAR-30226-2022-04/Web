@@ -135,7 +135,7 @@ function TalesList({quicks, tales}){
 function QuickStory({info}){
     return(
         <div className='flex flex-row bg-blue-200 w-[400px] px-5'>
-            <div className='justify-start w-[160px]'>{info.date}</div>
+            <div className='justify-start w-[160px] font-bold'>{info.date}</div>
             <div className='justify-end'>
                 {info.type === 'quick_twittwer' ?(
                     <Image src="/quick-game/twitter_trend.png" width="40" height="25"/>
@@ -156,8 +156,8 @@ function TaleStory({info}){
     return(
         <div className='flex flex-row bg-blue-200 w-[400px] mx-3 p-2 items-center rounded-full'>
             <div className='justify-start flex flex-row space-x-5 items-center'>
-                <div className='w-[150px]'>{info.title}</div>
-                <div className='w-[160px]'>{info.date}</div>
+                <div className='w-[150px] font-bold'>{info.title}</div>
+                <div className='w-[160px] font-bold'>{info.date}</div>
             </div>
             <div className='justify-end clickableItem'>
                 <Link href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}>
