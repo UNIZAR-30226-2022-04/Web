@@ -26,6 +26,10 @@ export default function Continue() {
       username:"Septem",
       picture: 7,
       stars: 777
+    },{
+      username:"Jaime",
+      picture: 7,
+      stars: 777
     }]
 
   const router = useRouter()
@@ -34,17 +38,18 @@ export default function Continue() {
   const [punyetasM, setPunyetasM] = useState("")
   const [punyeta, setPunyeta] = useState("")
   const [punyetasCompradas, setPunyetasCompradas] = useState([])
-  const [monedas, setMonedas] = useState(1000)
+  const [monedas, setMonedas] = useState(0)
   const [currentTitle, setCurrentTitle] = useState("")
   const [previous, setPrevious] = useState("")
   const [currentText, setCurrentText] = useState("")
   const [maxChar, setMaxChar ] = useState(200)
-  const [handicap, setHandicap] = useState("ciego")
+  const [handicap, setHandicap] = useState("")
   const [mode, setMode] = useState("aleatorio")
   const [topic, setTopic] = useState("Topicazo")
   const [randomWords, setWords] = useState(["Rayo","Fuego","Hielo"])
-  const [time, setTime] = useState(20000)
+  const [time, setTime] = useState(70)
   const [clock, setClock] = useState(0)
+  const [rivals, setRivals] = useState([])
   var queryParams
   var isLast
   var first = true
@@ -87,6 +92,9 @@ export default function Continue() {
     }else{
       router.push("/")
     }
+    setRivals(participantes.filter((rival) => rival.username != username))
+    console.log(rivals)
+    setMonedas(windowUser.coins) 
   }, [])
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
@@ -152,7 +160,7 @@ export default function Continue() {
       }
       return (
         <button className="bg-white rounded m-2 flex w-40" onClick={choosePunyeta}>
-          <Image src={`/quick-game/punyetas.png`} width={40} height={40}/>
+          <Image src={`/quick-game/${img}.png`} width={40} height={40}/>
           <div className = "text-right">
             <>{text}</>
             <div>
@@ -167,13 +175,13 @@ export default function Continue() {
     return(
       <ul>
         <li>
-          <ButtonPunyeta img={1} name={"reves"} text={"Letras al revés"} price={150} />
+          <ButtonPunyeta img={"letras_reves"} name={"reves"} text={"Letras al revés"} price={150} />
         </li>
         <li>
-          <ButtonPunyeta img={2} name={"ciego"} text={"Escribe a ciegas"} price={300} />
+          <ButtonPunyeta img={"escribe_ciegas"} name={"ciego"} text={"Escribe a ciegas"} price={300} />
         </li>
         <li>
-          <ButtonPunyeta img={3} name={"desorden"} text={"Desorden total"} price={500} />
+          <ButtonPunyeta img={"desorden_total"} name={"desorden"} text={"Desorden total"} price={500} />
         </li>
       </ul>
     )
@@ -183,7 +191,7 @@ export default function Continue() {
 
   function DestinoPunyeta(){
 
-    function Rival({username,picture,stars}){
+    function Rival({username,picture}){
       const chooseTarget = (e) => {
         e.preventDefault()
         var precio
@@ -200,78 +208,28 @@ export default function Continue() {
         }
         setPunyetasM("punyeta")
         var dupla = {puneta:punyeta,username:username}
-        //Comprobamos si ya hay una puñeta dirigida a ese jugador
-        filtradas = (punyetasCompradas.filter((compra) => compra.username == username))
-        if (filtradas.length == 0){
-          //Si no hya putadas dirigidas al jugador y nos llegan las monedas añadimos la puñeta a la lista
-          if(monedas-precio < 0){
-            alert("Monedas no suficientes")
-            return
-          }
-          setPunyetasCompradas([...punyetasCompradas, dupla])
-          setMonedas(monedas-precio)
-        }else{
-          //Si hay putada anterior comprobamos que sea de diferente tipo
-          var anterior = filtradas[0].puneta
-          if (anterior == punyeta){
-            return
-          }
-          //Si es de diferente tipo devolvemos monedas o comprobamos que tengamos
-          //las suficientes para cubrir la diferencia
-
-          switch(punyeta){
-            case "reves":
-              if(anterior == "ciego"){
-                if(monedas >= 150){
-                  setMonedas(monedas-150)
-                }else{
-                  alert("Monedas no suficientes")
-                  return
-                }
-              }else if(anterior == "desorden"){
-                if(monedas >= 350){
-                  setMonedas(monedas-350)
-                }else{
-                  alert("Monedas no suficientes")
-                  return
-                }
-              }
-              break
-            case "ciego":
-              if(anterior == "reves"){
-                setMonedas(monedas+150)
-              }else if(anterior == "desorden"){
-                if(monedas >= 200){
-                  setMonedas(monedas-200)
-                }else{
-                  alert("Monedas no suficientes")
-                  return
-                }
-              }
-              break
-            default :
-            if(anterior == "reves"){
-              setMonedas(monedas+350)
-            }else if(anterior == "ciego"){
-              setMonedas(monedas+200)
-            }
-          }
-          //Obtenemos una lista con todas las puñetas excepto la antigua dirigida
-          //al mismo usuario y añadimos la nueva
-          filtradas = (punyetasCompradas.filter((compra) => compra.username != username))
-          setPunyetasCompradas([...filtradas, dupla])
+        if(monedas-precio < 0){
+          alert("Monedas no suficientes")
+          return
         }
+        setPunyetasCompradas([...punyetasCompradas, dupla])
+        setMonedas(monedas-precio)
+        localStorage.setItem("coins",monedas)
+        setRivals(rivals.filter((rival) => rival.username != username))
+        setPunyetasCompradas([...punyetasCompradas, dupla])
         return
       }
+
       return (
         <button className="bg-white rounded m-2 px-2" onClick={chooseTarget}>
           <Image src={`/profPic/icon${picture}.png`} width={20} height={20} /><>{username}</>
         </button>
       )
     }
+
     return(
       <ul>
-          {participantes.map((rival) => 
+          {rivals.map((rival) => 
           <li> 
             <Rival username={rival.username} picture={rival.picture}/>
           </li>
