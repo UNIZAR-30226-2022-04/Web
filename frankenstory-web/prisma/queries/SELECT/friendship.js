@@ -9,6 +9,6 @@ export async function selectFriendshipDB(username,friendname){
 			],
 		},
 	});
-	console.log(query)
+	//console.log(query)
 	return query;
 }

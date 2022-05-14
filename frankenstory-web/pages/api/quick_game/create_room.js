@@ -34,16 +34,24 @@ export default async (req, res) => {
 				"#" +
 				Date.now().toString(36).substr(12, 4) +
 				Math.random().toString(36).substr(2, 5);
-			await createGame(
-				id,
-				p,
-				message.time,
-				message.isPrivate,
-				message.mode,
-				state.LOBBY,
-				message.time
-			);
-			res.status(200).json({ result: "success", id: id });
+			if (
+				(await createGame(
+					id,
+					p,
+					message.time,
+					message.isPrivate,
+					message.mode,
+					state.LOBBY,
+					message.time
+				)) == true
+			) {
+				res.status(200).json({ result: "success", id: id });
+			} else {
+				res.status(200).json({
+					result: "error",
+					reason: "player_in_game",
+				});
+			}
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });
 		}

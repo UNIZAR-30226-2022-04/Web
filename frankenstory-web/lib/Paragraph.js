@@ -1,8 +1,8 @@
-
 export default class Paragraph {
-	constructor(turn, player, body) {
+	constructor(creator, turn, body) {
+		this.creator = creator;
+		this.score = 0;
 		this.turn = turn;
-		this.player = player;
 		this.body = body;
 	}
 }

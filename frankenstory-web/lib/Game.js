@@ -1,6 +1,18 @@
 import { gamesList } from "./GamesManager";
 import { getTrends } from "./TrendsManager";
+import { selectPlayerDB } from "../prisma/queries/SELECT/player";
+import { createStoryDB } from "../prisma/queries/CREATE/story";
+import { createQuickGameDB } from "../prisma/queries/CREATE/quick_game";
+import { createParagraphDB } from "../prisma/queries/CREATE/paragraph";
+import { createParticipantDB } from "../prisma/queries/CREATE/participant";
+import { updatePlayerDB } from "../prisma/queries/PUT/player";
 import { randomWordsList } from "./GamesManager";
+import { POINTS_QK_PRIVATE } from "./GamesManager";
+import { POINTS_QK_PUBLIC } from "./GamesManager";
+import { REVES_PRICE } from "./GamesManager";
+import { CIEGO_PRICE } from "./GamesManager";
+import { DESORDEN_PRICE } from "./GamesManager";
+import { state } from "./GamesManager";
 
 export default class Game {
 	constructor(
@@ -23,6 +35,9 @@ export default class Game {
 		this.maxTime = maxTime;
 		//this.timeRemaining = maxTime
 		this.turn = 0;
+		this.voteTurn = 0;
+		this.voted = 0;
+		this.paragraphs = 0;
 		//this.haveFinished = 0;
 		this.topic = topic;
 		this.randomWords = randomWords;
@@ -35,18 +50,145 @@ export default class Game {
 	}
 
 	deletePlayer(player) {
-		this.players.splice(this.players.indexOf(player));
+		const pl = this.players.find((p) => p.username == player.username);
+		this.players.splice(this.players.indexOf(pl));
 		//this.players = this.players.filter((p) => (p = player));
 	}
 
-	/*timer(time){
-		setTimeout(saludos);
+	async addPunetas(senderUsername,punetas){
+		var spent = 0;
+		punetas.forEach((pun) => {
+			const pl = this.players.find((p) => p.username == pun.username);
+			var cost = REVES_PRICE;
+			if (pun.puneta=="ciego") cost = CIEGO_PRICE;
+			else if (pun.puneta=="desorden") cost = DESORDEN_PRICE;
+			if (pl.punetaCost<cost) {
+				spent+=cost-pl.punetaCost;
+				pl.nextPuneta = pun.puneta;
+			}
+		});
+		const sender = await selectPlayerDB(senderUsername);
+		sender.mooncoins = sender.mooncoins-spent;
+		await updatePlayerDB(sender.username, sender);
 	}
 
-	startGame(){
-		this.state = state.INGAME;
-		var myWorker = new Worker('gameWorker.js');
-	}*/
+	getPuneta(username) {
+		const pl = this.players.find((p) => p.username == username);
+		console.log(this);
+		if (pl != undefined && this.turn != 1) {
+			return this.players[this.players.indexOf(pl)].puneta;
+		}
+	}
+
+	getLastParagraph(username) {
+		const pl = this.players.find((p) => p.username == username);
+		console.log(this);
+		if (pl != undefined && this.turn != 1) {
+			var a = this.turn / 2;
+			var s = 1;
+			if (this.turn % 2 != 0) {
+				a = (this.turn - 1) / 2;
+				s = -1;
+			}
+			const myIndex = this.players.indexOf(pl);
+			const plIndex =
+				(a * (this.players.length + s) + myIndex) % this.players.length;
+			const parag = this.players[plIndex].paragraphs;
+			console.log(myIndex);
+			console.log(plIndex);
+			console.log(parag);
+			console.log(parag[parag.length - 1]);
+			console.log(parag[parag.length - 1].body);
+			return parag[parag.length - 1].body;
+		} else return "";
+	}
+
+	addParagraph(player, paragraph) {
+		var a = this.turn / 2;
+		var s = 1;
+		if (this.turn % 2 != 0) {
+			a = (this.turn - 1) / 2;
+			s = -1;
+		}
+		const myIndex = this.players.indexOf(player);
+		this.players[myIndex].wrote = true;
+		const plIndex =
+			(a * (this.players.length + s) + myIndex) % this.players.length;
+
+		this.paragraphs++;
+		this.players[plIndex].addPlayerParagraph(paragraph);
+		if (this.paragraphs == this.players.length) this.nextTurn();
+	}
+
+	async vote(username,paragraph){
+		const pl = this.players.find((p) => p.username == username);
+		const par = this.players[this.voteTurn-1].paragraphs[paragraph]
+		pl.votedTo = par.creator;
+		par.score++;
+		const receiver = await selectPlayerDB(par.creator);
+		if (this.isPrivate) receiver.mooncoins = receiver.mooncoins+POINTS_QK_PRIVATE;
+		else receiver.mooncoins = receiver.mooncoins+POINTS_QK_PUBLIC;
+		await updatePlayerDB(receiver.username, receiver);
+
+		this.voted++;
+	}
+
+	async saveStory(){
+		const story = await createStoryDB();
+
+		const dataQuick = {
+			story_id: story.story_id,
+			mode: (this.mode == "random" ? 0 : 1)
+		}
+		await createQuickGameDB(dataQuick);
+
+		const par = this.players[this.voteTurn-1].paragraphs;
+		for (var i = 0; i<par.length;i++){
+			const dataParagraph = {
+				text: par[i].body,
+				username: par[i].creator,
+				Score: par[i].score,
+				turn_number: i,
+				story_id: story.story_id,
+			};
+			await createParagraphDB(dataParagraph);
+			const pl = this.players.find((p) => p.username == par[i].creator);
+			const dataParticipant = {
+				username: par[i].creator,
+				story_id: story.story_id,
+				creator: i==0,
+				voted: pl.votedTo,
+			};
+			await createParticipantDB(dataParticipant);
+		}
+	}
+
+	nextTurn() {
+		if (this.state == state.LOBBY) {
+			this.turn++;
+			this.state = state.INGAME;
+		} else if (this.state == state.VOTING) {
+			this.voted = 0;
+			this.players.forEach((pl) => {
+				pl.votedTo = "";
+			});
+			this.voteTurn++
+		} else if (this.turn == this.players.length) {
+			this.state = state.VOTING;
+			this.voteTurn++
+		} else {
+			this.paragraphs = 0;
+			this.players.forEach((pl) => {
+				pl.puneta = pl.nextPuneta;
+				pl.nextPuneta = "";
+				pl.punetaCost = 0;
+				pl.wrote = false;
+			});
+			this.turn++;
+		}
+		
+		// inicializar tiempo
+	}
 }
 
 export async function createGame(
@@ -58,9 +200,14 @@ export async function createGame(
 	state,
 	maxTime
 ) {
-	const game = gamesList.find((game) => game.host.username == host.username);
+	const game = gamesList.find(
+		(game) =>
+			game.players.find((player) => player.username == host.username) !=
+			undefined
+	);
 	if (game != undefined) {
-		gamesList.splice(gamesList.indexOf(game));
+		// devuelve que ya está en partida
+		return false;
 	}
 	const randomWords = [];
 	const topics = [];
@@ -114,18 +261,28 @@ export async function createGame(
 			randomWords
 		)
 	);
+
+	return true;
 }
 
-export function addPlayerGame(room_id, player) {
+export function addPlayerGame(room_id, p) {
+	const inGame = gamesList.find(
+		(game) =>
+			game.players.find((player) => player.username == p.username) !=
+			undefined
+	);
+	console.log(inGame);
 	const game = gamesList.find((game) => game.room_id == room_id);
-	if (game != undefined) {
-		const inGame = game.players.find((p) => p.username == player.username);
+	console.log(game);
+	if (
+		(inGame == undefined && game.state == state.LOBBY) || // Si no esta en otra partida y me quiero unir a una partida en loby
+		(inGame != undefined && inGame.room_id == room_id) // Si esta ya en esta partida
+	) {
 		if (inGame == undefined) {
-			game.addPlayer(player);
-			return true;
-		} else {
-			return false;
+			// Si es nuevo
+			game.addPlayer(p);
 		}
+		return true;
 	} else {
 		return false;
 	}

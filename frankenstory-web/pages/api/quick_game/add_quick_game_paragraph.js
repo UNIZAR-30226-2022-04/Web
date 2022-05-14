@@ -1,20 +1,24 @@
-import { createParagraphDB } from "../../../prisma/queries/CREATE/paragraph";
-import { createParticipantDB } from "../../../prisma/queries/CREATE/participant";
-import { updateTaleDB } from "../../../prisma/queries/PUT/tale_mode";
-import { selectParticipantDB } from "../../../prisma/queries/SELECT/participant";
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
-import { selectTaleDB } from "../../../prisma/queries/SELECT/tale_mode";
-import {checkFields} from "../../../lib/checkFields";
+import { checkFields } from "../../../lib/checkFields";
+import Paragraph from "../../../lib/Paragraph";
+import { gamesList } from "../../../lib/GamesManager";
 
 // Al ir a http://localhost:3000/api/add_quick_game_paragraph te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
-	
-	const fields = ['username','password','id','body','turn','isLast','punetas'];
 
-	const rest = checkFields(message,fields)
-	if (rest.length != 0){
-		const msg = "invalid credentials, expected: " + rest
+	const fields = [
+		"username",
+		"password",
+		"id",
+		"body",
+		"turn",
+		"punetas",
+	];
+
+	const rest = checkFields(message, fields);
+	if (rest.length != 0) {
+		const msg = "invalid credentials, expected: " + rest;
 		res.status(200).json({ result: "error", reason: msg });
 		return;
 	}
@@ -24,32 +28,28 @@ export default async (req, res) => {
 	// checks if username exists
 	if (user != undefined) {
 		if (user.password_hash == message.password) {
+			const paragraph = new Paragraph(
+				message.username,
+				message.turn,
+				message.body
+			);
+			const game = gamesList.find((game) => game.room_id == message.id);
 
-			const dataParagraph = {
-				text: message.body,
-				username: message.username,
-				story_id: message.id,
-				turn_number: tale.turn + 1,
-			};
-
-			await createParagraphDB(dataParagraph);
-            
-			if (message.isLast) {
-				// 
-			} else {
-				const dataTale = {
-					story_id: tale.story_id,
-					max_turns: tale.maxTurns,
-					turn: tale.turn + 1,
-					max_paragraph_chars: tale.maxCharacters,
-					privacy: tale.privacy,
-					title: tale.title,
-					finished: false,
-				};
-				await updateTaleDB(message.id, dataTale);
+			if (game == undefined) {
+				res.status(200).json({
+					result: "error",
+					reason: "room_not_found",
+				});
+				return;
 			}
 
-			res.status(200).json({ result: "success", reason: "" });
+			const player = game.players.find(
+				(p) => p.username == message.username
+			);
+			await game.addPunetas(message.username,message.punetas)
+			game.addParagraph(player, paragraph);
+
+			res.status(200).json({ result: "success" });
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });
 		}

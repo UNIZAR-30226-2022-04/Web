@@ -6,7 +6,7 @@ import { gamesList } from "../../../lib/GamesManager";
 import { MAX_AMOUNT_PLAYERS } from "../../../lib/GamesManager";
 import { state } from "../../../lib/GamesManager";
 
-// Al ir a http://localhost:3000/api/quick_game/join_room te devuelve el siguiente json
+// Al ir a http://localhost:3000/api/quick_game/leave_room te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
 
@@ -24,52 +24,32 @@ export default async (req, res) => {
 	// checks if username exists
 	if (user != undefined) {
 		if (user.password_hash == message.password) {
-			if (gamesList.length == 0) {
+			const game = gamesList.find(
+				(game) =>
+					game.players.find(
+						(player) => player.username == player.username
+					) != undefined
+			);
+
+			if (game == undefined) {
 				res.status(200).json({
 					result: "error",
-					reason: "no_rooms_available",
+					reason: "room_not_found",
 				});
-			} else {
-				const p = new Player(
-					message.username,
-					message.password,
-					user.image_ID,
-					user.stars,
-					user.mooncoins
-				);
-				const oldGame = gamesList.find(
-					(game) =>
-						game.players.find((player) => player.username == p.username) !=
-						undefined
-				);
-				if (oldGame != undefined){
-					res.status(200).json({
-						result: "success",
-						id: oldGame.room_id,
-					});
-					return
-				}
-				var found = false;
-				var game;
-				for (var i = 0; found == false && i < gamesList.length; i++) {
-					game = gamesList[i];
-					if (game.players.lenght >= MAX_AMOUNT_PLAYERS) {
-					} else if (addPlayerGame(game.room_id, p)) {
-						found = true;
-					}
-				}
-				if (found) {
-					res.status(200).json({
-						result: "success",
-						id: game.room_id,
-					});
-				} else {
-					res.status(200).json({
-						result: "error",
-						reason: "no_rooms_available",
-					});
-				}
+				return;
 			}
+
+			const index = game.players.indexOf(
+				game.players.find(
+					(player) => player.username == player.username
+				)
+			);
+			game.players.splice(index);
+			if (game.players.length == 0) {
+				const gameIndex = gamesList.indexOf(game);
+				gamesList.splice(gameIndex);
+			}
+			res.status(200).json({ result: "success" });
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });
 		}

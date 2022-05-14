@@ -1,6 +1,15 @@
 //Lista de partidas activas online
 export var gamesList = [];
 
+export const MAX_AMOUNT_PLAYERS = 10;
+
+export const POINTS_QK_PRIVATE = 200;
+export const POINTS_QK_PUBLIC = 300;
+
+export const REVES_PRICE = 150;
+export const CIEGO_PRICE = 300;
+export const DESORDEN_PRICE = 500;
+
 export const state = Object.freeze({
 	LOBBY: 0,
 	INGAME: 1,
@@ -12,6 +21,20 @@ export const randomWordsList = [
 	"Coche",
 	"Puerta",
 	"Mesa",
+	"Altavoz",
+	"Kiwi",
+	"Dinosaurio",
+	"Estrella",
+	"Caballo",
+	"Lupa",
+	"Araña",
+	"Ratón",
+	"Mercurio",
+	"Marte",
+	"Tierra",
+	"Galaxia",
+	"Pokemon",
+	"Electricidad",
 	"Autobús",
 	"Rueda",
 	"Bolígrafo",

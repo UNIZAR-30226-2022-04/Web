@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,78 +14,78 @@ model Player {
   image_ID      Int           @default(0)
   mooncoins     Int           @default(100)
   stars         Int           @default(0)
+  friend        Friendship[]  @relation("friend")
+  himself       Friendship[]  @relation("himself")
+  contributor   Paragraph[]   @relation("contributor")
+  participant   Participant[] @relation("participant")
   receiver      Petition[]    @relation("receiver")
   questioner    Petition[]    @relation("questioner")
-  himself       Friendship[]  @relation("himself")
-  friend        Friendship[]  @relation("friend")
-  participant   Participant[] @relation("participant")
-  contributor   Paragraph[]   @relation("contributor")
 }
 
 model Petition {
-  questioner    Player @relation(name: "questioner", fields: [username], references: [username], onDelete: Cascade)
   username      String @db.VarChar(30)
-  receiver      Player @relation(name: "receiver", fields: [petition_name], references: [username], onDelete: Cascade)
   petition_name String @db.VarChar(30)
+  receiver      Player @relation("receiver", fields: [petition_name], references: [username], onDelete: Cascade)
+  questioner    Player @relation("questioner", fields: [username], references: [username], onDelete: Cascade)
 
   @@id([username, petition_name])
 }
 
 model Friendship {
-  himself    Player @relation(name: "himself", fields: [username], references: [username], onDelete: Cascade)
   username   String @db.VarChar(30)
-  friend     Player @relation(name: "friend", fields: [friendname], references: [username], onDelete: Cascade)
   friendname String @db.VarChar(30)
+  friend     Player @relation("friend", fields: [friendname], references: [username], onDelete: Cascade)
+  himself    Player @relation("himself", fields: [username], references: [username], onDelete: Cascade)
 
   @@id([username, friendname])
 }
 
 model Story {
   story_id    Int           @id @default(autoincrement())
-  story       Participant[] @relation("story")
   date        DateTime      @default(now())
-  tale        Tale_mode[]   @relation("tale")
-  quick_match Quick_match[] @relation("quick_match")
   contributed Paragraph[]   @relation("contributed")
+  story       Participant[] @relation("story")
+  quick_match Quick_match?  @relation("quick_match")
+  tale        Tale_mode?    @relation("tale")
 }
 
 model Participant {
-  participant Player  @relation(name: "participant", fields: [username], references: [username], onDelete: Cascade)
   username    String  @db.VarChar(30)
-  story       Story   @relation(name: "story", fields: [story_id], references: [story_id], onDelete: Cascade)
   story_id    Int
   voted       String  @db.VarChar(30)
   creator     Boolean
+  story       Story   @relation("story", fields: [story_id], references: [story_id], onDelete: Cascade)
+  participant Player  @relation("participant", fields: [username], references: [username], onDelete: Cascade)
 
   @@id([username, story_id])
 }
 
 model Tale_mode {
-  tale                Story   @relation(name: "tale", fields: [story_id], references: [story_id], onDelete: Cascade) //Prisma no permite herencia
   story_id            Int     @id
   max_turns           Int     @default(1)
-  turn                Int     @default(0)
   max_paragraph_chars Int     @default(50)
-  privacy             Boolean @default(false)//1=private, 0=public
+  privacy             Boolean @default(false)
   finished            Boolean @default(false)
-  scored              Boolean @default(false)//1=scored, 0=not scored
+  scored              Boolean @default(false)
   title               String  @db.VarChar(50)
+  turn                Int     @default(0)
+  tale                Story   @relation("tale", fields: [story_id], references: [story_id], onDelete: Cascade)
 }
 
 model Quick_match {
-  quick_match Story @relation(name: "quick_match", fields: [story_id], references: [story_id], onDelete: Cascade) //Prisma no permite herencia
   story_id    Int   @unique
-  mode        Int   //0=normal, 1=tendencias Twitter, 2=palabras obligatorias
+  mode        Int
+  quick_match Story @relation("quick_match", fields: [story_id], references: [story_id], onDelete: Cascade)
 }
 
 model Paragraph {
   text        String @db.VarChar(250)
-  Score       Float  @default(0)
+  Score       Int    @default(0)
   turn_number Int    @default(0)
-  contributor Player @relation(name: "contributor", fields: [username], references: [username], onDelete: Cascade)
   username    String @db.VarChar(30)
-  contributed Story  @relation(name: "contributed", fields: [story_id], references: [story_id], onDelete: Cascade)
   story_id    Int
+  contributed Story  @relation("contributed", fields: [story_id], references: [story_id], onDelete: Cascade)
+  contributor Player @relation("contributor", fields: [username], references: [username], onDelete: Cascade)
 
   @@id([turn_number, username, story_id])
 }

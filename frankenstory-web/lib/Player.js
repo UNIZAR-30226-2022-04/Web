@@ -4,11 +4,17 @@ export default class Player {
 		this.password = password;
 		this.picture = picture;
 		this.stars = stars;
+		this.spent = 0;
+		this.puneta = "";
+		this.nextPuneta = "";
+		this.punetaCost = 0;	//NO es necesaria pero acelera un proceso
+		this.wrote = false;
+		this.votedTo = "";
 		this.mooncoins = mooncoins;
-		this.paragraphs = []
+		this.paragraphs = [];
 	}
 
-	addParagraph(paragraph){
+	addPlayerParagraph(paragraph) {
 		this.paragraphs.push(paragraph);
 	}
 
@@ -16,8 +22,4 @@ export default class Player {
 		return 0;
 		//return getFriends(this.username);
 	}
-}
-
-export function addParagraphPlayer(player,id,paragraph){
-	
 }

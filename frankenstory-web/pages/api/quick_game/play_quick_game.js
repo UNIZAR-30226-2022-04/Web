@@ -9,9 +9,9 @@ export default async (req, res) => {
 
 	const fields = ["username", "password", "id"];
 
-	const rest = checkFields(message,fields)
-	if (rest.length != 0){
-		const msg = "invalid credentials, expected: " + rest
+	const rest = checkFields(message, fields);
+	if (rest.length != 0) {
+		const msg = "invalid credentials, expected: " + rest;
 		res.status(200).json({ result: "error", reason: msg });
 		return;
 	}
@@ -30,14 +30,24 @@ export default async (req, res) => {
 				});
 				return;
 			}
-			const result = (game.players.length == game.haveFinished ||
-				game.turn == 0) ? "success" : "waiting_players";
-			/*const result = (game.players.length == game.haveFinished ||
-				game.turn == 0 || game.timeRemaining == 0) ? "success" : "waiting_players";
 
-			if (game.players.length == game.haveFinished || game.turn == 0){
-				startTurn(game.room_id);
-			}*/
+			if (game.turn == 0) game.nextTurn();
+
+			const pl = game.players.find((p) => p.username == message.username);
+
+			const result =
+				(message.turn <= game.turn && pl.wrote == false)
+					? "success"
+					: "waiting_players";
+
+
+			var lastParagraph = "";
+			var puneta = "";
+
+			if (result == "success" && game.turn != 1){
+				lastParagraph = game.getLastParagraph(message.username);
+				puneta = game.getPuneta(message.username)
+			}
 
 			res.status(200).json({
 				result: result,
@@ -45,9 +55,10 @@ export default async (req, res) => {
 				//s: game.timeRemaining,
 				topic: game.topic,
 				randomWords: game.randomWords,
-				lastParagraph: "",
-				isLast: game.turn == game.players.length - 1,
-				puneta: "",
+				lastParagraph: lastParagraph,
+				isLast: game.turn == game.players.length,
+				puneta: puneta,
+				turn: game.turn
 			});
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });

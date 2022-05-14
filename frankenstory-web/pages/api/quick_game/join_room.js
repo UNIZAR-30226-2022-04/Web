@@ -2,6 +2,9 @@ import { addPlayerGame, createGame } from "../../../lib/Game";
 import Player from "../../../lib/Player";
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
+import { gamesList } from "../../../lib/GamesManager";
+import { MAX_AMOUNT_PLAYERS } from "../../../lib/GamesManager";
+import { state } from "../../../lib/GamesManager";
 
 // Al ir a http://localhost:3000/api/quick_game/join_room te devuelve el siguiente json
 export default async (req, res) => {
@@ -9,9 +12,9 @@ export default async (req, res) => {
 
 	const fields = ["username", "password", "id"];
 
-	const rest = checkFields(message,fields)
-	if (rest.length != 0){
-		const msg = "invalid credentials, expected: " + rest
+	const rest = checkFields(message, fields);
+	if (rest.length != 0) {
+		const msg = "invalid credentials, expected: " + rest;
 		res.status(200).json({ result: "error", reason: msg });
 		return;
 	}
@@ -29,8 +32,24 @@ export default async (req, res) => {
 				user.mooncoins
 			);
 
-			if (addPlayerGame(message.id, p)) {
+			const game = gamesList.find((game) => game.room_id == message.id);
+			if (game == undefined) {
+				res.status(200).json({
+					result: "error",
+					reason: "room_not_found",
+				});
+			} else if (game.players.lenght >= MAX_AMOUNT_PLAYERS) {
+				res.status(200).json({
+					result: "error",
+					reason: "game_full",
+				});
+			} else if (addPlayerGame(message.id, p)) {
 				res.status(200).json({ result: "success" });
+			} else if (game.state != state.LOBBY) {
+				res.status(200).json({
+					result: "error",
+					reason: "game_started",
+				});
 			} else {
 				res.status(200).json({
 					result: "error",

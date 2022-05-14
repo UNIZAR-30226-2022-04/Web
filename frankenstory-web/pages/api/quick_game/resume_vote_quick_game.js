@@ -8,9 +8,9 @@ export default async (req, res) => {
 
 	const fields = ["username", "password", "id"];
 
-	const rest = checkFields(message,fields)
-	if (rest.length != 0){
-		const msg = "invalid credentials, expected: " + rest
+	const rest = checkFields(message, fields);
+	if (rest.length != 0) {
+		const msg = "invalid credentials, expected: " + rest;
 		res.status(200).json({ result: "error", reason: msg });
 		return;
 	}
@@ -29,19 +29,33 @@ export default async (req, res) => {
 				});
 				return;
 			}
-			const result = game.state == 0 ? "waiting_players" : "success";
+			const pl = game.players.find((p) => p.username == message.username);
+			const result =
+			(message.turn <= game.voteTurn && pl.votedTo == "")
+				? "success"
+				: "waiting_players";
+
+			if (result == "waiting_players"){
+				res.status(200).json({
+					result: result,
+					turn: game.voteTurn
+				});
+				return;
+			}
+
 			const paragraphs = [];
-			game.paragraphs.forEach((paragraph) => {
-				var paraInfo;
-				paraInfo.body = paragraph.body;
-				paraInfo.randomWords = game.randomWords;
-				paragraphs.push(paragraph);
+
+			game.players[game.voteTurn-1].paragraphs.forEach((paragraph) => {
+				paragraphs.push({ body: paragraph.body, randomWords: game.randomWords });
 			});
 
 			res.status(200).json({
 				result: result,
 				topic: game.topic,
 				paragraphs: paragraphs,
+				isLast: game.voteTurn == game.players.length,
+				turn: game.voteTurn,
+				s: game.maxTime
 			});
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });
