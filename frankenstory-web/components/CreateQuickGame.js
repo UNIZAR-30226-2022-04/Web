@@ -11,22 +11,6 @@ const CreateQuickGame = () => {
     const [gameMode, setGameMode] = useState("random")
     const [time, setTime ] = useState(120)
 
-    const setPublic = () => {
-        setPublicGame(true)
-    }
-
-    const setPrivate = () => {
-        setPublicGame(false)
-    }
-
-    const setModeRandom = () => {
-        setGameMode("random")
-    }
-
-    const setModeTwitter = () => {
-        setGameMode("twitter")
-    }
-
     const timeUp = (e) => {
         e.preventDefault()
         setTime(time + 5)
@@ -87,15 +71,15 @@ const CreateQuickGame = () => {
             <p>Tipo de partida</p>
           </div>
           <div className="centered">
-            <input className={`py-1 px-2 text-white ${ publicGame ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="PUBLICA" onClick={setPublic}/>
-            <input className={`py-1 px-2 text-white ${ !publicGame ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="PRIVADA" onClick={setPrivate}/>
+            <input className={`py-1 px-2 text-white ${ publicGame ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="PUBLICA" onClick={() => setPublicGame(true)}/>
+            <input className={`py-1 px-2 text-white ${ !publicGame ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="PRIVADA" onClick={() => setPublicGame(false)}/>
           </div>
           <div className = "centered ">
                 <>Modo de juego</>
           </div>
           <div className = "centered">
-            <input className={`py-1 px-2 text-white ${ gameMode=="random" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="ALEATORIAS" onClick={setModeRandom}/><> </>
-            <input className={`py-1 px-2 text-white ${ gameMode=="twitter" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="TWITTER" onClick={setModeTwitter}/><> </>
+            <input className={`py-1 px-2 text-white ${ gameMode=="random" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="ALEATORIAS" onClick={() => setGameMode("random")}/><> </>
+            <input className={`py-1 px-2 text-white ${ gameMode=="twitter" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="TWITTER" onClick={() => setGameMode("twitter")}/><> </>
           </div>
           <div className = "centered">
             <input className="clickableItem"type="submit" value="Crear partida"/>

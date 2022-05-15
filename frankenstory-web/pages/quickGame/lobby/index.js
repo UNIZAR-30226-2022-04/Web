@@ -85,7 +85,7 @@ export default function QuickGame(){
             }
 
             // Llamada a la api
-            const res = await fetch('http://localhost:3000/api/quick_game/get_room', options)
+            const res = await fetch('http://localhost:3000/api/', options)
             const data = await res.json()
 
             //DEBUG

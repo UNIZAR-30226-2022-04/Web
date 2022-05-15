@@ -44,6 +44,7 @@ export default function Write() {
   const [rivals, setRivals] = useState([])
   const [last, setLast ] = useState(false)
   const [turn, setTurn ] = useState(0)
+  var queryParams
 
   useEffect(() => {
     const start = new Date();
@@ -64,13 +65,14 @@ export default function Write() {
   }, []);
 
   useEffect(()=>{
-    const queryParams = new URLSearchParams(window.location.search);
+    queryParams = new URLSearchParams(window.location.search);
+    alert(queryParams.get("id"))
     const getData = async () =>{
       const data = {
         username: localStorage.getItem("username"),
         password: localStorage.getItem("password"),
         turn: 0,
-        id: queryParams.get("id")
+        id: queryParams.get("id"),
       }
       const options = {
         method: 'POST',
