@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export default function ListOfPeople({data, showFaces}) {
     return(
-        <div className='flex flex-col space-y-4 h-full '>
+        <div className='flex flex-col space-y-4 '>
             {data.map((person, index) => ( <PersonInfo key={index} person={person} index={index} faces={showFaces} /> ) ) }
         </div> 
     )

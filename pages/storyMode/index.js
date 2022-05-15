@@ -87,15 +87,15 @@ export default function StoryMode(){
 
     return(
         <Layout data={layoutInfo} > 
-            <div className='flex flex-row items-center space-x-20 ml-5'>
+            <div className='flex flex-row items-center space-x-20 ml-5 mb-16'>
                 <div className='flex flex-col ml-5 bg-scroll bg-contain overflow-auto h-[400px] pr-2'>
-                    <h1 className='commonTitle'>Tus Relatos</h1>
+                    <h1 className='commonTitle'>Mis Relatos</h1>
                     <StoryList stories={myTales.myTales} isVoteStory={false}/>
                     <h1 className='commonTitle'>Relatos de Amigos</h1>
                     <StoryList stories={myTales.friendTales} isVoteStory={false}/>
                     <h1 className='commonTitle'>Relatos Públicos</h1>
                     <StoryList stories={myTales.publicTales} isVoteStory={false}/>
-                    <h1 className='commonTitle'>Relatos a Votar</h1>
+                    <h1 className='commonTitle'>Relatos en Votación</h1>
                     <StoryList stories={myTales.talesForVote} isVoteStory={true}/>
                 </div>
                 <form className='flex flex-col space-y-3 w-80'>
@@ -105,11 +105,11 @@ export default function StoryMode(){
                         
                         <h1 className='commonSubtitle'>Número de escrituras</h1>
                         <div className='flex flex-row space-x-2 items-center justify-center text-center'>
-                            <button className='bg-verde_top rounded-full w-12 p-2 font-bold text-2xl text-center text-white' onClick={(e) => (changeTurnos(e,setTurnos,turnos-1))}>-</button>
+                            <button className='addReduceButton bg-verde_plus_minus' type='button' onClick={() => (changeTurnos(setTurnos,turnos-1))}>-</button>
                             <div className='text-white font-arial-b text-2xl'>
                                 {turnos}
                             </div>
-                            <button className='bg-verde_top rounded-full w-12  p-2 font-bold text-2xl text-center text-white' onClick={(e) => (changeTurnos(e,setTurnos,turnos+1))}>+</button>
+                            <button className='addReduceButton bg-verde_plus_minus' type='button' onClick={() => (changeTurnos(setTurnos,turnos+1))}>+</button>
                         </div>
                     </div>
 
@@ -117,20 +117,20 @@ export default function StoryMode(){
                         
                         <h1 className='commonSubtitle'>Número de caracteres</h1>
                         <div className='flex flex-row space-x-2 items-center justify-center text-center'>
-                            <button className='bg-verde_top rounded-full w-12 p-2 font-bold text-2xl text-center text-white ' onClick={(e) => (changeCaracteres(e,setChars,chars-5))}>-</button>
+                            <button className='addReduceButton bg-verde_plus_minus' type='button' onClick={() => (changeCaracteres(setChars,chars-5))}>-</button>
                             <div className='text-white font-arial-b text-2xl'>
                                 {chars}
                             </div>
-                            <button className='bg-verde_top rounded-full w-12  p-2 font-bold text-2xl text-center text-white' onClick={(e) => (changeCaracteres(e,setChars,chars+5))}>+</button>
+                            <button className='addReduceButton bg-verde_plus_minus' type='button' onClick={() => (changeCaracteres(setChars,chars+5))}>+</button>
                         </div>
                     </div>
 
-                    <div className='flex flex-col w-full justify-center item-center space-y-2'>
+                    <div className='flex flex-col justify-center item-center space-y-2'>
                         <h1 className='commonSubtitle'>Tipo de partida</h1>
                         {visibility==0?(
-                            <button type='button' onClick={(e) => setVisibility(1)} className='bg-green-700 text-white rounded-3xl'>Privada</button>
+                            <button type='button' onClick={() => setVisibility(1)} className='bg-red-700 text-white rounded-3xl font-arial-b p-1'>Privada</button>
                         ):(
-                            <button type='button' onClick={(e) => setVisibility(0)} className='bg-red-700 text-white rounded-3xl'>Pública</button>
+                            <button type='button' onClick={() => setVisibility(0)} className='bg-green-700 text-white rounded-3xl font-arial-b p-1'>Pública</button>
                         )}
                         
                     </div>
@@ -145,9 +145,7 @@ export default function StoryMode(){
     )
 }
 
-function changeCaracteres(e, stateChanger, chars){
-    e.preventDefault()
-    
+function changeCaracteres(stateChanger, chars){
     if(chars < 30){
         stateChanger(30)
     }else if(chars > 120){
@@ -157,9 +155,7 @@ function changeCaracteres(e, stateChanger, chars){
     }
 }
 
-function changeTurnos(e, stateChanger, turnos){
-    e.preventDefault()
-    
+function changeTurnos(stateChanger, turnos){ 
     if(turnos < 3){
         stateChanger(3)
     }else{
