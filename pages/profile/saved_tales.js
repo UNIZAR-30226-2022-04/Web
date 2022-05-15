@@ -108,34 +108,32 @@ export default function SavedTales(){
 
 function TalesList({quicks, tales}){
     return(
-        <>
-            <div className='flex flex-row justify-start ml-32 items-center space-x-20 align-middle text-center'>
-                <div className='flex flex-col space-y-3 items-center justify-center align-middle'>
-                    <h1 className='commonTitle'>Partidas Rápidas</h1>
-                    <div className="bg-scroll bg-contain overflow-auto">
-                        <div className="h-[500px]">
-                            <div className='flex flex-col items-center space-y-3 w-auto'>
-                                {quicks.map(
-                                    (game) => (
-                                        <QuickStory key={game.id} info={game} />
-                                    ))
-                                }
-                            </div>
+        <div className='flex flex-row ml-24 items-center space-x-20'>
+            <div className='flex flex-col space-y-3 items-center justify-center align-middle'>
+                <h1 className='commonTitle'>Partidas Rápidas</h1>
+                <div className="bg-scroll bg-contain overflow-auto">
+                    <div className="h-[500px]">
+                        <div className='flex flex-col items-center space-y-3 w-auto'>
+                            {quicks.map(
+                                (game) => (
+                                    <QuickStory key={game.id} info={game} />
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
-                <div className='flex flex-col space-y-3 items-center justify-center align-middle'>
-                    <h1 className='commonTitle'>Relatos</h1>
-                    <div className="bg-scroll bg-contain overflow-auto">
-                        <div className="h-[500px]">
-                            <div className='flex flex-col space-y-3 justify-start items-center'>
-                                {tales.map((game) => (<TaleStory key={game.id} info={game}/>))}
-                            </div>
-                        </div>            
-                    </div>
-                </div>               
             </div>
-        </>
+            <div className='flex flex-col space-y-3 items-center justify-center align-middle'>
+                <h1 className='commonTitle'>Relatos</h1>
+                <div className="bg-scroll bg-contain overflow-auto">
+                    <div className="h-[500px]">
+                        <div className='flex flex-col space-y-3 justify-start items-center'>
+                            {tales.map((game) => (<TaleStory key={game.id} info={game}/>))}
+                        </div>
+                    </div>            
+                </div>
+            </div>               
+        </div>
     )
 }
 
@@ -144,12 +142,12 @@ function QuickStory({info}){
         <div className='flex flex-col'>
             <div className='flex flex-row justify-between w-80 items-center text-left space-y-1'>
                 <div className='flex flex-col'>
-                    <div className='font-bold font-arial-b'>
+                    <div className='font-bold font-arial-b text-verde_punetas'>
                         Historia {info.type === 'quick_twitter' ? ('Twitter'):('Aleatoria')}
                     </div>
                     <div className='flex flex-row space-x-2 font-arial-r text-xs'> 
-                        <div className='font-bold'>Fecha:</div> 
-                        <div>{info.date}</div>
+                        <div className='font-bold text-verde_punetas'>Fecha:</div> 
+                        <div className='text-verde_plus_minus_back'>{info.date}</div>
                     </div>
                 </div>
                 {info.type === 'quick_twitter' ?(
@@ -174,10 +172,10 @@ function TaleStory({info}){
         <div className='flex flex-col'>
             <div className='flex flex-row justify-between w-80 items-center text-left space-y-1'>
                 <div className='flex flex-col'>
-                    <div className='font-bold font-arial-b'>{info.title}</div>
+                    <div className='font-bold font-arial-b text-verde_punetas'>{info.title}</div>
                     <div className='flex flex-row space-x-2 font-arial-r text-xs'> 
-                        <div className='font-bold'>Fecha:</div> 
-                        <div>{info.date}</div>
+                        <div className='font-bold text-verde_punetas'>Fecha:</div> 
+                        <div className='text-verde_plus_minus_back'>{info.date}</div>
                     </div>
                 </div>
                 <div className='clickableItem'>
@@ -188,7 +186,5 @@ function TaleStory({info}){
             </div>
             <div className='w-full h-1 bg-verde_top rounded-full bg-opacity-60' />
         </div>
-        
-       
     )
 }

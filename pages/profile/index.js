@@ -85,7 +85,7 @@ export default function Stats() {
 
   return (
     <Layout data={layoutInfo}>
-        <div className='pl-20 flex flex-col justify-center left-0 space-y-3'>
+        <div className='ml-20 flex flex-col justify-center space-y-3 mb-16'>
             <h1 className='commonTitle'>Estadísticas</h1>
             <ListOfPeople data={myuser.bestFour} showFaces={false}/>
         </div>

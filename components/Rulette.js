@@ -4,11 +4,7 @@ import Link from 'next/link'
 export default function Rulette({page}) {
     return(
         <div className='relative h-full mt-3 -mr-1' >
-            
-
-            <img className='h-full w-full relative' src="/rulette/rulette2.png" alt='xd' />
-
-            
+            <img className='h-full w-full relative' src="/rulette/rulette2.png" alt='xd' />            
             <div className='absolute flex flex-col items-end pr-8 space-y-3 right-0 top-24 2xl:top-44'>            
                 <RuletteButton page={page} thisPage='story' icon='/rulette/long_play.png' reference='/storyMode'/>
                 <RuletteButton page={page} thisPage='quickGame' icon='/rulette/quick_play.png' reference='/quickGame'/>

@@ -41,8 +41,8 @@ function Crates({person, changeSettings}){
                     </Link> 
                 </div>
             )}
-                <div className='' >
-                    <Image className='' src='/icons/logout.png' width="38" height="38" onClick={() => {localStorage.setItem("logged","No"); Router.push("/login")}}/> 
+                <div className='clickableItem' >
+                    <Image className='' src='/icons/logout.png' width="38" height="38" onClick={() => {localStorage.setItem("logged","No"); Router.push("/login")}}/>
                 </div>               
         </div>
     )
