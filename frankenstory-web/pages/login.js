@@ -28,27 +28,31 @@ export default function login() {
   }
 
   return (
-    <div className="background p-6 h-screen w-screen flex flex-col items-center justify-center space-y-4">
+    <div className="background h-screen w-screen flex flex-col items-center justify-center">
       <Image src={'/frankenstory.png'} height={150} width={600} />
-      <div className="flex flex-row">
+      <div className="flex flex-row justify-center items-center">
         <Lottie 
           options = {options}
           height = {400}
           width = {400}
         />
-        <form className ="justify-center p-6 bg-white align-middle" onSubmit={(e) => (onSubmit(e, name, password, router))}>
-            <h1 className="pb-3 pt-6 px-10 text-4xl text-blue-800 font-bold">Iniciar sesión</h1>
-            <div>Usuario</div>
-            <input className="p-2 w-full bg-blue-100 text-blue-400" maxLength={30} type="text" value={name} placeholder="Usuario" onChange={(e) => setName(e.target.value)}/>
-            <div>Contraseña</div>
-            <input className="p-2 w-full bg-blue-100 text-blue-400" maxLength={30} type="password" value={password} placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)}/>
-            <div className="py-2 font-bold text-blue-800">
-              <Link  href="/register">Crear Cuenta</Link>
+        <form className ="flex flex-col items-center justify-center" onSubmit={(e) => (onSubmit(e, name, password, router))}>
+            <h1 className="commonTitle font-arial-b">INICIAR SESIÓN</h1>
+            <div className="w-96 flex flex-col space-y-2">
+              <div>
+                <div className="commonSubtitle">Usuario</div>
+                <input className="w-full p-2 bg-white rounded-lg" maxLength={30} type="text" value={name} placeholder="Usuario" onChange={(e) => setName(e.target.value)}/>
+              </div>
+              <div>
+                <div className="commonSubtitle">Contraseña</div>
+                <input className="w-full p-2 bg-white rounded-lg" maxLength={30} type="password" value={password} placeholder="Contraseña" onChange={(e) => setPassword(e.target.value)}/>
+              </div>
+              <button className="commonButton bg-verde_top" type="submit">Iniciar sesión</button>
             </div>
-            <button className="ml-20 bg-center text-white justify-self-center bg-blue-900 rounded-md px-4 py-2" type="submit">Iniciar sesión</button>
+            
         </form>
       </div>
-      
+      <button className="commonButton bg-verde_top absolute bottom-0 right-0 m-10" onClick={() => (router.push("/register"))}>Crear Cuenta {"->"}</button>
     </div>
   )
 }

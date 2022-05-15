@@ -36,8 +36,7 @@
   }
 
   .commonTitle{
-    @apply  text-3xl 
-            justify-start
+    @apply  text-3xl
             text-white
             font-bold
             txtShadw
@@ -50,8 +49,6 @@
             font-bold
             txtShadw
   }
-
-  
 
   .commonButton{ 
     @apply  rounded-lg

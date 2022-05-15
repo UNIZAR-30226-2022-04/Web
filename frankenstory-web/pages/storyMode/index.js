@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
+
 import Layout from 'components/Layout'  
 import Rulette from 'components/Rulette'
 import StoryList from 'components/StoryList'
@@ -7,10 +9,15 @@ import Spinner from 'components/Spinner'
 
 export default function StoryMode(){
     const router = useRouter()
-    const [visibility, setVisibility] = useState(1)
+    
+    // Api data
+    const [windowUser, setWindowUser] = useState({}) 
     const [myTales, setMyTales] = useState("")
 
-    const [windowUser, setWindowUser] = useState({}) 
+    // Tale options
+    const [visibility, setVisibility] = useState(1)
+    const [turnos, setTurnos] = useState(3)
+    const [chars, setChars] = useState(30)
 
     useEffect(()=>{
         if(localStorage.getItem("logged") == "si"){
@@ -27,9 +34,7 @@ export default function StoryMode(){
             coins: coins,
             stars: stars
           })
-          console.log("SACO DATOS")
         }else{
-          console.log("VOY A LOGIN")
           router.push("/")
         }
     }, [])
@@ -93,30 +98,44 @@ export default function StoryMode(){
                     <h1 className='commonTitle'>Relatos a Votar</h1>
                     <StoryList stories={myTales.talesForVote} isVoteStory={true}/>
                 </div>
-                <form className='flex flex-col space-y-3'>
-                    <h1 className='commonTitle'>Crear Partida</h1>
+                <form className='flex flex-col space-y-3 w-80'>
+                    <h1 className='commonTitle'>Crear Relato</h1>
                     
-                    <div className='commonCrate'>
-                        <h1 className='commonFont w-32'>Partida Pública: </h1>
+                    <div className='flex flex-col w-full justify-center item-center space-y-2'>
+                        
+                        <h1 className='commonSubtitle'>Número de escrituras</h1>
+                        <div className='flex flex-row space-x-2 items-center justify-center text-center'>
+                            <button className='bg-verde_top rounded-full w-12 p-2 font-bold text-2xl text-center text-white' onClick={(e) => (changeTurnos(e,setTurnos,turnos-1))}>-</button>
+                            <div className='text-white font-arial-b text-2xl'>
+                                {turnos}
+                            </div>
+                            <button className='bg-verde_top rounded-full w-12  p-2 font-bold text-2xl text-center text-white' onClick={(e) => (changeTurnos(e,setTurnos,turnos+1))}>+</button>
+                        </div>
+                    </div>
+
+                    <div className='flex flex-col w-full justify-center item-center space-y-2'>
+                        
+                        <h1 className='commonSubtitle'>Número de caracteres</h1>
+                        <div className='flex flex-row space-x-2 items-center justify-center text-center'>
+                            <button className='bg-verde_top rounded-full w-12 p-2 font-bold text-2xl text-center text-white ' onClick={(e) => (changeCaracteres(e,setChars,chars-5))}>-</button>
+                            <div className='text-white font-arial-b text-2xl'>
+                                {chars}
+                            </div>
+                            <button className='bg-verde_top rounded-full w-12  p-2 font-bold text-2xl text-center text-white' onClick={(e) => (changeCaracteres(e,setChars,chars+5))}>+</button>
+                        </div>
+                    </div>
+
+                    <div className='flex flex-col w-full justify-center item-center space-y-2'>
+                        <h1 className='commonSubtitle'>Tipo de partida</h1>
                         {visibility==0?(
-                            <button type='button' onClick={(e) => setVisibility(1)} className='bg-green-700 text-white w-full rounded-3xl'>Sí</button>
+                            <button type='button' onClick={(e) => setVisibility(1)} className='bg-green-700 text-white rounded-3xl'>Privada</button>
                         ):(
-                            <button type='button' onClick={(e) => setVisibility(0)} className='bg-red-700 text-white w-full rounded-3xl'>No</button>
+                            <button type='button' onClick={(e) => setVisibility(0)} className='bg-red-700 text-white rounded-3xl'>Pública</button>
                         )}
                         
                     </div>
 
-                    <div className='commonCrate'>
-                        <h1 className='commonFont w-32'>Turnos: </h1>
-                        <input id='turns' type='number' min='0' className='text-center w-full rounded-lg' />
-                    </div>
-
-                    <div className='commonCrate'>
-                        <h1 className='commonFont w-32'>Número Caracteres: </h1>
-                        <input id='chars' type='number' min='0' className='text-center w-full rounded-lg' />
-                    </div>
-
-                    <button type='button' className='buttonStyle bg-red-300' onClick={() => createGame(visibility, router)}>
+                    <button type='button' className='commonButton bg-verde_top' onClick={() => createGame(visibility, router)}>
                         Crear Partida
                     </button>
                 </form>
@@ -124,6 +143,28 @@ export default function StoryMode(){
             <Rulette page='story'/>   
         </Layout>
     )
+}
+
+function changeCaracteres(e, stateChanger, chars){
+    e.preventDefault()
+    
+    if(chars < 30){
+        stateChanger(30)
+    }else if(chars > 120){
+        stateChanger(120)
+    }else{
+        stateChanger(chars)
+    }
+}
+
+function changeTurnos(e, stateChanger, turnos){
+    e.preventDefault()
+    
+    if(turnos < 3){
+        stateChanger(3)
+    }else{
+        stateChanger(turnos)
+    }
 }
 
 function createGame(privacy, router){

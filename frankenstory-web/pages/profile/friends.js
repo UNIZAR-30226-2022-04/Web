@@ -143,20 +143,16 @@ export default function Friends() {
 function Friend({username, password, friend, setFound, new_friend, reloaderState, reloader}) {
   
   return(
-    <div className="flex flex-row text-2xl items-center justify-between  px-2 text-blue-900 font-bold bg-teal-500 rounded border-white border-2 ">
+    <div className="flex flex-row p-1 items-center justify-between px-2 bg-gris_claro">
         
-        <div>{friend}</div>
-
-        <button className="" onClick={() => (manageFriend(username, password, friend, new_friend, setFound, reloaderState, reloader))}> 
+        <div className='text-xl text-gris font-arial-b'>{friend}</div>
+        
+        <button onClick={() => (manageFriend(username, password, friend, new_friend, setFound, reloaderState, reloader))}> 
           {new_friend ? (
-            <div>
               <Image src={'/friends/add_friend.png'} width={25} height={25} />
-            </div>
             
           ):(
-            <div>
               <Image src={'/friends/delete_friend.png'} width={25} height={25} />
-            </div>
             
           )}
         </button>
@@ -167,8 +163,8 @@ function Friend({username, password, friend, setFound, new_friend, reloaderState
 
 function FriendRequest({username, password, friend, reloaderState, reloader}){
   return(
-    <div className="flex flex-row text-2xl items-center justify-between px-2 space-x-3 text-blue-900 font-bold bg-teal-500 rounded border-white border-2 ">
-      <div>{friend}</div>
+    <div className="flex flex-row p-1 items-center justify-between px-2 bg-gris_claro">
+      <div className='text-xl text-gris font-arial-b'>{friend}</div>
       <div className='flex flex-row space-x-1'>
         <button onClick={() => (manageRequest(username, password, friend, true, reloaderState, reloader))}>
           <Image src={'/friends/accept.png'} width={25} height={25}/>
@@ -235,8 +231,14 @@ async function manageFriend(username, password, friend, new_friend, setFound, re
 
 // Busqueda de una persona en la BD
 async function searchPerson (e, username, password, friend, setFound, reloaderState, reloader) {
+  
   e.preventDefault()
   setFound(false)
+
+  // No te puedes buscar a ti mismo
+  if(username == friend){
+    //return
+  }
   
   // Llamada a la BD
   const info = {
