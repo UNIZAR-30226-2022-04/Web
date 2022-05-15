@@ -85,15 +85,22 @@ export default function SavedTales(){
         image_ID: windowUser.picture
     } 
 
-    console.log("my stories",myStories)
-
     const stories = separateStories(myStories)
-    
-    console.log(stories)
+
+    const quick_stories = [
+        {
+            date: "12/07/21",
+            type: "quick_twitter"
+        },
+        {
+            date: "12/07/21",
+            type: "quick_random"
+        }
+    ]
 
     return(
         <Layout data={layoutInfo}>
-            <TalesList quicks={stories.quick_stories} tales={stories.tale_stories}/>
+            <TalesList quicks={quick_stories} tales={stories.tale_stories}/>
             <Rulette page="yourStories"/> 
         </Layout>
     )
@@ -134,37 +141,54 @@ function TalesList({quicks, tales}){
 
 function QuickStory({info}){
     return(
-        <div className='flex flex-row bg-blue-200 w-[400px] px-5'>
-            <div className='justify-start w-[160px] font-bold'>{info.date}</div>
-            <div className='justify-end'>
-
-                {info.type === 'quick_twittwer' ?(
-                    <Image src="/quick-game/twitter_trend.png" width="40" height="25"/>
+        <div className='flex flex-col'>
+            <div className='flex flex-row justify-between w-80 items-center text-left space-y-1'>
+                <div className='flex flex-col'>
+                    <div className='font-bold font-arial-b'>
+                        Historia {info.type === 'quick_twitter' ? ('Twitter'):('Aleatoria')}
+                    </div>
+                    <div className='flex flex-row space-x-2 font-arial-r text-xs'> 
+                        <div className='font-bold'>Fecha:</div> 
+                        <div>{info.date}</div>
+                    </div>
+                </div>
+                {info.type === 'quick_twitter' ?(
+                    <Link href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}>
+                        <a><Image src="/quick-game/tendencias_twitter.png" width="40" height="40"/></a>
+                    </Link>
+                    
                 ):(
-                    <Image src="/quick-game/random_words.png" width="40" height="25"/>
+                    <Link href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}>
+                        <a><Image src="/quick-game/random_words.png" width="40" height="40"/></a>
+                    </Link>
                 )}
-                 <div className='justify-end clickableItem'>
-                <Link href={`/profile/see_tale?id=${info.id}&type=quick`}>
-                    <a><Image src="/icons/play.png" width="40" height="40"/></a>
-                </Link>
             </div>
-            </div>
+            <div className='w-full h-1 bg-verde_top rounded-full bg-opacity-60' />
         </div>
+        
     )
 }
 
 function TaleStory({info}){
     return(
-        <div className='flex flex-row bg-blue-200 w-[400px] mx-3 p-2 items-center rounded-full'>
-            <div className='justify-start flex flex-row space-x-5 items-center'>
-                <div className='w-[150px] font-bold'>{info.title}</div>
-                <div className='w-[160px] font-bold'>{info.date}</div>
+        <div className='flex flex-col'>
+            <div className='flex flex-row justify-between w-80 items-center text-left space-y-1'>
+                <div className='flex flex-col'>
+                    <div className='font-bold font-arial-b'>{info.title}</div>
+                    <div className='flex flex-row space-x-2 font-arial-r text-xs'> 
+                        <div className='font-bold'>Fecha:</div> 
+                        <div>{info.date}</div>
+                    </div>
+                </div>
+                <div className='clickableItem'>
+                    <Link href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}>
+                        <a><Image src="/icons/read.png" width="40" height="40"/></a>
+                    </Link>
+                </div>            
             </div>
-            <div className='justify-end clickableItem'>
-                <Link href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}>
-                    <a><Image src="/icons/play.png" width="40" height="40"/></a>
-                </Link>
-            </div>            
+            <div className='w-full h-1 bg-verde_top rounded-full bg-opacity-60' />
         </div>
+        
+       
     )
 }

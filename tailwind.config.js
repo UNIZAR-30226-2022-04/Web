@@ -35,6 +35,9 @@ module.exports = {
         "verde_punetas": '#015d52',
         "verde_plus_minus": '#2ecc71',
         "verde_plus_minus_back": '#27ae60',
+
+        "gris": '#676567',
+        "gris_claro": '#e6e6e6',
       },
     },
   },
