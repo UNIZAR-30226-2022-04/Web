@@ -67,49 +67,45 @@ export default function Write() {
 
 
 
-
-  const getData = async () =>{
-    const queryParams = new URLSearchParams(window.location.search);
-    const data = {
-      username: localStorage.getItem("username"),
-      password: localStorage.getItem("password"),
-      turn: 0,
-      id: ("#"+queryParams.get("id"))
-    }
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json' 
-      },
-      body: JSON.stringify(data)
-    }
-    alert(data.id)
-    var res = await fetch("http://localhost:3000/api/quick_game/play_quick_game",options)
-    res = await res.json()
-    console.log(res)
-    if(res.result != "error"){
-      setState(res.result)
-      setTime(res.s)
-      setTopic(res.topic)
-      setWords(res.randomWords)
-      setPrevious(res.lastParagraph)
-      setLast(res.isLast)
-      setPunyeta(res.puneta)
-      setTurn(res.turn)
-      setRivals(participantes.filter((rival) => rival.username != username))
-    }else{
-      alert("Error al acceder a partida")
-      setState("waiting_players")
-      //router.push("/quickGame")
-    }
-  }
-
-
-
-
   
   useEffect(()=>{
+    const queryParams = new URLSearchParams(window.location.search);
+    const getData = async () =>{
+      const data = {
+        username: localStorage.getItem("username"),
+        password: localStorage.getItem("password"),
+        turn: 0,
+        id: ("#"+queryParams.get("id"))
+      }
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json' 
+        },
+        body: JSON.stringify(data)
+      }
+      alert(data.id)
+      var res = await fetch("http://localhost:3000/api/quick_game/play_quick_game",options)
+      res = await res.json()
+      console.log(res)
+      if(res.result != "error"){
+        setState(res.result)
+        setTime(res.s)
+        setTopic(res.topic)
+        setWords(res.randomWords)
+        setPrevious(res.lastParagraph)
+        setLast(res.isLast)
+        setPunyeta(res.puneta)
+        setTurn(res.turn)
+        setRivals(participantes.filter((rival) => rival.username != username))
+      }else{
+        alert("Error al acceder a partida")
+        setState("waiting_players")
+        //router.push("/quickGame")
+      }
+    }
+
     if(localStorage.getItem("logged") == "si"){
 
       const username = localStorage.getItem("username")
@@ -164,6 +160,26 @@ export default function Write() {
     return res.json()
   }
 
+  const update_game_state = async () => {
+    var data = {
+      username:windowUser.username,
+      password:windowUser.password,
+      id:localStorage.getItem("id"),
+      body:currentText,
+      turn:turn,
+      punetas:punyetasCompradas
+    }
+    var options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json' 
+      },
+      body: JSON.stringify(data)
+    }
+    var res = await fetch("http://localhost:3000/api/tale_mode/add_tale_paragraph",options)
+    return res.json()
+  }
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -176,7 +192,9 @@ export default function Write() {
         router.push(`/quickGame/vote?id=${queryParams.get("id")}`)
       }
     })
-    getData()
+    update_game_state().then((res) =>{
+
+    })
   }
 
   const openClose = (e) => {
@@ -411,6 +429,6 @@ export default function Write() {
     </>
   )
   }else{
-    return(<button onClick={() => setState("success")}>pog</button>)
+    return(<>pog</>)
   }
 }

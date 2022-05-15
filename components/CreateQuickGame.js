@@ -48,7 +48,7 @@ const CreateQuickGame = () => {
                 alert("Error al crear sala")
                 router.push("/quickGame")
             }else{
-                router.push(`/quickGame/lobby?code=${res.id}`)
+                router.push(`/quickGame/lobby?code=${res.id.slice(1)}`)
             }
         })
     }
