@@ -24,7 +24,7 @@ export default function register () {
   }
 
   return (
-    <div className="background h-screen w-screen flex items-center justify-center">
+    <div className="background h-screen w-screen flex flex-col items-center justify-center">
       <Image src={'/frankenstory.png'} height={150} width={600} />
       <div className="flex flex-row items-center justify-center">
         <Lottie 
