@@ -36,7 +36,7 @@ export default function Write() {
   const [punyetasCompradas, setPunyetasCompradas] = useState([])
   const [previous, setPrevious] = useState("")
   const [currentText, setCurrentText] = useState("")
-  const [punyeta, setPunyeta] = useState("")
+  const [punyeta, setPunyeta] = useState("ciego")
   const [topic, setTopic] = useState("")
   const [randomWords, setWords] = useState(["Rayo","Fuego","Hielo"])
   const [time, setTime] = useState(1000)
@@ -65,9 +65,6 @@ export default function Write() {
   }, []);
 
 
-
-
-
   const getData = async () =>{
     const queryParams = new URLSearchParams(window.location.search);
     const data = {
@@ -84,7 +81,6 @@ export default function Write() {
       },
       body: JSON.stringify(data)
     }
-    alert(data.id)
     var res = await fetch("http://localhost:3000/api/quick_game/play_quick_game",options)
     res = await res.json()
     console.log(res)
@@ -105,10 +101,14 @@ export default function Write() {
     }
   }
 
+if(state=="waiting_players"){
+  useEffect(()=>{
+    getData()
+    alert(state + turn)
+  },)
+}
 
 
-
-  
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
 
@@ -125,7 +125,6 @@ export default function Write() {
         coins: coins,
         stars: stars
       })
-      getData()
     }else{
       router.push("/")
     }
@@ -177,6 +176,7 @@ export default function Write() {
       }
     })
     getData()
+    setTurn(turn+1)
   }
 
   const openClose = (e) => {
@@ -319,7 +319,7 @@ export default function Write() {
       )
     }
     return(
-      <div className="storyWrite  border-green-800 text-2xl font-arial inline-flex flex-col h-48 w-8/12 bg-white">
+      <div className={`storyWrite border-green-800 text-2xl font-arial inline-flex flex-col h-48 w-8/12 ${ punyeta == "ciego" ? "bg-black" : "bg-white"}`}>
         <SpecialText/>
       </div>
     )
@@ -332,10 +332,9 @@ export default function Write() {
     )
   }
 
-  if(state == "success"){
   return (
     <>
-        <Layout data={layoutInfo}>
+      <Layout data={layoutInfo}>
         <div className="relative storyBox">
           <form onSubmit={onSubmit}>
 
@@ -379,10 +378,6 @@ export default function Write() {
               <Image className="ml-4" src="/quick-game/clock.png" width={30} height={30}/>{parseInt(clock/60)}min:{clock % 60}seg
             </div>
 
-            <div className="centered font-blank bg-transparent">
-              
-            </div>
-
             <div className="centered">
               { topic =="" ? 
               <>
@@ -390,7 +385,8 @@ export default function Write() {
                 <input className ="absolute rounded-2xl w-8/12 h-48 bg-transparent font-blank" required={true} maxLength={200} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
               </> 
               :
-              <textarea className={`storyWrite border-green-800 text-2xl font-arial inline-flex flex-col h-48 w-8/12 ${ punyeta == "reves" ? "font-reverse" : ""} ${ punyeta == "ciego" ? "font-blank" : ""}`} type="password" required={true} maxLength={maxChar} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+
+              <textarea className={`storyWrite border-green-800 text-2xl font-arial inline-flex flex-col h-48 w-8/12 ${ punyeta == "reves" ? "font-reverse" : ""} ${ punyeta == "ciego" ? "font-blank bg-black" : ""}`} type="password" required={true} maxLength={200} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
               }
             </div>
 
@@ -407,10 +403,8 @@ export default function Write() {
           { punyetasM == "punyeta" ? <MenuPunyeta/> : ""}
           { punyetasM == "objetivo" ? <DestinoPunyeta/> : ""}
         </div>
-        </Layout> 
+        { state == "waiting_players" ? <Image src="/quick-game/clock.png" height={1000} width={1000}/>: ""}
+      </Layout> 
     </>
   )
-  }else{
-    return(<button onClick={() => setState("success")}>pog</button>)
-  }
 }

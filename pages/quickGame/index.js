@@ -142,6 +142,12 @@ export default function StoryMode(){
     image_ID: windowUser.picture
   }
 
+  const changeTime = (change) => {
+    if( 30 <= time + change && 300 >= time+change){
+      setTime(time+change)
+    }
+  }
+
   return(
     <Layout data={layoutInfo} >
       <div className='h-full w-2/4 flex flex-row justify-center items-center space-x-20'>
@@ -157,8 +163,8 @@ export default function StoryMode(){
           <div className="flex flex-col">
               <p className="text-2xl float-left text-white">{parseInt(time/60)}min:{time % 60}seg</p>
               <div className="flex flex-row text-2xl text-white">
-                  <button type="button" onClick={(e)=>(setTime(time-5))}>-</button>
-                  <button type="button"  onClick={(e)=>(setTime(time+5))}>+</button>
+                  <button type="button" onClick={(e)=>(changeTime(-5))}>-</button>
+                  <button type="button"  onClick={(e)=>(changeTime(5))}>+</button>
               </div>
           </div>
 
