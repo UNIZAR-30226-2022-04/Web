@@ -6,26 +6,6 @@ import Layout from 'components/Layout'
 import Spinner from 'components/Spinner'
 import ListOfPeople from 'components/ListOfPeople'
 
-const sala = {
-    result:"success",
-    mode: "random", // "random | twitter"
-    maxPlayers: 10,
-    time: "200",
-    participants: [
-        {
-            username:"MrNOPatineto",
-            picture: 1,
-            stars: 4531
-        },
-        {
-            username:"nombre",
-            picture: 2,
-            stars: 435 
-        },
-    ],
-    hasStarted:0
-  }
-  
 
 export default function QuickGame(){
     const router = useRouter()
@@ -103,7 +83,7 @@ export default function QuickGame(){
     }, [windowUser])
 
     // Si tadavía no hoy usuario, esperamos a que lo haya
-    if(!windowUser){
+    if(!windowUser || !room){
         return <Spinner />
     }
 

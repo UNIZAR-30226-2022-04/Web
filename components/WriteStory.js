@@ -119,7 +119,9 @@ const WriteStory = ({first}) => {
       body: JSON.stringify(info)
     }
 
-    await fetch("http://localhost:3000/api/tale_mode/create_tale", options)
+    const res = await fetch("http://localhost:3000/api/tale_mode/create_tale", options)
+    const data = await res.json()
+    return data
   }
 
   const add_tale_paragraph = async () => {
@@ -170,9 +172,16 @@ const WriteStory = ({first}) => {
     return <Spinner showLayout={false} />
   }
 
-  const lastWrite = parrafos[parrafos.length-1].username == windowUser.username;
-  const disabled = lastWrite ? "yes" : ""
-  const placeh = lastWrite ? "No puedes escribir ahora" : "Escribe tu parrafo"
+  var lastWrite
+  var disabled
+  var placeh
+
+  if(!first){
+    lastWrite = parrafos[parrafos.length-1].username == windowUser.username;
+    disabled = lastWrite ? "yes" : ""
+    placeh = lastWrite ? "No puedes escribir ahora" : "Escribe tu parrafo"
+  }
+ 
 
   return (
     <div className="flex flex-row w-full mt-10 p-10 items-start">

@@ -15,7 +15,7 @@ export default function StoryMode(){
 
   const [publicGame, setPublicGame] = useState(true)
   const [gameMode, setGameMode] = useState("random")
-  const [time, setTime ] = useState(120)
+  const [time, setTime ] = useState(30)
 
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
@@ -102,6 +102,7 @@ export default function StoryMode(){
     create().then((res) =>{
         console.log(res)
         if (res.result != "success"){
+            
             alert("Error al crear sala")
             router.push("/quickGame")
         }else{
@@ -125,6 +126,7 @@ export default function StoryMode(){
         },
         body: JSON.stringify(data) 
     }
+    console.log(data)
     const res = await fetch("http://localhost:3000/api/quick_game/create_room", options)
     return await res.json()
   }
@@ -143,7 +145,7 @@ export default function StoryMode(){
   }
 
   const changeTime = (change) => {
-    if( 30 <= time + change && 300 >= time+change){
+    if( 5 <= time + change && 120 >= time+change){
       setTime(time+change)
     }
   }

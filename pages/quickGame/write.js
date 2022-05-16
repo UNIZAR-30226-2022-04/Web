@@ -39,7 +39,7 @@ export default function Write() {
   const [punyeta, setPunyeta] = useState("ciego")
   const [topic, setTopic] = useState("")
   const [randomWords, setWords] = useState(["Rayo","Fuego","Hielo"])
-  const [time, setTime] = useState(1000)
+  const [time, setTime] = useState(10)
   const [clock, setClock] = useState(0)
   const [rivals, setRivals] = useState([])
   const [last, setLast ] = useState(false)
