@@ -13,7 +13,7 @@ export default function Layout({children, data, inSettingsScreen}) {
                 </Link>
                 <Crates person={data} changeSettings={inSettingsScreen} />
             </div>
-            <div className='flex flex-row w-full h-full items-center justify-between'>
+            <div className='flex flex-row w-full h-full justify-between'>
                 {children}
             </div>            
         </div>

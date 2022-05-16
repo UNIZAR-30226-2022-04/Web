@@ -16,8 +16,8 @@ export default function StoryMode(){
 
     // Tale options
     const [visibility, setVisibility] = useState(1)
-    const [turnos, setTurnos] = useState(3)
-    const [chars, setChars] = useState(30)
+    const [turnos, setTurnos] = useState(10)
+    const [chars, setChars] = useState(120)
 
     useEffect(()=>{
         if(localStorage.getItem("logged") == "si"){
@@ -87,8 +87,8 @@ export default function StoryMode(){
 
     return(
         <Layout data={layoutInfo} > 
-            <div className='flex flex-row items-center space-x-20 ml-5 mb-16'>
-                <div className='flex flex-col ml-5 bg-scroll bg-contain overflow-auto h-[400px] pr-2'>
+            <div className='ml-20 flex flex-row items-center space-x-40 mb-16'>
+                <div className='flex flex-col ml-5 bg-scroll bg-contain overflow-y-auto h-[400px] pr-2'>
                     <h1 className='commonTitle'>Mis Relatos</h1>
                     <StoryList stories={myTales.myTales} isVoteStory={false}/>
                     <h1 className='commonTitle'>Relatos de Amigos</h1>
@@ -135,7 +135,7 @@ export default function StoryMode(){
                         
                     </div>
 
-                    <button type='button' className='commonButton bg-verde_top' onClick={() => createGame(visibility, router)}>
+                    <button type='button' className='commonButton bg-verde_top' onClick={() => createGame(visibility, router, turnos, chars)}>
                         Crear Partida
                     </button>
                 </form>
@@ -163,13 +163,13 @@ function changeTurnos(stateChanger, turnos){
     }
 }
 
-function createGame(privacy, router){
-    const turns = document.getElementById('turns').value
-    const chars = document.getElementById('chars').value
+function createGame(privacy, router, turnos, chars2){
+    const turns = turnos
+    const chars = chars2
     if(turns && chars){
         if(turns < 3 || turns > 1000){
             alert("No puede haber menos de 3 turnos")
-        }else if(chars < 30 || chars > 120){
+        }else if(chars < 30){
             alert("No puede haber menos de 30 carácter o más de 120")
         }else{
             router.push(`/storyMode/start?turns=${turns}&characters=${chars}&privacy=${privacy}`)

@@ -92,12 +92,12 @@ export default function StoryVote(){
 
   return(
       <Layout data={layoutInfo} > 
-        <div className='w-screen justify-top h-full align-middle items-center text-center space-y-4'>
+        <div className='w-full justify-top h-full align-middle items-center text-center space-y-4 p-5'>
           <h1 className='commonTitle'>VOTACIONES</h1>
           <h2 className='commonSubtitle'>Elige el párrafo que más te guste</h2>
           <h2 className='commonSubtitle'> {story.title}, de {story.paragraphs[0].username} </h2>
           <StoryParagraphs story={story} chosenStory={chosenStory} setChosenStory={setChosenStory}/>
-          <button className='bg-white rounded-full p-2' onClick={() => (enviarVoto(info, chosenStory, router))}>Enviar Voto</button>
+          <button className='commonButton bg-verde_parrafo' onClick={() => (enviarVoto(info, chosenStory, router))}>Enviar Voto</button>
         </div>        
       </Layout>
   )

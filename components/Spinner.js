@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react'
 
 import Layout from "./Layout"
 
-export default function Spinner(){
+export default function Spinner({showLayout}){
     const [windowUser, setWindowUser] = useState({})
 
     useEffect(()=>{
@@ -28,12 +28,20 @@ export default function Spinner(){
       }, [])
     
     return(
-        <Layout data={windowUser} inSettingsScreen={false}>
+      <>
+        {showLayout === true ? (
+          <Layout data={windowUser} inSettingsScreen={false}>
             <div className="flex flex-col w-screen h-screen items-center justify-center align-middle">
                 <h1 className="commonTitle">LOADING</h1>
                 <Image src="/mooncodeLoading.gif" width={500} height={500}/>
             </div>
-        </Layout>
-        
+          </Layout>
+        ):(
+          <div className="background flex flex-col w-screen h-screen items-center justify-center align-middle">
+              <h1 className="commonTitle">LOADING</h1>
+              <Image src="/mooncodeLoading.gif" width={500} height={500}/>
+          </div>
+        )}
+      </>       
     )
 }

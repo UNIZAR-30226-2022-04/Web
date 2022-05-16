@@ -31,11 +31,6 @@ export default function Continue() {
     }
   }, [])
 
-  // Si tadavía no hoy usuario, esperamos a que lo haya
-  if(!windowUser){
-    return <Spinner />
-  }
-
   const layoutInfo = {
     username: windowUser.username,
     stars:    windowUser.stars,
@@ -44,10 +39,8 @@ export default function Continue() {
   }  
 
   return (
-    <>
-        <Layout data={layoutInfo}>
-          <WriteStory first={true} creator={windowUser.username}/>
-        </Layout> 
-    </>
+    <Layout data={layoutInfo}>
+      <WriteStory first={true} creator={windowUser.username}/>
+    </Layout> 
   )
 }

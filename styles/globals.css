@@ -131,40 +131,6 @@
             text-xs
             font-bold
   }
-
-  /* STORIES */
-
-  .storyBox{
-    @apply  absolute
-            flex
-            justify-center
-            w-screen
-            pt-10
-            row-start-auto
-            grid
-            grid-cols-1
-            h-screen
-            pb-32
-  }
-  .titleWrite{
-    @apply  relative
-            h-auto
-            bg-transparent
-            text-center
-            mb-10
-            text-6xl
-            text-white
-            txtShadw
-            font-arial-b
-  }
-  .storyWrite{
-    @apply  relative
-            border-blue-800
-            border-4
-            rounded-2xl
-            text-center
-  }
-
   /* YOUR STORIES*/
 
   .savedStory{

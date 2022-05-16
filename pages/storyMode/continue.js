@@ -48,10 +48,8 @@ export default function Continue() {
   }  
 
   return (
-    <>
-        <Layout data={layoutInfo}>
-          <WriteStory first={false} creator={creator}/>
-        </Layout> 
-    </>
+    <Layout data={layoutInfo}>
+      <WriteStory first={false} creator={creator}/>
+    </Layout> 
   )
 }

@@ -75,16 +75,16 @@ export default function See_Tale() {
 
 return(
     <Layout data={layoutInfo}>
-        <div className="storyBox">
-          <div className="titleWrite">{title}</div>
-          <div className="savedStory max-h-full text-xl">{story.body}</div>
-          <div className="centered">
-              <Link href="/profile/saved_tales">
-                  <div className="clickableItem border-2 border-green-900 rounded-xl w-48 text-center bg-green-700 h-6 text-white">
-                      Volver a libreria
-                  </div>
-              </Link>
-          </div>
+        <div className="flex flex-col w-full items-center m-10 space-y-3">
+          <div className="commonTitle">{title}</div>
+          <div className="relative bg-scroll bg-contain overflow-auto text-center mx-32 h-auto text-xl font-arial-r">{story.body}</div>
+          <Link href="/profile/saved_tales">
+            <a>
+              <div className="absolute left-5 bottom-5 commonButton bg-verde_letras">
+                  {'<-'} Volver a libreria
+              </div>
+            </a>
+          </Link>
       </div>
     </Layout>
   )
