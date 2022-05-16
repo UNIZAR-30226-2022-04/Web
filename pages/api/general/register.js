@@ -8,7 +8,7 @@ import {checkFields} from "../../../lib/checkFields";
 export default async (req, res) => {
 	const message = req.body;
 	
-	const fields = ['username','password','email'];
+	const fields = ['username','password','email','salt'];
 
 	const rest = checkFields(message,fields)
 	if (rest.length != 0){
@@ -27,7 +27,7 @@ export default async (req, res) => {
 		const query = {
 			username: message.username,
 			email: message.email,
-			//salt: salt,
+			salt: message.salt,
 			password_hash: message.password,
 			//password: CryptoJS.SHA512(salt + message.password).toString(),
 			image_ID: 0, // ID number of the default profile picture (HARDCODED)
