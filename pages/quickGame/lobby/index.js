@@ -70,10 +70,12 @@ export default function QuickGame(){
             
         const getData = async () => {
             // Opciones para llamar a la api
+            const ident = "#" + code.toString()
+            
             const info = {
                 username: windowUser.username,
                 password: windowUser.password,
-                id: code
+                id: ident
             }
 
             const options = {
@@ -85,15 +87,12 @@ export default function QuickGame(){
             }
 
             // Llamada a la api
-            const res = await fetch('http://localhost:3000/api/', options)
-            const data = await res.json()
-
-            //DEBUG
-            data.result = "acierto"
+            const res = await fetch('http://localhost:3000/api/quick_game/get_room', options)
+            const data = await res.json()       
 
             // Si no ha ido bien o no estoy logeado volvemos a /
             if(data.result === 'error'){
-                router.push("/")
+                router.push("/quickGame")
                 return
             }
 
@@ -119,16 +118,16 @@ export default function QuickGame(){
     return(
         <Layout data={layoutInfo} >
             <div className='flex flex-col items-center justify-center w-screen space-y-5'>
-                <div className='commonTitle'>Código de la Sala: {code}</div>
+                <div className='commonTitle'>Código de la Sala: #{code}</div>
                 <div className='flex flex-row justify-center items-center space-x-20 ml-5'>
-                    <ListOfPeople data={sala.participants} showFaces={true} />
+                    <ListOfPeople data={room.participants} showFaces={true} />
                     <div className='flex flex-col  space-y-5'>
                         <div className='flex flex-row bg-white rounded-lg items-center justify-center p-2 space-x-2'>
                             <Image src='/quick-game/clock.png' width="30" height="30"/>
-                            <p className=''>{secsToString(sala.time)}</p>                            
+                            <p className=''>{secsToString(room.time)}</p>                            
                         </div>
                         
-                        {sala.mode == 'random'?(
+                        {room.mode == 'random'?(
                             <div className='flex flex-row bg-purple-500 rounded-lg items-center justify-center space-x-2 p-2'>
                                 <Image src='/quick-game/random_words.png' width="30" height="30"/>
                                 <p className=''>Modo Aleatorio</p>                                
@@ -142,11 +141,11 @@ export default function QuickGame(){
                     </div>
                 </div>
                 <div className='flex flex-row space-x-3 items-center justify-center'>
-                    <button className='buttonStyle bg-purple-500' onClick={() => leaveRoom(windowUser, router)}> {'<-'} SALIR</button>  
-                    {windowUser.username == sala.participants[0].username ?(
+                    <button className='commonButton bg-purple-500' onClick={() => leaveRoom(windowUser, room, router)}> {'<-'} SALIR</button>  
+                    {windowUser.username == room.participants[0].username ?(
                         <>
-                            <button className='buttonStyle bg-purple-500' onClick={() => closeRoom(windowUser, router)}> CERRAR SALA </button> 
-                            <button className='buttonStyle bg-purple-500' onClick={() => startGame(windowUser, router)}> EMPEZAR </button>  
+                            <button className='commonButton bg-purple-500' onClick={() => closeRoom(windowUser, router)}> CERRAR SALA </button> 
+                            <button className='commonButton bg-purple-500' onClick={() => startGame(windowUser, router)}> EMPEZAR </button>  
                         </>                        
                     ):(<></>)}
                     
