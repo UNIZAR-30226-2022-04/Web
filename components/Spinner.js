@@ -1,10 +1,12 @@
 import Image from "next/image"
 import {useEffect, useState} from 'react'
+import { useRouter } from "next/router"
 
 import Layout from "./Layout"
 
 export default function Spinner({showLayout}){
     const [windowUser, setWindowUser] = useState({})
+    const router = useRouter();
 
     useEffect(()=>{
         if(localStorage.getItem("logged") == "si"){    
@@ -23,7 +25,7 @@ export default function Spinner({showLayout}){
           })
 
         }else{
-          router.push("/")
+          router.push("/login")
         }
       }, [])
     

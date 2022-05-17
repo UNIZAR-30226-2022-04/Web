@@ -30,8 +30,7 @@ export default function Continue() {
       setCreator(queryParams.get("creator"))
       
     }else{
-      console.log("VOY A LOGIN")
-      router.push("/")
+      router.push("/login")
     }
   }, [])
 

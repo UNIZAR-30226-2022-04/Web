@@ -17,10 +17,8 @@ export default function Stats() {
       const username = localStorage.getItem("username")
       const password = localStorage.getItem("password")
       setWindowUser({username: username, password: password})
-      console.log("SACO DATOS")
     }else{
-      console.log("VOY A LOGIN")
-      router.push("/")
+      router.push("/login")
     }
   }, [])
      
@@ -46,11 +44,10 @@ export default function Stats() {
       const res = await fetch('http://localhost:3000/api/general/home', options)
       const data = await res.json()
 
-      console.log(data)
-
       // Si no ha ido bien o no estoy logeado volvemos a /
       if(data.result === "error"){
-        router.push("/")
+        localStorage.setItem("logged", "no")
+        router.push("/login")
         return
       }
 

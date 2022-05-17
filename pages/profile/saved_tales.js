@@ -30,10 +30,8 @@ export default function SavedTales(){
             coins: coins,
             stars: stars
             })
-            console.log("SACO DATOS")
         }else{
-            console.log("VOY A LOGIN")
-            router.push("/")
+            router.push("/login")
         }
     }, [])
     
@@ -62,9 +60,10 @@ export default function SavedTales(){
 
             // Si no ha ido bien o no estoy logeado volvemos a /
             if(data.result === "error"){
-                router.push("/")
+                localStorage.setItem("logged", "no")
+                router.push("/login")
                 return
-            }
+              }
 
             // Llama al hook que almacena la información del usuario
             setMyStories(data)

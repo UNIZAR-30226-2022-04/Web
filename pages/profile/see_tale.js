@@ -31,10 +31,8 @@ export default function See_Tale() {
         coins: coins,
         stars: stars
       })
-      console.log("SACO DATOS")
     }else{
-      console.log("VOY A LOGIN")
-      router.push("/")
+      router.push("/login")
     }
   }, [])
 
@@ -56,6 +54,13 @@ export default function See_Tale() {
           }
           const res = await fetch("http://localhost:3000/api/general/watch_story", options)
           const data = await res.json()
+
+          if(data.result === "error"){
+            localStorage.setItem("logged", "no")
+            router.push("/login")
+            return
+          }
+
           setStory(data)
       }
       getData()
