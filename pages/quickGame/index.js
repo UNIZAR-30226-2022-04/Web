@@ -39,11 +39,13 @@ export default function StoryMode(){
   }, [])
 
   const tryJoin = async () => {
+    alert("Hola")
     const body = {
       username:windowUser.username,
       password:windowUser.password,
       id:code
     }
+    alert("Hola1")
     const options = {
       method: 'POST',
       headers: {
@@ -51,7 +53,9 @@ export default function StoryMode(){
       },
       body: JSON.stringify(body) 
     }
+    alert("Hola2")
     const data = await fetch("http://localhost:3000/api/quick_game/join_room",options)
+    alert("Hola3")
     return await data.json()
   }
   
@@ -83,26 +87,22 @@ export default function StoryMode(){
     return await data.json()
   }
   
-  const random = (e) =>{
-    router.push("quickGame/write")
-    return
+  const random = () =>{
     setErrorJ("")
-    e.preventDefault()
     tryRandom().then((res)=>{
       if(res.result != "success"){
         setErrorR(res.reason)
       }else{
+        alert("Acierto")
         router.push(`quickGame/lobby?id=${res.id}`)
       }
     })
   }
   
   const onSubmit = (e) => {
-    e.preventDefault()
     create().then((res) =>{
         console.log(res)
         if (res.result != "success"){
-            
             alert("Error al crear sala")
             router.push("/quickGame")
         }else{
@@ -153,11 +153,12 @@ export default function StoryMode(){
   return(
     <Layout data={layoutInfo} >
       <div className='h-full w-2/4 flex flex-row justify-center items-center space-x-20'>
-        <form className="flex flex-col items-center space-y-4" onSubmit={()=>(join())}>
+        <form className="flex flex-col items-center space-y-4" onSubmit={(e)=>(join(e))}>
           <input type="text" placeholder='Código' value={code} onChange={(e) => setCode(e.target.value)}/>
           { errorJ != "" ? <div className="centered text-red-700">{errorJ}</div> : ""}
           <button className="rounded-xl bg-green-800 text-white p-2 border-2 border-white" type="submit">Unirse a sala</button>
-          <button className='rounded-xl bg-green-800 text-white p-2 border-2 border-white' onClick={()=>(random())}>Partida aleatoria</button>
+          <button type="button" className='rounded-xl bg-green-800 text-white p-2 border-2 border-white' onClick={()=>(random())}>Partida aleatoria</button>
+          { errorR != "" ? <div className="centered text-red-700">{errorR}</div> : ""}
         </form>
 
         <form className ="flex flex-col space-y-2" onSubmit={onSubmit}>
