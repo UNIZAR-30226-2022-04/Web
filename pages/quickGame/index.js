@@ -39,13 +39,12 @@ export default function StoryMode(){
   }, [])
 
   const tryJoin = async () => {
-    alert("Hola")
     const body = {
       username:windowUser.username,
       password:windowUser.password,
-      id:code
+      id:"#"+code
     }
-    alert("Hola1")
+    console.log(body)
     const options = {
       method: 'POST',
       headers: {
@@ -53,9 +52,7 @@ export default function StoryMode(){
       },
       body: JSON.stringify(body) 
     }
-    alert("Hola2")
     const data = await fetch("http://localhost:3000/api/quick_game/join_room",options)
-    alert("Hola3")
     return await data.json()
   }
   
@@ -63,6 +60,8 @@ export default function StoryMode(){
     setErrorR("")
     e.preventDefault()
     tryJoin().then((res)=>{
+      console.log(res)
+      alert(res.result)
       if(res.result != "success"){
         setErrorJ(res.reason)
       }else{
@@ -93,15 +92,17 @@ export default function StoryMode(){
       if(res.result != "success"){
         setErrorR(res.reason)
       }else{
-        alert("Acierto")
+        alert(res.id)
         router.push(`quickGame/lobby?id=${res.id}`)
       }
     })
   }
   
   const onSubmit = (e) => {
+    e.preventDefault()
     create().then((res) =>{
         console.log(res)
+        alert("Hey")
         if (res.result != "success"){
             alert("Error al crear sala")
             router.push("/quickGame")
@@ -182,8 +183,7 @@ export default function StoryMode(){
             <input className={`py-1 px-2 text-white ${ gameMode=="random" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="ALEATORIAS" onClick={() => setGameMode("random")}/><> </>
             <input className={`py-1 px-2 text-white ${ gameMode=="twitter" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="TWITTER" onClick={() => setGameMode("twitter")}/><> </>
           </div>
-          <input className="clickableItem"type="submit" value="Crear partida"/>
-          <button className='rounded-xl bg-green-800 text-white p-2 border-2 border-white' onClick={(e) => (create(e))}>Crear partida</button>
+          <input className="clickableItem rounded-xl bg-green-800 text-white p-2 border-2 border-white" type="submit" value="Crear partida"/>
         </form>
       </div>
       <Rulette page='quickGame'/>            

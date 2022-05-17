@@ -65,6 +65,8 @@ export default function QuickGame(){
                 },
                 body: JSON.stringify(info) 
             }
+            console.log(info)
+            alert("Info")
 
             // Llamada a la api
             const res = await fetch('http://localhost:3000/api/quick_game/get_room', options)
@@ -72,6 +74,8 @@ export default function QuickGame(){
 
             // Si no ha ido bien o no estoy logeado volvemos a /
             if(data.result === 'error'){
+                console.log(data)
+                alert("Error")
                 router.push("/quickGame")
                 return
             }

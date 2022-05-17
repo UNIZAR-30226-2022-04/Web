@@ -39,12 +39,14 @@ export default function Write() {
   const [punyeta, setPunyeta] = useState("ciego")
   const [topic, setTopic] = useState("")
   const [randomWords, setWords] = useState(["Rayo","Fuego","Hielo"])
-  const [time, setTime] = useState(10)
+  const [time, setTime] = useState(1000000)
   const [clock, setClock] = useState(0)
   const [rivals, setRivals] = useState([])
   const [last, setLast ] = useState(false)
   const [turn, setTurn ] = useState(0)
   const [state, setState ] = useState("waiting_players")
+  const [tick, setTick ] = useState(true)
+  const [dots, setDots ] = useState("")
 
   useEffect(() => {
     const start = new Date();
@@ -95,19 +97,29 @@ export default function Write() {
       setTurn(res.turn)
       setRivals(participantes.filter((rival) => rival.username != username))
     }else{
-      alert("Error al acceder a partida")
+      //alert("Error al acceder a partida")
       setState("waiting_players")
       //router.push("/quickGame")
     }
   }
 
-if(state=="waiting_players"){
-  useEffect(()=>{
-    getData()
-    alert(state + turn)
-  },)
-}
-
+  if(state=="waiting_players"){
+    //Esperamos medio segundo antes de volver a pedir el estado de la partida
+    useEffect(()=>{
+      const sleep = async (ms) => {
+        await new Promise(r => setTimeout(r, ms));
+      }
+      sleep(1000).then(()=>{
+        getData()
+        setTick(!tick)
+        if(dots.length==3){
+          setDots("")
+        }else{
+          setDots(dots+".")
+        }
+      })
+    },[tick])
+  }
 
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
@@ -403,8 +415,9 @@ if(state=="waiting_players"){
           { punyetasM == "punyeta" ? <MenuPunyeta/> : ""}
           { punyetasM == "objetivo" ? <DestinoPunyeta/> : ""}
         </div>
-        { state == "waiting_players" ? <Image src="/quick-game/clock.png" height={1000} width={1000}/>: ""}
+        { state == "waiting_players" ? <div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white" >Esperando al resto de jugadores{dots}</div> : ""}
       </Layout> 
     </>
   )
 }
+//        { state == "waiting_players" ? <div className="absolute w-screen h-screen" ><Image src="/quick-game/wait.png" height={500} width={1000}/></div> : ""}
