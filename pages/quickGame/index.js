@@ -13,7 +13,7 @@ export default function StoryMode(){
   const [errorJ, setErrorJ] = useState("")
   const [errorR, setErrorR] = useState("")
 
-  const [publicGame, setPublicGame] = useState(true)
+  const [privateGame, setprivateGame] = useState(false)
   const [gameMode, setGameMode] = useState("random")
   const [time, setTime ] = useState(30)
 
@@ -117,7 +117,7 @@ export default function StoryMode(){
         username: localStorage.getItem("username"),
         password: localStorage.getItem("password"),
         time: time,
-        isPrivate: publicGame,
+        isPrivate: privateGame,
         mode: gameMode
     }
     const options = {
@@ -174,8 +174,8 @@ export default function StoryMode(){
 
           <p>Tipo de partida</p>          
           <div className='flex flex-row'>
-            <input className={`py-1 px-2 text-white ${ publicGame ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="PUBLICA" onClick={() => setPublicGame(true)}/>
-            <input className={`py-1 px-2 text-white ${ !publicGame ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="PRIVADA" onClick={() => setPublicGame(false)}/>
+            <input className={`py-1 px-2 text-white ${ !privateGame ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="PUBLICA" onClick={() => setprivateGame(false)}/>
+            <input className={`py-1 px-2 text-white ${ privateGame ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="PRIVADA" onClick={() => setprivateGame(true)}/>
           </div>
           
           <div>Modo de juego</div>
