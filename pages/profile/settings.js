@@ -5,6 +5,9 @@ import { useRouter } from 'next/router'
 import Layout from 'components/Layout'
 import Spinner from 'components/Spinner'
 
+var sha512 = require(`sha512`)
+var SecureRandom = require('securerandom');
+
 export default function Settings() {
   const [passwd, setPass] = useState("")
   const [passwdRep, setPassRep] = useState("")
@@ -160,10 +163,12 @@ async function changePassword(user, passwd, passwdRep){
   }else if(passwd.length < 10){
     alert("Las contraseñas debe superar los 10 caracteres")
   }else{
+    var salt = getSalt(user)
+    var newPasswd = (passwd+salt).toString("hex")
     const info = {
       "username": user.username,
       "password": user.password,
-      "newPassword": passwd
+      "newPassword": newPasswd
     }
 
     const options = {
@@ -212,4 +217,23 @@ async function deleteUser(user, deleteCheck, setDeleteCheck){
       alert("Cuenta no borrada")
     }
   }
+}
+
+const getSalt = async (name) =>{
+
+  const info = {
+    username:name
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json' 
+    },
+    body: JSON.stringify(info)
+  }
+
+  const res = await fetch("http://localhost:3000/api/general/get_salt", options)
+  return res.json()
 }
