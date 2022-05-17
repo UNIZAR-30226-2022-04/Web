@@ -3,7 +3,6 @@ import { checkFields } from "../../../lib/checkFields";
 import Paragraph from "../../../lib/Paragraph";
 import { gamesList } from "../../../lib/GamesManager";
 
-// Al ir a http://localhost:3000/api/add_quick_game_paragraph te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
 

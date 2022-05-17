@@ -9,11 +9,12 @@ datasource db {
 
 model Player {
   username      String        @id @db.VarChar(30)
-  password_hash String        @db.VarChar(30)
+  password_hash String        @default("")
   email         String        @unique @db.VarChar(40)
   image_ID      Int           @default(0)
   mooncoins     Int           @default(100)
   stars         Int           @default(0)
+  salt          String        @default("")
   friend        Friendship[]  @relation("friend")
   himself       Friendship[]  @relation("himself")
   contributor   Paragraph[]   @relation("contributor")

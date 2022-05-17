@@ -8,7 +8,6 @@ import { selectParticipantsDB } from "../../../prisma/queries/SELECT/participant
 import {givePoints} from "../../../lib/givePoints";
 import {checkFields} from "../../../lib/checkFields";
 
-// Al ir a http://localhost:3000/api/vote_story te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
 	

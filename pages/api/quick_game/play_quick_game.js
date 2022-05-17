@@ -3,7 +3,6 @@ import Player from "../../../lib/Player";
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
 
-// Al ir a http://localhost:3000/api/quick_game/play_quick_game te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
 

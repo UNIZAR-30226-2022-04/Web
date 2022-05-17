@@ -2,7 +2,6 @@ import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
 import { findGame } from "../../../lib/Game";
 
-// Al ir a http://localhost:3000/api/quick_game/get_room te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
 

@@ -5,8 +5,9 @@ import Image from 'next/image'
 
 import Lottie from 'react-lottie'
 import loginLottie from '/public/lottie/login.json'
+import { getPrismaClient } from "@prisma/client/runtime"
 
-var sha512 = require ("sha512")
+import sha512 from "sha512"
 
 export default function login() {
   const router = useRouter()  
@@ -15,6 +16,7 @@ export default function login() {
 
   // Check de que el usuario no esté ya logueado
   useEffect(()=>{
+    localStorage.setItem("logged","no")
     if(localStorage.getItem("logged") == "si"){
       router.push("/profile")
     }
@@ -61,34 +63,27 @@ export default function login() {
 
 
 const onSubmit = (e, name, password, router) => {
-  var salt
-  var hash
+    
   e.preventDefault()
   if(name == ""){
     alert("Introduce un nombre de usuario")
   }else if(password == ""){
     alert("Introduce una contraseña")
   }else{
-    getSalt(name).then((res) => {
-      console.log(res)
+    /*getSalt(name).then((res) =>{
       if(res.result == "success"){
-        salt = res.salt
-        alert(res.salt)
-        hash = (sha512(salt+password))
-        hash = hash.toString("hex")
-        console.log(hash)
-        alert(hash)
+        password = sha512(password+res.salt)
       }else{
-        alert("Error contraseña segura")
+        alert("Error de contraseña segura")
         return
       }
-    })
+    })*/
     tryLogin(name, password).then((res) =>{
       
       if(res.result == "success"){
         localStorage.setItem("logged", "si")
         localStorage.setItem("username", name)
-        localStorage.setItem("password",hash)
+        localStorage.setItem("password",password)
         router.push("http://localhost:3000/profile")
       
       }else{
@@ -121,11 +116,10 @@ const tryLogin = async (user,pass) => {
   }
 
   const res = await fetch("http://localhost:3000/api/general/login", options)
-  const data = await res.json()
-  return data
+  return res.json()
 }
 
-const getSalt = async (name) =>{
+/*const getSalt = async (name) =>{
 
   const info = {
     username:name
@@ -142,4 +136,4 @@ const getSalt = async (name) =>{
 
   const res = await fetch("http://localhost:3000/api/general/get_salt", options)
   return res.json()
-}
+}*/

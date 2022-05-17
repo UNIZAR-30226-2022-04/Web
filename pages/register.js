@@ -6,6 +6,9 @@ import Image from 'next/image'
 import Lottie from 'react-lottie'
 import registerLottie from '/public/lottie/register.json'
 
+var sha512 = require(`sha512`)
+var SecureRandom = require('securerandom');
+
 export default function register () {
   const [name, setName] = useState("")
   const [mail, setMail] = useState("")
@@ -63,10 +66,13 @@ export default function register () {
 
 const tryRegister = async (user, pass, mail) => {
 
+  var salt = SecureRandom.hex(16)
+
   const info = {
     username: user,
-    password: pass,
-    email: mail
+    password: (sha512(salt+pass)).toString("hex"),
+    email: mail,
+    salt: salt
   }
 
   const url ="http://localhost:3000/api/general/register"
@@ -79,8 +85,7 @@ const tryRegister = async (user, pass, mail) => {
     body: JSON.stringify(info)
   }
   const res = await fetch(url,options)
-  const data = res.json()
-  return data
+  return res.json()
 }
 
 async function onSubmit (e, name, mail, password, passwordR, router) {
@@ -100,12 +105,11 @@ async function onSubmit (e, name, mail, password, passwordR, router) {
  
   }else{
     const res = await tryRegister(name, password, mail)
-
+    console.log(res)
     if(res.result == "success"){
+      alert("Yes")
       window.location = `http://localhost:3000/profile`
-    
     }else{
-      console.log(res)
       if(res.reason == "user_already_registered"){
         alert("El nombre de usuario introducido ya esta en uso")
 
@@ -118,8 +122,4 @@ async function onSubmit (e, name, mail, password, passwordR, router) {
     }
     
   }
-}
-
-function inputGroup () {
-
 }

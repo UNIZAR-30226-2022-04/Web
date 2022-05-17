@@ -4,14 +4,14 @@ import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import {checkFields} from "../../../lib/checkFields";
 //import CryptoJS from "crypto-js"
 
-// Al ir a http://localhost:3000/api/register te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
 	
 	const fields = ['username','password','email','salt'];
-
+	console.log(req.body)
 	const rest = checkFields(message,fields)
 	if (rest.length != 0){
+		console.log("error")
 		const msg = "invalid credentials, expected: " + rest
 		res.status(200).json({ result: "error", reason: msg });
 		return;
@@ -49,6 +49,7 @@ export default async (req, res) => {
 		}
 		// if(la introduccion ha ido bien){
 		res.status(200).json({ result: "success", reason: "" });
+		console.log("Correcto")
 		//} else error
 	} else {
 		res.status(200).json({

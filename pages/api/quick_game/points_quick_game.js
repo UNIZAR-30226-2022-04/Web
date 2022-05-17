@@ -1,6 +1,7 @@
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
-import { gamesList } from "../../../lib/GamesManager";
+import { findGame } from "../../../lib/Game";
+import { state } from "../../../lib/GamesManager";
 
 export default async (req, res) => {
 	const message = req.body;
@@ -19,32 +20,34 @@ export default async (req, res) => {
 	// checks if username exists
 	if (user != undefined) {
 		if (user.password_hash == message.password) {
-			var found = false;
-			gamesList.forEach((game) => {
-				if (game.room_id == message.id) {
-					const participants = game.players;
-					participants.forEach((participant) => {
-						delete participant.password;
-						delete participant.mooncoins;
-					});
-					const mode = game.mode;
-					const hasStarted = game.state;
-					res.status(200).json({
-						result: "success",
-						mode: mode,
-						participants: participants,
-						hasStarted: hasStarted,
-					});
-					found = true;
-					return;
-				}
-			});
-			if (!found) {
+			const game = findGame(message.id);
+
+			if (game == undefined) {
 				res.status(200).json({
 					result: "error",
 					reason: "room_not_found",
 				});
+				return;
 			}
+			const result =
+			(game.state == state.END)
+				? "success"
+				: "waiting_players";
+
+			if (result == "waiting_players"){
+				res.status(200).json({
+					result: result
+				});
+				return;
+			}
+
+			const ranking = game.getRanking();
+			const pl = game.players.find((p) => p.username == message.username);
+			res.status(200).json({
+				result: result,
+				classification: ranking,
+                coins: pl.scored
+			});
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });
 		}

@@ -3,11 +3,10 @@ import { checkFields } from "../../../lib/checkFields";
 import { findGame } from "../../../lib/Game";
 import { state } from "../../../lib/GamesManager";
 
-// Al ir a http://localhost:3000/api/quick_game/get_room te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
 
-	const fields = ["username", "password", "id"];
+	const fields = ["username", "password", "turn", "id"];
 
 	const rest = checkFields(message, fields);
 	if (rest.length != 0) {
@@ -30,7 +29,6 @@ export default async (req, res) => {
 				});
 				return;
 			}
-			const pl = game.players.find((p) => p.username == message.username);
 			const result =
 			(message.turn <= game.voteTurn && game.reviewing)
 				? "success"
@@ -43,7 +41,7 @@ export default async (req, res) => {
 				return;
 			}
 
-			const paragraphs = game.getRanking();
+			const paragraphs = game.getStoryRanking();
 
 			const idx = game.getWinnerIndex();
 

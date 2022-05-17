@@ -6,7 +6,6 @@ import { gamesList } from "../../../lib/GamesManager";
 import { MAX_AMOUNT_PLAYERS } from "../../../lib/GamesManager";
 import { state } from "../../../lib/GamesManager";
 
-// Al ir a http://localhost:3000/api/quick_game/leave_room te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
 

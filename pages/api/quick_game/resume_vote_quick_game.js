@@ -2,7 +2,6 @@ import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
 import { findGame } from "../../../lib/Game";
 
-// Al ir a http://localhost:3000/api/quick_game/get_room te devuelve el siguiente json
 export default async (req, res) => {
 	const message = req.body;
 
@@ -29,6 +28,7 @@ export default async (req, res) => {
 				});
 				return;
 			}
+			game.reviewing = false;
 			const pl = game.players.find((p) => p.username == message.username);
 			const result =
 			(message.turn <= game.voteTurn && pl.votedTo == "")
