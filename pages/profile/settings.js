@@ -34,10 +34,8 @@ export default function Settings() {
         coins: coins,
         stars: stars
       })
-      console.log("SACO DATOS")
     }else{
-      console.log("VOY A LOGIN")
-      router.push("/")
+      router.push("/login")
     }
   }, [])
 
@@ -69,7 +67,7 @@ export default function Settings() {
               <input type="password" value={passwd} placeholder="**********" onChange={(e) => setPass(e.target.value)}/>
               <div className='commonTitle' >Repita la Contraseña</div>
               <input type="password" value={passwdRep} placeholder="**********" onChange={(e) => setPassRep(e.target.value)}/>
-              <button className='buttonStyle bg-green-800 hover:bg-green-400' type="button" onClick={() => changePassword(user, passwd, passwdRep)}>Cambiar Contraseña</button>
+              <button className='buttonStyle bg-green-800 hover:bg-green-400' type="button" onClick={() => changePassword(windowUser, passwd, passwdRep)}>Cambiar Contraseña</button>
           </form>
 
           <div className='flex flex-col space-y-2 '>
@@ -158,35 +156,50 @@ async function changeIcon(user, icon){
 async function changePassword(user, passwd, passwdRep){
   if(passwd == ''){
     alert("Las contraseñas no puede estar vacía")
-  }else if(passwd != passwdRep){
-    alert("Las contraseñas no coinciden")
-  }else if(passwd.length < 10){
-    alert("Las contraseñas debe superar los 10 caracteres")
-  }else{
-    var salt = getSalt(user)
-    var newPasswd = (passwd+salt).toString("hex")
-    const info = {
-      "username": user.username,
-      "password": user.password,
-      "newPassword": newPasswd
-    }
-
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(info) 
-    }
-    
-    const result = await fetch('http://localhost:3000/api/general/change_password', options)
-    const resultJson = await result.json()
-    if(resultJson.result == 'success'){
-      window.location.reload()
-    }else{
-      alert("Conteseña no cambiada")
-    }
+    return
+  
   }
+  
+  if(passwd != passwdRep){
+    alert("Las contraseñas no coinciden")
+    return
+  
+  }
+  
+  if(passwd.length < 1){
+    alert("Las contraseñas debe superar los 10 caracteres")
+    return
+  }
+
+
+  const salt = await getSalt(user)
+  const passHash = sha512(passwd+salt)
+  const newPasswd = passHash.toString('hex')
+  
+  const info = {
+    "username": user.username,
+    "password": user.password,
+    "newPassword": newPasswd
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(info) 
+  }
+  
+  const result = await fetch('http://localhost:3000/api/general/change_password', options)
+  const resultJson = await result.json()
+  
+  if(resultJson.result == 'success'){
+    localStorage.setItem("password",newPasswd)
+    window.location.reload()
+  }else{
+    alert("Conteseña no cambiada")
+  }
+  
 }
 
 async function deleteUser(user, deleteCheck, setDeleteCheck){
@@ -222,7 +235,7 @@ async function deleteUser(user, deleteCheck, setDeleteCheck){
 const getSalt = async (name) =>{
 
   const info = {
-    username:name
+    username:name.username
   }
 
   const options = {
@@ -235,5 +248,6 @@ const getSalt = async (name) =>{
   }
 
   const res = await fetch("http://localhost:3000/api/general/get_salt", options)
-  return res.json()
+  const data = await res.json()
+  return data.salt
 }

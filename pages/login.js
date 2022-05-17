@@ -66,19 +66,23 @@ const onSubmit = (e, name, password, router) => {
   e.preventDefault()
   if(name == ""){
     alert("Introduce un nombre de usuario")
+  
   }else if(password == ""){
     alert("Introduce una contraseña")
+  
   }else{
     getSalt(name).then((res) => {
       if(res.result == "success"){
         salt = res.salt
-        hash = (sha512(password+salt))
+        hash = sha512(password+salt)
         hash = hash.toString("hex")
+        
         tryLogin(name, hash).then((res2) =>{
           if(res2.result == "success"){
             localStorage.setItem("logged", "si")
             localStorage.setItem("username", name)
-            localStorage.setItem("password",hash)
+            localStorage.setItem("password", hash)
+            
             router.push("http://localhost:3000/profile")
           
           }else{

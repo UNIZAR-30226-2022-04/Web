@@ -24,10 +24,8 @@ export default function Continue() {
         coins: coins,
         stars: stars
       })
-      console.log("SACO DATOS")
     }else{
-      console.log("VOY A LOGIN")
-      router.push("/")
+      router.push("/login")
     }
   }, [])
 

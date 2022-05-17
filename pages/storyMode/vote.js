@@ -36,10 +36,8 @@ export default function StoryVote(){
         coins: coins,
         stars: stars
       })
-      console.log("SACO DATOS")
     }else{
-      console.log("VOY A LOGIN")
-      router.push("/")
+      router.push("/login")
     }
   }, [])
 
@@ -68,7 +66,7 @@ export default function StoryVote(){
       // Si no ha ido bien o no estoy logeado volvemos a /
       if(data.result === "error"){
         localStorage.setItem("logged", "no")
-        router.push("/")
+        router.push("/login")
         return
       }
 

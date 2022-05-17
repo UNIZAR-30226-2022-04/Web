@@ -35,7 +35,7 @@ export default function StoryMode(){
             stars: stars
           })
         }else{
-          router.push("/")
+            router.push("/login")
         }
     }, [])
     // Hace fetch de la api
@@ -62,9 +62,9 @@ export default function StoryMode(){
             // Si no ha ido bien o no estoy logeado volvemos a /
             if(data.result === "error"){
                 localStorage.setItem("logged", "no")
-                router.push("/")
+                router.push("/login")
                 return
-            }
+              }
 
             // Llama al hook que almacena la información del usuario
             setMyTales(data)

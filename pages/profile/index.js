@@ -18,10 +18,8 @@ export default function Stats() {
       const username = localStorage.getItem("username")
       const password = localStorage.getItem("password")
       setWindowUser({username: username, password: password})
-      console.log("SACO DATOS")
     }else{
-      console.log("VOY A LOGIN")
-      router.push("/")
+      router.push("/login")
     }
   }, [])
      
@@ -52,7 +50,7 @@ export default function Stats() {
       // Si no ha ido bien o no estoy logeado volvemos a /
       if(data.result === "error"){
         localStorage.setItem("logged", "no")
-        router.push("/")
+        router.push("/login")
         return
       }
 

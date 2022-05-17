@@ -33,12 +33,14 @@ export default function Friends() {
         coins: coins,
         stars: stars
       })
-      console.log("SACO DATOS")
     }else{
-      console.log("VOY A LOGIN")
-      router.push("/")
+      router.push("/login")
     }
   }, [])
+
+  useEffect(()=>{
+    setFound(false)
+  },[name])
 
   // Llamadas a la API
   useEffect(() => {
@@ -72,7 +74,7 @@ export default function Friends() {
       // Si no ha ido bien o no estoy logeado volvemos a /
       if(data.result === "error"){
           alert("Error en fetch de amigos")
-          //router.push("/")
+          router.push("/login")
           return
       }
 
@@ -106,7 +108,7 @@ export default function Friends() {
             
             <div className="commonTitle">Buscar amigos</div>
             
-            <form onSubmit={(e) => (searchPerson(e, windowUser.username, windowUser.password, name, setFound))}>
+            <form onSubmit={(e) => (searchPerson(e, windowUser.username, windowUser.password, friends, name, setFound))}>
                 <input className="relative p-2 w-full rounded-lg" value={name} type="text" placeholder="Introduce nombre" onChange={(e) => setName(e.target.value)}/>
             </form>
             
@@ -230,16 +232,21 @@ async function manageFriend(username, password, friend, new_friend, setFound, re
 }
 
 // Busqueda de una persona en la BD
-async function searchPerson (e, username, password, friend, setFound, reloaderState, reloader) {
+async function searchPerson (e, username, password, myFriends, friend, setFound, reloaderState, reloader) {
   
   e.preventDefault()
   setFound(false)
 
   // No te puedes buscar a ti mismo
   if(username == friend){
-    //return
+    return
   }
-  
+
+  // No puedes añadir a alguien que ya es amigo
+  if(myFriends.indexOf(friend) > -1){
+    return
+  }
+
   // Llamada a la BD
   const info = {
     username: username,
