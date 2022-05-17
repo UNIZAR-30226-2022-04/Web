@@ -70,7 +70,7 @@ const tryRegister = async (user, pass, mail) => {
 
   const info = {
     username: user,
-    password: (sha512(salt+pass)).toString("hex"),
+    password: (sha512(pass+salt)).toString("hex"),
     email: mail,
     salt: salt
   }
@@ -105,9 +105,7 @@ async function onSubmit (e, name, mail, password, passwordR, router) {
  
   }else{
     const res = await tryRegister(name, password, mail)
-    console.log(res)
     if(res.result == "success"){
-      alert("Yes")
       window.location = `http://localhost:3000/profile`
     }else{
       if(res.reason == "user_already_registered"){

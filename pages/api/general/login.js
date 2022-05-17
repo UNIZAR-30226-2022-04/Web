@@ -7,6 +7,7 @@ export default async (req, res) => {
 	const fields = ['username','password'];
 
 	const rest = checkFields(message,fields)
+	console.log(req.body)
 	if (rest.length != 0){
 		const msg = "invalid credentials, expected: " + rest
 		res.status(200).json({ result: "error", reason: msg });

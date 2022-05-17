@@ -70,35 +70,30 @@ const onSubmit = (e, name, password, router) => {
     alert("Introduce una contraseña")
   }else{
     getSalt(name).then((res) => {
-      console.log(res)
       if(res.result == "success"){
         salt = res.salt
-        alert(res.salt)
-        hash = (sha512(salt+password))
+        hash = (sha512(password+salt))
         hash = hash.toString("hex")
-        console.log(hash)
-        alert(hash)
+        tryLogin(name, hash).then((res2) =>{
+          if(res2.result == "success"){
+            localStorage.setItem("logged", "si")
+            localStorage.setItem("username", name)
+            localStorage.setItem("password",hash)
+            router.push("http://localhost:3000/profile")
+          
+          }else{
+            if(res2.reason == "user_not_found"){
+              alert("Usuario desconocido")
+            }else if(res2.reason == "wrong_password"){
+              alert("Contraseña incorrecta")
+            }else{
+              alert("Error desconocido")
+            }
+          }
+        })
       }else{
         alert("Error contraseña segura")
         return
-      }
-    })
-    tryLogin(name, password).then((res) =>{
-      
-      if(res.result == "success"){
-        localStorage.setItem("logged", "si")
-        localStorage.setItem("username", name)
-        localStorage.setItem("password",hash)
-        router.push("http://localhost:3000/profile")
-      
-      }else{
-        if(res.reason == "user_not_found"){
-          alert("Usuario desconocido")
-        }else if(res.reason == "wrong_password"){
-          alert("Contraseña incorrecta")
-        }else{
-          alert("Error desconocido")
-        }
       }
     })
   }
@@ -110,7 +105,6 @@ const tryLogin = async (user,pass) => {
     username:user,
     password:pass
   }
-
   const options = {
     method: 'POST',
     headers: {
