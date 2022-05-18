@@ -9,7 +9,7 @@ import registerLottie from '/public/lottie/register.json'
 var sha512 = require(`sha512`)
 var SecureRandom = require('securerandom');
 
-export default function register () {
+export default function Register () {
   const [name, setName] = useState("")
   const [mail, setMail] = useState("")
   const [password, setPassword] = useState("")

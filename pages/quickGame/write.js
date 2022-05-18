@@ -1,7 +1,9 @@
-import Layout from 'components/Layout'
 import { useEffect,useState } from 'react'
 import { useRouter } from 'next/router'
 import Image from "next/Image"
+
+import Layout from 'components/Layout'
+import Spinner from 'components/Spinner'
 
 export default function Write() {
 
@@ -45,7 +47,7 @@ export default function Write() {
     return () => clearInterval(interval);
   }, [tick]);
 
-
+  // Obtiene los datos de la sala y 
   const getData = async () =>{
     const queryParams = new URLSearchParams(window.location.search);
     var data = {
@@ -96,8 +98,7 @@ export default function Write() {
     }
   }
 
-
-    //Esperamos medio segundo antes de volver a pedir el estado de la partida
+  //Esperamos medio segundo antes de volver a pedir el estado de la partida
   useEffect(()=>{
     if(state=="waiting_players"){
       const sleep = async (ms) => {
@@ -114,7 +115,8 @@ export default function Write() {
     }
   },[tick])
 
-
+  // Saca la información del usuario de la pantalla
+  // Porqué está aquí?
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
 
@@ -138,6 +140,7 @@ export default function Write() {
   },[])
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
+  // Solo usuario? Y si no hay sala?
   if(!windowUser){
     return <Spinner />
   }
@@ -149,6 +152,8 @@ export default function Write() {
     image_ID: windowUser.picture
   }  
 
+  // Añade un párrafo a ¿¡¿¡¿TALE?!?!?
+  // Esto está mal, debe llamar a las apis de quick
   const add_quick_game_paragraph = async () => {
     var data = {
       username:windowUser.username,
@@ -170,7 +175,8 @@ export default function Write() {
     return res.json()
   }
 
-
+  // te redirecciona a votación
+  // Porque on submit, porqué no toVotePage
   const onSubmit = (e) => {
     e.preventDefault()
     add_quick_game_paragraph().then((res) =>{
@@ -186,6 +192,8 @@ export default function Write() {
     setTurn(turn+1)
   }
 
+  // Abre o cierra el menú de la puñetas
+  // No hace falta una función para esto 
   const openClose = (e) => {
     e.preventDefault()
     if(punyetasM == ""){
@@ -196,8 +204,10 @@ export default function Write() {
     }
   }
 
+  // Devuelve lo visual del menú de puñetas 
   function MenuPunyeta(){
 
+    // Devuelve un solo botón de las puñetas
     function ButtonPunyeta({img,name,text,price}){
       const choosePunyeta = (e) => {
         e.preventDefault()
@@ -233,8 +243,8 @@ export default function Write() {
     )
   }
 
-
-
+  // Muesta a quién va a dirigida la puñeta
+  // Porqué llama a hooks y a la vez muesta cosas?!?!?!
   function DestinoPunyeta(){
 
     function Rival({username,picture}){
@@ -280,15 +290,18 @@ export default function Write() {
 
     return(
       <ul>
-          {rivals.map((rival) => 
-          <li> 
-            <Rival key={rival.username} username={rival.username} picture={rival.picture}/>
-          </li>
+          {rivals.map((rival, index) => 
+            (
+              <li key={index}> 
+                <Rival username={rival.username} picture={rival.picture}/>
+              </li>
+            )
           )}
       </ul>
     )
   }
 
+   // Muestra un texto con las palabras obligatorias coloreadas
   function SpecialInputBox(){
 
     function SpecialText(){
@@ -332,6 +345,7 @@ export default function Write() {
     )
   }
 
+  // Muesta una plabra clave?
   function DisplayPalabraClave({palabra}){
     var incluida = currentText.includes(palabra)
     return(
@@ -339,6 +353,7 @@ export default function Write() {
     )
   }
 
+  // Página principal
   return (
     <>
       <Layout data={layoutInfo}>

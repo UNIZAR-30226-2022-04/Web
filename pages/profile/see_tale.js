@@ -9,11 +9,7 @@ export default function See_Tale() {
   const router = useRouter()
   const [windowUser, setWindowUser] = useState({}) 
   const [story, setStory] = useState({})
-  
-  const queryParams = new URLSearchParams(window.location.search);
-  const title = queryParams.get('title')
-  const id = queryParams.get('id')
-  const type = queryParams.get('type')
+  var title
 
 
   useEffect(()=>{
@@ -37,7 +33,13 @@ export default function See_Tale() {
   }, [])
 
   useEffect (()=>{
-      const getData = async () =>{
+    const queryParams = new URLSearchParams(window.location.search);
+    title = queryParams.get('title')
+    const id = queryParams.get('id')
+    const type = queryParams.get('type')
+  
+    
+    const getData = async () =>{
           const info = {
               username:localStorage.getItem("username"),
               password:localStorage.getItem("password"),

@@ -37,100 +37,6 @@ export default function StoryMode(){
 router.push("/login")
     }
   }, [])
-
-  const tryJoin = async () => {
-    const body = {
-      username:windowUser.username,
-      password:windowUser.password,
-      id:"#"+code
-    }
-    console.log(body)
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body) 
-    }
-    const data = await fetch("http://localhost:3000/api/quick_game/join_room",options)
-    return await data.json()
-  }
-  
-  const join = (e) =>{
-    setErrorR("")
-    e.preventDefault()
-    tryJoin().then((res)=>{
-      console.log(res)
-      alert(res.result)
-      if(res.result != "success"){
-        setErrorJ(res.reason)
-      }else{
-        router.push(`quickGame/lobby?code=${code}`)
-      }
-    })
-  }
-  
-  const tryRandom = async () => {
-    const body = {
-      username:windowUser.username,
-      password:windowUser.password,
-    }
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body) 
-    }
-    const data = await fetch("http://localhost:3000/api/quick_game/join_random_room",options)
-    return await data.json()
-  }
-  
-  const random = () =>{
-    setErrorJ("")
-    tryRandom().then((res)=>{
-      if(res.result != "success"){
-        setErrorR(res.reason)
-      }else{
-        alert(res.id)
-        router.push(`quickGame/lobby?code=${res.id.slice(1)}`)
-      }
-    })
-  }
-  
-  const onSubmit = (e) => {
-    e.preventDefault()
-    create().then((res) =>{
-        console.log(res)
-        alert("Hey")
-        if (res.result != "success"){
-            alert("Error al crear sala")
-            router.push("/quickGame")
-        }else{
-            router.push(`/quickGame/lobby?code=${res.id.slice(1)}`)
-        }
-    })
-  }
-  
-  const create = async () =>{
-    const data = {
-        username: localStorage.getItem("username"),
-        password: localStorage.getItem("password"),
-        time: time,
-        isPrivate: privateGame,
-        mode: gameMode
-    }
-    const options = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data) 
-    }
-    console.log(data)
-    const res = await fetch("http://localhost:3000/api/quick_game/create_room", options)
-    return await res.json()
-  }
  
   // Si tadavía no hoy usuario, esperamos a que lo haya
   if(!windowUser){
@@ -154,21 +60,29 @@ router.push("/login")
   return(
     <Layout data={layoutInfo} >
       <div className='h-full w-2/4 flex flex-row justify-center items-center space-x-20'>
-        <form className="flex flex-col items-center space-y-4" onSubmit={(e)=>(join(e))}>
+        <form className="flex flex-col items-center space-y-4">
           <input type="text" placeholder='Código' value={code} onChange={(e) => setCode(e.target.value)}/>
-          { errorJ != "" ? <div className="centered text-red-700">{errorJ}</div> : ""}
-          <button className="rounded-xl bg-green-800 text-white p-2 border-2 border-white" type="submit">Unirse a sala</button>
-          <button type="button" className='rounded-xl bg-green-800 text-white p-2 border-2 border-white' onClick={()=>(random())}>Partida aleatoria</button>
-          { errorR != "" ? <div className="centered text-red-700">{errorR}</div> : ""}
+          { errorJ != "" ? (
+            <div className="centered text-red-700">{errorJ}</div>
+          ):(
+            <></>
+          )}
+          <button type="button" onClick={()=>(join(windowUser, code, setErrorR, setErrorJ, router))} className="rounded-xl bg-green-800 text-white p-2 border-2 border-white">Unirse a sala</button>
+          <button type="button" onClick={()=>(random(windowUser, setErrorJ, setErrorR, router))} className='rounded-xl bg-green-800 text-white p-2 border-2 border-white'>Partida aleatoria</button>
+          { errorR != "" ? (
+            <div className="centered text-red-700">{errorR}</div>
+          ):(
+            <></>
+          )}
         </form>
 
-        <form className ="flex flex-col space-y-2" onSubmit={onSubmit}>
+        <form className ="flex flex-col space-y-2">
           <p>Tiempo de escritura</p>
           <div className="flex flex-col">
               <p className="text-2xl float-left text-white">{parseInt(time/60)}min:{time % 60}seg</p>
               <div className="flex flex-row text-2xl text-white">
-                  <button type="button" onClick={(e)=>(changeTime(-5))}>-</button>
-                  <button type="button"  onClick={(e)=>(changeTime(5))}>+</button>
+                  <button type="button" onClick={()=>(changeTime(-5))}>-</button>
+                  <button type="button"  onClick={()=>(changeTime(5))}>+</button>
               </div>
           </div>
 
@@ -183,7 +97,7 @@ router.push("/login")
             <input className={`py-1 px-2 text-white ${ gameMode=="random" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="ALEATORIAS" onClick={() => setGameMode("random")}/><> </>
             <input className={`py-1 px-2 text-white ${ gameMode=="twitter" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="TWITTER" onClick={() => setGameMode("twitter")}/><> </>
           </div>
-          <input className="clickableItem rounded-xl bg-green-800 text-white p-2 border-2 border-white" type="submit" value="Crear partida"/>
+          <button type="button" onClick={()=>(create(windowUser, time, privateGame, gameMode, setErrorR, setErrorJ, router))} className="clickableItem rounded-xl bg-green-800 text-white p-2 border-2 border-white">Crear partida</button>
         </form>
       </div>
       <Rulette page='quickGame'/>            
@@ -191,3 +105,100 @@ router.push("/login")
   )
 }
 
+async function create (windowUser, time, isPrivate, gameMode, setErrorR, setErrorJ, router){
+  setErrorR("")
+  const res = await tryCreate(windowUser, time, isPrivate, gameMode)
+
+  if(res.result != "success"){
+    setErrorJ(res.reason)
+  }else{
+    console.log(res)
+    router.push(`quickGame/lobby?code=${res.id.slice(1)}`)
+  }
+}
+
+async function join (windowUser, code, setErrorR, setErrorJ, router) {
+  setErrorR("")
+  const res = await tryJoin(windowUser, code)
+
+  if(res.result != "success"){
+    setErrorJ(res.reason)
+  }else{
+    console.log(res)
+    router.push(`quickGame/lobby?code=${code}`)
+  }
+}
+
+async function random(windowUser, setErrorJ, setErrorR, router) {
+  setErrorJ("")
+  
+  const res = await tryRandom(windowUser)
+  
+  if(res.result != "success"){
+    setErrorR(res.reason)
+  
+  }else{
+    console.log(res)
+    router.push(`quickGame/lobby?code=${res.id.slice(1)}`)
+  }
+}
+
+async function tryCreate(windowUser, time, isPrivate, gameMode) {
+  const info = {
+      username: windowUser.username,
+      password: windowUser.password,
+      time: time,
+      isPrivate: isPrivate,
+      mode: gameMode
+  }
+
+  const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(info) 
+  }
+  
+  const res = await fetch("http://localhost:3000/api/quick_game/create_room", options)
+  const data = await res.json()
+  return data
+}
+
+async function tryJoin(windowUser, code) {
+  const info = {
+    username:windowUser.username,
+    password:windowUser.password,
+    id:code
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(info) 
+  }
+
+  const res = await fetch("http://localhost:3000/api/quick_game/join_room",options)
+  const data = await res.json()
+  return data
+}
+
+async function tryRandom (windowUser) {
+  
+  const body = {
+    username:windowUser.username,
+    password:windowUser.password,
+  }
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body) 
+  }
+  const data = await fetch("http://localhost:3000/api/quick_game/join_random_room", options)
+  return await data.json()
+}

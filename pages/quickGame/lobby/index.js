@@ -31,22 +31,17 @@ export default function QuickGame(){
                 coins: coins,
                 stars: stars
             })
-            console.log("SACO DATOS")
-            
+
         }else{
-            console.log("VOY A LOGIN")
-      router.push("/login")
+            router.push("/login")
         }
-      }, [])
+    }, [])
     
 
     // Hace fetch de la api
     useEffect(() => {
         // Función que llama a la api
         if(!windowUser.username || !code){
-            console.log(windowUser.username)
-            console.log(code)
-            console.log("no permito sacar datos")
             return
         }
             
@@ -67,9 +62,6 @@ export default function QuickGame(){
                 },
                 body: JSON.stringify(info) 
             }
-            console.log(info)
-            alert("Info")
-
             // Llamada a la api
             const res = await fetch('http://localhost:3000/api/quick_game/get_room', options)
             const data = await res.json()       
@@ -82,12 +74,67 @@ export default function QuickGame(){
                 return
             }
 
-            // Llama al hook que almacena la información del usuario
-            alert("Hola")
             setRoom(data)
         }
         getData()
     }, [windowUser])
+
+    // Compruebo periódicamente que la partida no ha empezado
+    useEffect(() => {
+        /*
+        if(windowUser && room){
+                    if(windowUser.username != room.participants[0].username){
+                        const res = await fetch("http://localhost:3000/api/quick_game/get_room")
+                    }
+                }
+        */
+    }, [])
+
+    // Obtiene la sal y comprueba periodicamente si ha empezado
+    const getRoom = async () => {
+        if(windowUser && room){
+            if(windowUser.username != room.participants[0].username){
+                const ident = "#" + code.toString()
+            
+                const info = {
+                    username: windowUser.username,
+                    password: windowUser.password,
+                    id: ident
+                }
+
+                const options = {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(info) 
+                }
+                // Llamada a la api
+                const res = await fetch('http://localhost:3000/api/quick_game/get_room', options)
+                const data = await res.json()       
+
+                // Si no ha ido bien o no estoy logeado volvemos a /
+                if(data.result === 'error'){
+                    console.log(data)
+                    alert("Error")
+                    router.push("/quickGame")
+                    return
+                }
+
+                if(data.hasStarted == 1){
+                    alert("Ha empezado")
+                }else if(data.hasStarted == 2){
+                    alert("En votacion")
+                }
+            }
+        }
+    };
+
+    // Ejecuta el obtener sala cada 2000 ms
+    useEffect(() => {
+        const timer = setInterval(getRoom, 2000);
+        return () => clearInterval(timer);
+    }, []);
 
     // Si tadavía no hoy usuario, esperamos a que lo haya
     if(!windowUser || !room){
@@ -123,11 +170,11 @@ export default function QuickGame(){
                     </div>
                 </div>
                 <div className='flex flex-row space-x-3 items-center justify-center'>
-                    <button className='commonButton bg-purple-500' onClick={() => leaveRoom(windowUser, room, router)}> {'<-'} SALIR</button>  
+                    <button type="button" className='commonButton bg-purple-500' onClick={() => (leaveRoom(windowUser, room, router))}> {'<-'} SALIR</button>  
                     {windowUser.username == room.participants[0].username ?(
                         <>
-                            <button className='commonButton bg-purple-500' onClick={() => closeRoom(windowUser, router)}> CERRAR SALA </button> 
-                            <button className='commonButton bg-purple-500' onClick={() => startGame(windowUser, router)}> EMPEZAR </button>  
+                            <button type="button" className='commonButton bg-purple-500' onClick={() => (closeRoom(windowUser, router))}> CERRAR SALA </button> 
+                            <button type="button" className='commonButton bg-purple-500' onClick={() => (startGame(windowUser, router))}> EMPEZAR </button>  
                         </>                        
                     ):(<></>)}
                     
@@ -138,21 +185,42 @@ export default function QuickGame(){
     )
 }
 
-function secsToString(totSeconds){
-    const secondsInt = parseInt(totSeconds)
-    const minutes = parseInt(secondsInt / 60)
-    const seconds = secondsInt - minutes * 60
-    return minutes.toString() + "min " + seconds.toString() + "seg"
-}
+async function leaveRoom(user, room, router){    
+    
+    const info = {
+        username: user.username,
+        password: user.password,
+        id: '#' + room
+    }
 
-function leaveRoom(user, room, router){
+    const options = {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(info) 
+    }
+
+    await fetch('http://localhost:3000/api/quick_game/leave_room', options)
     router.push("/quickGame")
-
-    // HACER FETCH DE LEAVE ROOM
 }
 
 function startGame(user, room, router){
+    const info = {
+        username: user.username,
+        password: user.password,
+        id: '#' + room
+    }
 
+    const options = {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(info) 
+    }
+
+    await fetch('http://localhost:3000/api/quick_game/', options)
 }
 
 function closeRoom(user, room, router){

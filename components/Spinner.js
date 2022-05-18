@@ -27,7 +27,7 @@ export default function Spinner({showLayout}){
         }else{
           router.push("/login")
         }
-      }, [])
+      }, [router])
     
     return(
       <>
@@ -35,13 +35,13 @@ export default function Spinner({showLayout}){
           <Layout data={windowUser} inSettingsScreen={false}>
             <div className="flex flex-col w-screen h-screen items-center justify-center align-middle">
                 <h1 className="commonTitle">LOADING</h1>
-                <Image src="/mooncodeLoading.gif" width={500} height={500}/>
+                <Image src="/mooncodeLoading.gif" width={500} height={500} alt={"Cargando..."} />
             </div>
           </Layout>
         ):(
           <div className="background flex flex-col w-screen h-screen items-center justify-center align-middle">
               <h1 className="commonTitle">LOADING</h1>
-              <Image src="/mooncodeLoading.gif" width={500} height={500}/>
+              <Image src="/mooncodeLoading.gif" width={500} height={500} alt={"Cargando..."} />
           </div>
         )}
       </>       

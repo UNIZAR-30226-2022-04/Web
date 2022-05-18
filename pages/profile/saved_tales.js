@@ -33,7 +33,7 @@ export default function SavedTales(){
         }else{
             router.push("/login")
         }
-    }, [])
+    }, [router])
     
 
     // Hace fetch de la api
@@ -69,7 +69,7 @@ export default function SavedTales(){
             setMyStories(data)
         }
         getData()
-    }, [windowUser])
+    }, [windowUser, router])
 
     // Si tadavía no hoy usuario, esperamos a que lo haya
     if(!myStories){
@@ -151,12 +151,12 @@ function QuickStory({info}){
                 </div>
                 {info.type === 'quick_twitter' ?(
                     <Link href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}>
-                        <a><Image src="/quick-game/tendencias_twitter.png" width="40" height="40"/></a>
+                        <a><Image src="/quick-game/tendencias_twitter.png" width="40" height="40" alt='Trends'/></a>
                     </Link>
                     
                 ):(
                     <Link href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}>
-                        <a><Image src="/quick-game/random_words.png" width="40" height="40"/></a>
+                        <a><Image src="/quick-game/random_words.png" width="40" height="40" alt='Random'/></a>
                     </Link>
                 )}
             </div>
@@ -179,7 +179,7 @@ function TaleStory({info}){
                 </div>
                 <div className='clickableItem'>
                     <Link href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}>
-                        <a><Image src="/icons/read.png" width="40" height="40"/></a>
+                        <a><Image src="/icons/read.png" width="40" height="40" alt='Leer'/></a>
                     </Link>
                 </div>            
             </div>

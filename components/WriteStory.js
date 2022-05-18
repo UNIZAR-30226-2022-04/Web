@@ -32,7 +32,7 @@ const WriteStory = ({first}) => {
     }else{
 router.push("/login")
     }
-  }, [])
+  }, [router])
 
   // Story info
   useEffect(()=>{
@@ -93,7 +93,7 @@ router.push("/login")
       }
     }
     getPrevious()
-  }, [storyInfo])
+  }, [storyInfo, router])
 
   const create_tale = async () => {
     if(storyInfo.id == undefined){
@@ -190,9 +190,9 @@ router.push("/login")
         <div className="flex flex-col overflow-y-scroll space-y-2 px-2">
           {parrafos ?(
             <>
-              {parrafos.map((parrafo) => {
+              {parrafos.map((parrafo, index) => {
                 return(
-                  <div className="w-full">
+                  <div key={index} className="w-full">
                     
                     <div className="flex flex-row space-x-1">
                       <div className="font-arial-r">Escrito por</div>
