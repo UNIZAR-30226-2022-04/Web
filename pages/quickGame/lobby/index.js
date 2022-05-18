@@ -44,6 +44,8 @@ export default function QuickGame(){
     useEffect(() => {
         // Función que llama a la api
         if(!windowUser.username || !code){
+            console.log(windowUser.username)
+            console.log(code)
             console.log("no permito sacar datos")
             return
         }
@@ -81,6 +83,7 @@ export default function QuickGame(){
             }
 
             // Llama al hook que almacena la información del usuario
+            alert("Hola")
             setRoom(data)
         }
         getData()
@@ -106,11 +109,6 @@ export default function QuickGame(){
                 <div className='flex flex-row justify-center items-center space-x-20 ml-5'>
                     <ListOfPeople data={room.participants} showFaces={true} />
                     <div className='flex flex-col  space-y-5'>
-                        <div className='flex flex-row bg-white rounded-lg items-center justify-center p-2 space-x-2'>
-                            <Image src='/quick-game/clock.png' width="30" height="30"/>
-                            <p className=''>{secsToString(room.time)}</p>                            
-                        </div>
-                        
                         {room.mode == 'random'?(
                             <div className='flex flex-row bg-purple-500 rounded-lg items-center justify-center space-x-2 p-2'>
                                 <Image src='/quick-game/random_words.png' width="30" height="30"/>

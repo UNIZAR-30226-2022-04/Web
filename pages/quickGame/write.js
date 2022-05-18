@@ -69,13 +69,12 @@ export default function Write() {
 
   const getData = async () =>{
     const queryParams = new URLSearchParams(window.location.search);
-    const data = {
+    var data = {
       username: localStorage.getItem("username"),
       password: localStorage.getItem("password"),
-      turn: 0,
       id: ("#"+queryParams.get("id"))
     }
-    const options = {
+    var options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +82,24 @@ export default function Write() {
       },
       body: JSON.stringify(data)
     }
-    var res = await fetch("http://localhost:3000/api/quick_game/play_quick_game",options)
+    var res = await fetch("http://localhost:3000/api/quick_game/get_room",options)
+    res = await res.json()
+    setRivals(res.participants.filter((rival) => rival.username != windowUser.username))
+    data = {
+      username: localStorage.getItem("username"),
+      password: localStorage.getItem("password"),
+      turn: turn,
+      id: ("#"+queryParams.get("id"))
+    }
+    options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json' 
+      },
+      body: JSON.stringify(data)
+    }
+    res = await fetch("http://localhost:3000/api/quick_game/play_quick_game",options)
     res = await res.json()
     console.log(res)
     if(res.result != "error"){
@@ -95,7 +111,6 @@ export default function Write() {
       setLast(res.isLast)
       setPunyeta(res.puneta)
       setTurn(res.turn)
-      setRivals(participantes.filter((rival) => rival.username != username))
     }else{
       //alert("Error al acceder a partida")
       setState("waiting_players")

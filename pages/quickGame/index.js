@@ -65,7 +65,7 @@ export default function StoryMode(){
       if(res.result != "success"){
         setErrorJ(res.reason)
       }else{
-        router.push(`quickGame/lobby?id=${code}`)
+        router.push(`quickGame/lobby?code=${code}`)
       }
     })
   }
@@ -93,7 +93,7 @@ export default function StoryMode(){
         setErrorR(res.reason)
       }else{
         alert(res.id)
-        router.push(`quickGame/lobby?id=${res.id}`)
+        router.push(`quickGame/lobby?code=${res.id.slice(1)}`)
       }
     })
   }
