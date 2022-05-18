@@ -36,7 +36,7 @@ export default function Friends() {
     }else{
       router.push("/login")
     }
-  }, [])
+  }, [router])
 
   useEffect(()=>{
     setFound(false)
@@ -77,17 +77,13 @@ export default function Friends() {
           router.push("/login")
           return
       }
-
-      // Llama al hook que almacena la información del usuario
-      useFriends(data.friends)
-      useNotifications(data.notifications)
     }
 
     if(windowUser != undefined){
       getData()
     }
     
-  }, [windowUser, mustReload]) 
+  }, [windowUser, mustReload, router]) 
 
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
@@ -151,10 +147,10 @@ function Friend({username, password, friend, setFound, new_friend, reloaderState
         
         <button onClick={() => (manageFriend(username, password, friend, new_friend, setFound, reloaderState, reloader))}> 
           {new_friend ? (
-              <Image src={'/friends/add_friend.png'} width={25} height={25} />
+              <Image src={'/friends/add_friend.png'} width={25} height={25} alt={"Add"} />
             
           ):(
-              <Image src={'/friends/delete_friend.png'} width={25} height={25} />
+              <Image src={'/friends/delete_friend.png'} width={25} height={25} alt={"Delete"} />
             
           )}
         </button>
@@ -169,10 +165,10 @@ function FriendRequest({username, password, friend, reloaderState, reloader}){
       <div className='text-xl text-gris font-arial-b'>{friend}</div>
       <div className='flex flex-row space-x-1'>
         <button onClick={() => (manageRequest(username, password, friend, true, reloaderState, reloader))}>
-          <Image src={'/friends/accept.png'} width={25} height={25}/>
+          <Image src={'/friends/accept.png'} width={25} height={25} alt={"Accept"} />
         </button>
         <button onClick={() => (manageRequest(username, password, friend, false, reloaderState, reloader))}>
-          <Image src={'/friends/cancel.png'} width={25} height={25}/>
+          <Image src={'/friends/cancel.png'} width={25} height={25} alt={"Deny"}/>
         </button>
       </div>
       

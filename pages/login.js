@@ -8,7 +8,7 @@ import loginLottie from '/public/lottie/login.json'
 
 var sha512 = require ("sha512")
 
-export default function login() {
+export default function Login() {
   const router = useRouter()  
   const [name, setName] = useState("")
   const [password, setPassword] = useState("")
@@ -18,7 +18,7 @@ export default function login() {
     if(localStorage.getItem("logged") == "si"){
       router.push("/profile")
     }
-  }, [])
+  }, [router])
 
   const options = {
     loop: true,
@@ -31,7 +31,7 @@ export default function login() {
 
   return (
     <div className="background h-screen w-screen flex flex-col items-center justify-center">
-      <Image src={'/frankenstory.png'} height={150} width={600} />
+      <Image src={'/frankenstory.png'} height={150} width={600} alt={"LOGO"} />
       <div className="flex flex-row justify-center items-center">
         <Lottie 
           options = {options}

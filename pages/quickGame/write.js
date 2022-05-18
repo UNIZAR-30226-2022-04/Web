@@ -1,7 +1,9 @@
-import Layout from 'components/Layout'
 import { useEffect,useState } from 'react'
 import { useRouter } from 'next/router'
 import Image from "next/Image"
+
+import Layout from 'components/Layout'
+import Spinner from 'components/Spinner'
 
 export default function Write() {
 
@@ -45,7 +47,7 @@ export default function Write() {
     return () => clearInterval(interval);
   }, []);
 
-
+  // Obtiene los datos de la sala y 
   const getData = async () =>{
     const queryParams = new URLSearchParams(window.location.search);
     var data = {
@@ -97,25 +99,30 @@ export default function Write() {
     }
     setTick(!tick)
   }
-
-  if(state=="waiting_players"){
-    //Esperamos medio segundo antes de volver a pedir el estado de la partida
-    useEffect(()=>{
-      const sleep = async (ms) => {
-        await new Promise(r => setTimeout(r, ms));
-      }
-      sleep(1000).then(()=>{
-        getData()
-        setTick(!tick)
-        if(dots.length==3){
-          setDots("")
-        }else{
-          setDots(dots+".")
+  
+  // cada ¿¡¿¡¿¡segundo!?!?!? llama a la base de datos 
+  useEffect(()=>{
+    if(state=="waiting_players"){
+      //Esperamos medio segundo antes de volver a pedir el estado de la partida
+    
+        const sleep = async (ms) => {
+          await new Promise(r => setTimeout(r, ms));
         }
-      })
-    },[tick])
-  }
+        sleep(1000).then(()=>{
+          getData()
+          setTick(!tick)
+          if(dots.length==3){
+            setDots("")
+          }else{
+            setDots(dots+".")
+          }
+        })
+      
+    }
+  },[tick])
 
+  // Saca la información del usuario de la pantalla
+  // Porqué está aquí?
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
 
@@ -139,6 +146,7 @@ router.push("/login")
   },[])
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
+  // Solo usuario? Y si no hay sala?
   if(!windowUser){
     return <Spinner />
   }
@@ -150,6 +158,8 @@ router.push("/login")
     image_ID: windowUser.picture
   }  
 
+  // Añade un párrafo a ¿¡¿¡¿TALE?!?!?
+  // Esto está mal, debe llamar a las apis de quick
   const add_quick_game_paragraph = async () => {
     var data = {
       username:windowUser.username,
@@ -171,7 +181,8 @@ router.push("/login")
     return res.json()
   }
 
-
+  // te redirecciona a votación
+  // Porque on submit, porqué no toVotePage
   const onSubmit = (e) => {
     e.preventDefault()
     add_quick_game_paragraph().then((res) =>{
@@ -188,6 +199,8 @@ router.push("/login")
     setTick(!tick)
   }
 
+  // Abre o cierra el menú de la puñetas
+  // No hace falta una función para esto 
   const openClose = (e) => {
     e.preventDefault()
     if(punyetasM == ""){
@@ -198,8 +211,10 @@ router.push("/login")
     }
   }
 
+  // Devuelve lo visual del menú de puñetas 
   function MenuPunyeta(){
 
+    // Devuelve un solo botón de las puñetas
     function ButtonPunyeta({img,name,text,price}){
       const choosePunyeta = (e) => {
         e.preventDefault()
@@ -235,8 +250,8 @@ router.push("/login")
     )
   }
 
-
-
+  // Muesta a quién va a dirigida la puñeta
+  // Porqué llama a hooks y a la vez muesta cosas?!?!?!
   function DestinoPunyeta(){
 
     function Rival({username,picture}){
@@ -282,15 +297,18 @@ router.push("/login")
 
     return(
       <ul>
-          {rivals.map((rival) => 
-          <li> 
-            <Rival key={rival.username} username={rival.username} picture={rival.picture}/>
-          </li>
+          {rivals.map((rival, index) => 
+            (
+              <li key={index}> 
+                <Rival username={rival.username} picture={rival.picture}/>
+              </li>
+            )
           )}
       </ul>
     )
   }
 
+   // Muestra un texto con las palabras obligatorias coloreadas
   function SpecialInputBox(){
 
     function SpecialText(){
@@ -334,6 +352,7 @@ router.push("/login")
     )
   }
 
+  // Muesta una plabra clave?
   function DisplayPalabraClave({palabra}){
     var incluida = currentText.includes(palabra)
     return(
@@ -341,6 +360,7 @@ router.push("/login")
     )
   }
 
+  // Página principal
   return (
     <>
       <Layout data={layoutInfo}>

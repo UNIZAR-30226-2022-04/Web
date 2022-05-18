@@ -99,8 +99,8 @@ const QuickVote = ({user}) => {
             <div className="centered">Titulo:{story.title}</div>
             <div className="scrollBox h-auto text-center">
                 <ul>
-                    {story.paragraphs.map((paragraph, num) => 
-                    <Paragraph body={paragraph.text} words={paragraph.words} turn={num}/>
+                    {story.paragraphs.map((paragraph, num, index) => 
+                        <Paragraph key={index} body={paragraph.text} words={paragraph.words} turn={num}/>
                     )}
                 </ul>
             </div>

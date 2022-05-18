@@ -29,11 +29,11 @@ function Story({story, isVoteStory}){
                     <div className='pr-2 text-verde_punetas text-sm font-arial_r'>{story.turn}/{story.max_turns}</div>
                     {isVoteStory ? (
                         <Link href={`/storyMode/vote?id=${story.story_id}&creator=${story.creator}`}>
-                            <a><Image src="/icons/voting-box.png" width="20" height="20"/></a>
+                            <a><Image src="/icons/voting-box.png" width="20" height="20" alt='Votar'/></a>
                         </Link>
                     ):(
                         <Link href={`/storyMode/continue?id=${story.story_id}&lastTurn=${lastTurn}&creator=${story.creator}`}>
-                            <a><Image src="/icons/pencil.png" width="20" height="20"/></a>
+                            <a><Image src="/icons/pencil.png" width="20" height="20" alt='Editar'/></a>
                         </Link>
                     )}
                 </div> 

@@ -55,8 +55,8 @@ const QuickVoteResults = ({user}) => {
             <div className="centered">Historia de {creator}</div>
             <div className="scrollBox h-auto text-center">
                 <ul>
-                    {story.paragraphs.map((paragraph, num) => 
-                    <Paragraph body={paragraph.body} turn={num} creator={paragraph.username}/>,
+                    {story.paragraphs.map((paragraph, num, index) => 
+                    <Paragraph key={index} body={paragraph.body} turn={num} creator={paragraph.username}/>,
                     )}
                 </ul>
             </div>

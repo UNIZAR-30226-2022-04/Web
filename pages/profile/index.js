@@ -21,7 +21,7 @@ export default function Stats() {
     }else{
       router.push("/login")
     }
-  }, [])
+  }, [router])
      
   // Hace fetch de la api
   useEffect(() => {
@@ -58,7 +58,7 @@ export default function Stats() {
       setMyuser(data)
     }
     getData()
-  }, [windowUser])
+  }, [windowUser, router])
 
   useEffect(() => {
     if(myuser){

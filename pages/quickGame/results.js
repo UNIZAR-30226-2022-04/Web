@@ -1,4 +1,4 @@
-/*import Layout from 'components/Layout'
+import Layout from 'components/Layout'
 import FriendStats from 'components/Statistics'
 
 import { useState, useEffect } from 'react'
@@ -96,4 +96,4 @@ export default function Stats() {
         </div>                        
     </Layout> 
   )
-}*/
+}
