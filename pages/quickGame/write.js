@@ -5,29 +5,6 @@ import Image from "next/Image"
 
 export default function Write() {
 
-  /*const participantes = [
-    {
-      username:"Uno",
-      picture: 1,
-      stars: 111
-    },{
-      username:"Trio",
-      picture: 3,
-      stars: 333
-    },{
-      username:"Quintus",
-      picture: 5,
-      stars: 555
-    },{
-      username:"Septem",
-      picture: 7,
-      stars: 777
-    },{
-      username:"Jaime",
-      picture: 7,
-      stars: 777
-    }]*/
-
   const router = useRouter()
   const [windowUser, setWindowUser] = useState({}) 
 
@@ -48,6 +25,8 @@ export default function Write() {
   const [tick, setTick ] = useState(true)
   const [dots, setDots ] = useState("")
 
+
+  //Temporizador
   useEffect(() => {
     const start = new Date();
     const interval = setInterval(() => {
@@ -116,6 +95,7 @@ export default function Write() {
       setState("waiting_players")
       //router.push("/quickGame")
     }
+    setTick(!tick)
   }
 
   if(state=="waiting_players"){
@@ -152,6 +132,7 @@ export default function Write() {
         coins: coins,
         stars: stars
       })
+      getData()
     }else{
 router.push("/login")
     }
@@ -204,6 +185,7 @@ router.push("/login")
     })
     getData()
     setTurn(turn+1)
+    setTick(!tick)
   }
 
   const openClose = (e) => {
