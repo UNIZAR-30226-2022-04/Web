@@ -32,7 +32,7 @@ const QuickVote = ({user}) => {
   
             // Si no ha ido bien o no estoy logeado volvemos a /
             if(data.result === "error"){
-                router.push("/")
+          router.push("/login")
                 return
             }
             // Llama al hook que almacena la información del usuario

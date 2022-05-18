@@ -153,7 +153,7 @@ export default function Write() {
         stars: stars
       })
     }else{
-      router.push("/")
+router.push("/login")
     }
   },[])
 

@@ -34,7 +34,7 @@ export default function StoryMode(){
       })
 
     }else{
-      router.push("/")
+router.push("/login")
     }
   }, [])
 

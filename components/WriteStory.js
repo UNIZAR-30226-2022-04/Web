@@ -30,7 +30,7 @@ const WriteStory = ({first}) => {
         stars: stars
       })
     }else{
-      router.push("/")
+router.push("/login")
     }
   }, [])
 

@@ -35,7 +35,7 @@ export default function QuickGame(){
             
         }else{
             console.log("VOY A LOGIN")
-            router.push("/")
+      router.push("/login")
         }
       }, [])
     

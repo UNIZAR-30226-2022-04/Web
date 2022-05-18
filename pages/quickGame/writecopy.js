@@ -123,7 +123,7 @@ export default function Write() {
       })
       getData()
     }else{
-      router.push("/")
+router.push("/login")
     }
   },[])
 
