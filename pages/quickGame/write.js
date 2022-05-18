@@ -16,12 +16,12 @@ export default function Write() {
   const [punyeta, setPunyeta] = useState("ciego")
   const [topic, setTopic] = useState("")
   const [randomWords, setWords] = useState(["Rayo","Fuego","Hielo"])
-  const [time, setTime] = useState(1000000)
+  const [time, setTime] = useState(1000)
   const [clock, setClock] = useState(0)
   const [rivals, setRivals] = useState([])
   const [last, setLast ] = useState(false)
   const [turn, setTurn ] = useState(0)
-  const [state, setState ] = useState("waiting_players")
+  const [state, setState ] = useState("")
   const [tick, setTick ] = useState(true)
   const [dots, setDots ] = useState("")
 
@@ -38,12 +38,12 @@ export default function Write() {
 
       if (time < s) {
         alert("Timer terminado");
-        router.push("/quickGame")
+        onSubmit()
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [tick]);
 
 
   const getData = async () =>{
@@ -63,7 +63,7 @@ export default function Write() {
     }
     var res = await fetch("http://localhost:3000/api/quick_game/get_room",options)
     res = await res.json()
-    setRivals(res.participants.filter((rival) => rival.username != windowUser.username))
+    //setRivals(res.participants.filter((rival) => rival.username != windowUser.username))
     data = {
       username: localStorage.getItem("username"),
       password: localStorage.getItem("password"),
@@ -91,30 +91,29 @@ export default function Write() {
       setPunyeta(res.puneta)
       setTurn(res.turn)
     }else{
-      //alert("Error al acceder a partida")
-      setState("waiting_players")
-      //router.push("/quickGame")
+      router.push("/quickGame")
+      alert("Error al acceder a partida")
     }
-    setTick(!tick)
   }
 
-  if(state=="waiting_players"){
+
     //Esperamos medio segundo antes de volver a pedir el estado de la partida
-    useEffect(()=>{
+  useEffect(()=>{
+    if(state=="waiting_players"){
       const sleep = async (ms) => {
         await new Promise(r => setTimeout(r, ms));
       }
       sleep(1000).then(()=>{
         getData()
-        setTick(!tick)
         if(dots.length==3){
           setDots("")
         }else{
           setDots(dots+".")
         }
       })
-    },[tick])
-  }
+    }
+  },[tick])
+
 
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
@@ -134,7 +133,7 @@ export default function Write() {
       })
       getData()
     }else{
-router.push("/login")
+      router.push("/login")
     }
   },[])
 
@@ -185,7 +184,6 @@ router.push("/login")
     })
     getData()
     setTurn(turn+1)
-    setTick(!tick)
   }
 
   const openClose = (e) => {

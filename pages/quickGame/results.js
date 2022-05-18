@@ -1,5 +1,5 @@
-/*import Layout from 'components/Layout'
-import FriendStats from 'components/Statistics'
+import Layout from 'components/Layout'
+import FriendStats from 'components/ListOfPeople'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -72,28 +72,62 @@ export default function Stats() {
 
   return (
     <Layout data={layoutInfo}>
-        
-        <div className='centered'>
-            <div className="commonTitle mt-2">Resultados</div>
-        </div>
-        <div className="centered">
-            <div className="grid grid-cols-2">
+        <div className="flex flex-col w-screen">
+
+          <div className='text-center'>
+              <div className="commonTitle my-2 text-6xl">Resultados</div>
+          </div>
+
+          <div className="flex">
+
+            <div className="w-1/12"></div>
+            <div className="w-5/12 flex flex-row bg-red-800">
+              <div>
+                <Image src="/icons/star.png" width={250} height={250}/>
+              </div>
                 <div>
-                    <Image src="/icons/star.png" width={100} height={100}/>
-                </div>
-                <div>
-                    <div className="text-centered">{windowUser.username}</div>
-                    <div className="inline-grid grid-cols-3">
-                        <Image src="/profPic/icon0.png" width={38} height={38}/>
-                        <div className="text-2xl">+500</div>
-                        <Image src="/icons/stats.png" width={38} height={38}/>
-                    </div>
+                  <div className="h-10"/>
+                  <div className="text-centered commonTitle text-5xl ml-16 bg-blue-800">{windowUser.username}</div>
+                  <div className="inline-grid grid-cols-3">
+                    <Image src="/profPic/icon0.png" width={38} height={38}/>
+                    <div className="text-2xl">+500</div>
+                    <Image src="/icons/mooncoin.png" width={38} height={38}/>
+                  </div>
                 </div>
             </div>
+
+            <div className='w-5/12'>
+              <FriendStats className="pl-0" data={myuser.bestFour}/>
+            </div>
+
+          </div>
+
         </div>
-        <div className='centered px-20'>
-            <FriendStats className="pl-0" data={myuser.bestFour}/>
-        </div>                        
-    </Layout> 
+    </Layout>
   )
-}*/
+}
+/*    <Layout data={layoutInfo}>
+        <div className="flex flex-col w-screen">
+          <div className='centered'>
+              <div className="commonTitle mt-2">Resultados</div>
+          </div>
+          <div>
+              <div className="grid grid-cols-2">
+                  <div>
+                      <Image src="/icons/star.png" width={100} height={100}/>
+                  </div>
+                  <div>
+                      <div className="text-centered">{windowUser.username}</div>
+                      <div className="inline-grid grid-cols-3">
+                          <Image src="/profPic/icon0.png" width={38} height={38}/>
+                          <div className="text-2xl">+500</div>
+                          <Image src="/icons/stats.png" width={38} height={38}/>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div className='centered px-20'>
+              <FriendStats className="pl-0" data={myuser.bestFour}/>
+          </div>
+        </div>
+    </Layout>*/
