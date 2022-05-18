@@ -58,13 +58,13 @@ export default function QuickVote(){
     return () => clearInterval(interval);
   }, [tick]);
 
-    //Esperamos medio segundo antes de volver a pedir el estado de la partida
+    //Esperamos 3 segundos antes de volver a pedir el estado de la partida
     useEffect(()=>{
       if(story.result=="waiting_players"){
       const sleep = async (ms) => {
         await new Promise(r => setTimeout(r, ms));
       }
-      sleep(1000).then(()=>{
+      sleep(3000).then(()=>{
         getData()
         setTick(!tick)
         if(dots.length==3){
@@ -98,7 +98,7 @@ export default function QuickVote(){
       console.log("SACO DATOS")
     }else{
       console.log("VOY A LOGIN")
-router.push("/login")
+      router.push("/login")
     }
   }, [])
 

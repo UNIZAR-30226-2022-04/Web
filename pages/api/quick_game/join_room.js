@@ -1,16 +1,16 @@
-import { addPlayerGame, createGame } from "../../../lib/Game";
+import { addPlayerGame, findGame, checkEmpty } from "../../../lib/Game";
 import Player from "../../../lib/Player";
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
-import { gamesList } from "../../../lib/GamesManager";
 import { MAX_AMOUNT_PLAYERS } from "../../../lib/GamesManager";
 import { state } from "../../../lib/GamesManager";
 
 export default async (req, res) => {
 	const message = req.body;
 
-	const fields = ["username", "password", "id"];
+	console.log(req.body)
 
+	const fields = ["username", "password", "id"];
 	const rest = checkFields(message, fields);
 	if (rest.length != 0) {
 		const msg = "invalid credentials, expected: " + rest;
@@ -31,12 +31,15 @@ export default async (req, res) => {
 				user.mooncoins
 			);
 
-			const game = gamesList.find((game) => game.room_id == message.id);
+			checkEmpty(message.id);
+
+			const game = findGame(message.id);
 			if (game == undefined) {
 				res.status(200).json({
 					result: "error",
 					reason: "room_not_found",
 				});
+				return;
 			} else if (game.players.lenght >= MAX_AMOUNT_PLAYERS) {
 				res.status(200).json({
 					result: "error",

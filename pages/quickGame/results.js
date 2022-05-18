@@ -75,23 +75,24 @@ export default function Stats() {
         <div className="flex flex-col w-screen">
 
           <div className='text-center'>
-              <div className="commonTitle my-2 text-6xl">Resultados</div>
+              <div className="commonTitle my-4 text-6xl">Resultados</div>
           </div>
 
           <div className="flex">
 
-            <div className="w-1/12"></div>
-            <div className="w-5/12 flex flex-row bg-red-800">
+            <div className="w-1/12"/>
+            <div className="w-5/12 flex flex-row pt-20">
               <div>
                 <Image src="/icons/star.png" width={250} height={250}/>
               </div>
                 <div>
                   <div className="h-10"/>
-                  <div className="text-centered commonTitle text-5xl ml-16 bg-blue-800">{windowUser.username}</div>
-                  <div className="inline-grid grid-cols-3">
-                    <Image src="/profPic/icon0.png" width={38} height={38}/>
-                    <div className="text-2xl">+500</div>
-                    <Image src="/icons/mooncoin.png" width={38} height={38}/>
+                  <div className="text-centered commonTitle text-5xl ml-16">{windowUser.username}</div>
+                  <div className="flex flex-row pt-10">
+                  <div className="w-1/12"/>
+                    <Image src="/profPic/icon0.png" width={50} height={50}/>
+                    <div className="text-4xl text-white font-bold ml-10">+500</div>
+                    <Image src="/icons/mooncoin.png" width={50} height={50}/>
                   </div>
                 </div>
             </div>
@@ -100,6 +101,10 @@ export default function Stats() {
               <FriendStats className="pl-0" data={myuser.bestFour}/>
             </div>
 
+          </div>
+
+          <div className='text-center'>
+              <input className="clickableItem rounded-xl bg-green-800 text-white p-2 border-2 border-white text-center font-bold" value="Recoger"/>
           </div>
 
         </div>

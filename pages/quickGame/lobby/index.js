@@ -220,7 +220,7 @@ function startGame(user, room, router){
         body: JSON.stringify(info) 
     }
 
-    await fetch('http://localhost:3000/api/quick_game/', options)
+    fetch('http://localhost:3000/api/quick_game/', options)
 }
 
 function closeRoom(user, room, router){

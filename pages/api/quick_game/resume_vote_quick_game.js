@@ -1,6 +1,6 @@
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
-import { findGame } from "../../../lib/Game";
+import { findGame, checkEmpty } from "../../../lib/Game";
 
 export default async (req, res) => {
 	const message = req.body;
@@ -19,6 +19,9 @@ export default async (req, res) => {
 	// checks if username exists
 	if (user != undefined) {
 		if (user.password_hash == message.password) {
+			checkEmpty(message.id);
+
+			// habria que poner mutex desde {
 			const game = findGame(message.id);
 
 			if (game == undefined) {
@@ -55,7 +58,7 @@ export default async (req, res) => {
 				paragraphs: paragraphs,
 				isLast: game.voteTurn == game.players.length,
 				turn: game.voteTurn,
-				s: game.maxTime
+				s: game.getRemainingTime()
 			});
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });
