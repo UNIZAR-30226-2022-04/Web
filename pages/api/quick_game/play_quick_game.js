@@ -1,4 +1,4 @@
-import { addPlayerGame, createGame, findGame, checkEmpty } from "../../../lib/Game";
+import { addPlayerGame, createGame, findGame } from "../../../lib/Game";
 import Player from "../../../lib/Player";
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
@@ -20,10 +20,6 @@ export default async (req, res) => {
 	// checks if username exists
 	if (user != undefined) {
 		if (user.password_hash == message.password) {
-			
-			await checkEmpty(message.id);
-
-			// habria que poner mutex desde {
 			const game = findGame(message.id);
 
 			if (game == undefined) {
@@ -35,7 +31,7 @@ export default async (req, res) => {
 			}
 
 			if (game.turn == 0) game.nextTurn();
-			// hasta }
+
 			const pl = game.players.find((p) => p.username == message.username);
 
 			const result =
@@ -49,12 +45,13 @@ export default async (req, res) => {
 
 			if (result == "success" && game.turn != 1){
 				lastParagraph = game.getLastParagraph(message.username);
-				puneta = game.getPuneta(message.username);
+				puneta = game.getPuneta(message.username)
 			}
 
 			res.status(200).json({
 				result: result,
-				s: game.getRemainingTime(),
+				s: game.maxTime,
+				//s: game.timeRemaining,
 				topic: game.topic,
 				randomWords: game.randomWords,
 				lastParagraph: lastParagraph,
