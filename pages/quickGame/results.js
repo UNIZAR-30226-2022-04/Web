@@ -1,16 +1,48 @@
 import Layout from 'components/Layout'
-import FriendStats from 'components/ListOfPeople'
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
+import ListOfPeople from 'components/ListOfPeople'
+
 import Image from 'next/image'
 
-export default function Stats() { 
+const placeholder = {
+  "result":"success",
+  "clasification":[
+  {
+    "username":"1",
+    "stars":1
+  },{
+    "username":"1",
+    "stars":1
+  },{
+    "username":"1",
+    "stars":1
+  },{
+    "username":"1",
+    "stars":1
+  },{
+    "username":"1",
+    "stars":1
+  },{
+    "username":"1",
+    "stars":1
+  },{
+    "username":"1",
+    "stars":1
+  }],
+  coins:42069
+}
+
+export default function Results() {
+
   const router = useRouter()
   const [myuser, setMyuser] = useState("")  // Hook que devuelve la llamada de la api
 
   const [windowUser, setWindowUser] = useState({}) 
+
+  const [results, setResults] = useState([])
 
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
@@ -25,6 +57,7 @@ export default function Stats() {
   // Hace fetch de la api
   useEffect(() => {
     // Función que llama a la api
+    console.log(placeholder)
     if(windowUser.username == undefined){
       console.log("no permito sacar datos")
       return
@@ -54,7 +87,38 @@ export default function Stats() {
       // Llama al hook que almacena la información del usuario
       setMyuser(data)
     }
+    const getResults = async () => {
+      const queryParams = new URLSearchParams(window.location.search);
+      // Opciones para llamar a la api
+      const body = {
+        username:windowUser.username,
+        password:windowUser.password,
+        id:queryParams.get("code")
+      }
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body) 
+      }
+    
+      // Llamada a la api
+      const res = await fetch('http://localhost:3000/api/quick_game/points_voted_quick_game', options)
+      const data = await res.json()
+
+      // Si no ha ido bien o no estoy logeado volvemos a /
+      if(data.result === "error"){
+        alert("Error al obtener datos")
+        router.push("/quickGame")
+        return
+      }
+
+      // Llama al hook que almacena la información del usuario
+      setResults(data)
+    }
     getData()
+    getResults()
   }, [windowUser])
 
   // Si tadavía no hoy usuario, esperamos a que lo haya
@@ -74,14 +138,11 @@ export default function Stats() {
     <Layout data={layoutInfo}>
         <div className="flex flex-col w-screen">
 
-          <div className='text-center'>
-              <div className="commonTitle my-4 text-6xl">Resultados</div>
-          </div>
-
           <div className="flex">
-
             <div className="w-1/12"/>
-            <div className="w-5/12 flex flex-row pt-20">
+            <div className="w-5/12">
+              <div className="text-center commonTitle my-4 text-6xl">Resultados</div>
+              <div className="flex flex-row pt-20">
               <div>
                 <Image src="/icons/star.png" width={250} height={250}/>
               </div>
@@ -91,48 +152,27 @@ export default function Stats() {
                   <div className="flex flex-row pt-10">
                   <div className="w-1/12"/>
                     <Image src="/profPic/icon0.png" width={50} height={50}/>
-                    <div className="text-4xl text-white font-bold ml-10">+500</div>
+                    <div className="text-4xl text-white font-bold ml-10">+{placeholder.coins}</div>
                     <Image src="/icons/mooncoin.png" width={50} height={50}/>
                   </div>
                 </div>
+              </div>
             </div>
 
             <div className='w-5/12'>
-              <FriendStats className="pl-0" data={myuser.bestFour}/>
+            <div className="commonTitle my-4 text-6xl">Clasificación</div>
+              <div className="scrollBox h-64 mt-20">
+                <ListOfPeople  data={placeholder.clasification}/>
+              </div>
             </div>
 
           </div>
 
           <div className='text-center'>
-              <input className="clickableItem rounded-xl bg-green-800 text-white p-2 border-2 border-white text-center font-bold" value="Recoger"/>
+            <input className="clickableItem rounded-xl bg-green-800 text-white p-2 border-2 border-white text-center font-bold" value="Recoger"/>
           </div>
 
         </div>
     </Layout>
   )
 }
-/*    <Layout data={layoutInfo}>
-        <div className="flex flex-col w-screen">
-          <div className='centered'>
-              <div className="commonTitle mt-2">Resultados</div>
-          </div>
-          <div>
-              <div className="grid grid-cols-2">
-                  <div>
-                      <Image src="/icons/star.png" width={100} height={100}/>
-                  </div>
-                  <div>
-                      <div className="text-centered">{windowUser.username}</div>
-                      <div className="inline-grid grid-cols-3">
-                          <Image src="/profPic/icon0.png" width={38} height={38}/>
-                          <div className="text-2xl">+500</div>
-                          <Image src="/icons/stats.png" width={38} height={38}/>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div className='centered px-20'>
-              <FriendStats className="pl-0" data={myuser.bestFour}/>
-          </div>
-        </div>
-    </Layout>*/

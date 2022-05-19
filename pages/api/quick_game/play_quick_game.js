@@ -21,7 +21,7 @@ export default async (req, res) => {
 	if (user != undefined) {
 		if (user.password_hash == message.password) {
 			
-			checkEmpty(message.id);
+			await checkEmpty(message.id);
 
 			// habria que poner mutex desde {
 			const game = findGame(message.id);

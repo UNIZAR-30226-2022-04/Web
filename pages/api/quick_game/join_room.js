@@ -8,9 +8,8 @@ import { state } from "../../../lib/GamesManager";
 export default async (req, res) => {
 	const message = req.body;
 
-	console.log(req.body)
-
 	const fields = ["username", "password", "id"];
+
 	const rest = checkFields(message, fields);
 	if (rest.length != 0) {
 		const msg = "invalid credentials, expected: " + rest;
@@ -31,7 +30,7 @@ export default async (req, res) => {
 				user.mooncoins
 			);
 
-			checkEmpty(message.id);
+			await checkEmpty(message.id);
 
 			const game = findGame(message.id);
 			if (game == undefined) {

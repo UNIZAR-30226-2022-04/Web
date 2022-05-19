@@ -7,8 +7,6 @@ import { state, gamesList } from "../../../lib/GamesManager";
 export default async (req, res) => {
 	const message = req.body;
 
-	console.log(req.body)
-
 	const fields = ["username", "password", "time", "isPrivate", "mode"];
 
 	const rest = checkFields(message, fields);
@@ -35,7 +33,7 @@ export default async (req, res) => {
 					game.players.find((player) => player.username == p.username) !=
 					undefined
 			);
-			if (oldGame!=undefined) checkEmpty(oldGame.room_id);
+			if (oldGame!=undefined) await checkEmpty(oldGame.room_id);
 			var id =
 				"#" +
 				Date.now().toString(36).substr(12, 4) +
@@ -51,7 +49,6 @@ export default async (req, res) => {
 					message.time
 				)) == true
 			) {
-				
 				res.status(200).json({ result: "success", id: id });
 			} else {
 				res.status(200).json({
