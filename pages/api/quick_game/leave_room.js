@@ -38,12 +38,8 @@ export default async (req, res) => {
 				return;
 			}
 
-			const index = game.players.indexOf(
-				game.players.find(
-					(player) => player.username == player.username
-				)
-			);
-			game.players.splice(index);
+			game.deletePlayer(message.username);
+		
 			if (game.players.length == 0) {
 				const gameIndex = gamesList.indexOf(game);
 				gamesList.splice(gameIndex);

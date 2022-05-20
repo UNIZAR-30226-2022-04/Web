@@ -133,11 +133,15 @@ async function random(windowUser, setErrorJ, setErrorR, router) {
   setErrorJ("")
   
   const res = await tryRandom(windowUser)
-  
+
+  alert(res.result)
+
   if(res.result != "success"){
+
     setErrorR(res.reason)
   
   }else{
+    alert(res.id)
     console.log(res)
     router.push(`quickGame/lobby?code=${res.id.slice(1)}`)
   }
@@ -169,9 +173,9 @@ async function tryJoin(windowUser, code) {
   const info = {
     username:windowUser.username,
     password:windowUser.password,
-    id:code
+    id:"#"+code
   }
-
+  alert(info.id)
   const options = {
     method: 'POST',
     headers: {

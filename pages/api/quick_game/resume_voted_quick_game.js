@@ -1,6 +1,6 @@
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
-import { findGame } from "../../../lib/Game";
+import { findGame, checkEmpty } from "../../../lib/Game";
 import { state } from "../../../lib/GamesManager";
 
 export default async (req, res) => {
@@ -20,8 +20,9 @@ export default async (req, res) => {
 	// checks if username exists
 	if (user != undefined) {
 		if (user.password_hash == message.password) {
-			const game = findGame(message.id);
+			checkEmpty(message.id);
 
+			const game = findGame(message.id);
 			if (game == undefined) {
 				res.status(200).json({
 					result: "error",
@@ -49,7 +50,7 @@ export default async (req, res) => {
 				result: result,
 				paragraphs: paragraphs,
 				winner: idx,
-				s: game.maxTime
+				s: game.getRemainingTime()
 			});
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });

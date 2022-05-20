@@ -1,11 +1,13 @@
-import { createGame } from "../../../lib/Game";
+import { createGame, checkEmpty } from "../../../lib/Game";
 import Player from "../../../lib/Player";
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
-import { state } from "../../../lib/GamesManager";
+import { state, gamesList } from "../../../lib/GamesManager";
 
 export default async (req, res) => {
 	const message = req.body;
+
+	console.log(req.body)
 
 	const fields = ["username", "password", "time", "isPrivate", "mode"];
 
@@ -28,7 +30,12 @@ export default async (req, res) => {
 				user.stars,
 				user.mooncoins
 			);
-
+			const oldGame = gamesList.find(
+				(game) =>
+					game.players.find((player) => player.username == p.username) !=
+					undefined
+			);
+			if (oldGame!=undefined) checkEmpty(oldGame.room_id);
 			var id =
 				"#" +
 				Date.now().toString(36).substr(12, 4) +
@@ -44,6 +51,7 @@ export default async (req, res) => {
 					message.time
 				)) == true
 			) {
+				
 				res.status(200).json({ result: "success", id: id });
 			} else {
 				res.status(200).json({

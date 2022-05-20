@@ -7,9 +7,11 @@ import Spinner from 'components/Spinner'
 import StoryParagraphs from "components/StoryParagraphs"
 
 const placeholder = {
+  result: "waiting_players",
   topic:"El Quijote", //vacío si no hay tema de twitter
   isLast: false,
   turn: 1,
+  s: 60,
   paragraphs:[
       { text:"uno dos tres cuatro cinco uno seis siete ocho nueve", 
         words:["uno","tres","word3"]
@@ -28,6 +30,8 @@ export default function QuickVote(){
   const router = useRouter()
   const [chosenStory, setChosenStory] = useState(0);
   const [tick, setTick] = useState(true)
+  const [time, setTime] = useState(1000)
+  const [clock, setClock] = useState(0)
   const [dots, setDots] = useState("")
 
   const info = {
@@ -36,15 +40,31 @@ export default function QuickVote(){
     id: parseInt(id)
   }
   
+  useEffect(() => {
+    const start = new Date();
+    const interval = setInterval(() => {
+      const now = new Date();
+      const difference = now.getTime() - start.getTime();
 
+      const s = Math.floor(difference/1000);
+      setClock(time-s);
 
-    //Esperamos medio segundo antes de volver a pedir el estado de la partida
+      if (time < s) {
+        alert("Timer terminado");
+        onSubmit()
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [tick]);
+
+    //Esperamos 3 segundos antes de volver a pedir el estado de la partida
     useEffect(()=>{
       if(story.result=="waiting_players"){
       const sleep = async (ms) => {
         await new Promise(r => setTimeout(r, ms));
       }
-      sleep(1000).then(()=>{
+      sleep(3000).then(()=>{
         getData()
         setTick(!tick)
         if(dots.length==3){
@@ -78,7 +98,7 @@ export default function QuickVote(){
       console.log("SACO DATOS")
     }else{
       console.log("VOY A LOGIN")
-router.push("/login")
+      router.push("/login")
     }
   }, [])
 
@@ -107,7 +127,10 @@ router.push("/login")
     }
 
     // Llama al hook que almacena la información del usuario
-    setStory(placeholder) // setStory(data)
+    //setStory(placeholder)
+    //setTime(placeholder.s)
+    setStory(data)
+    setTime(data.s)
   }
 
   // Hace fetch de la api
@@ -150,6 +173,9 @@ router.push("/login")
               </div>
             </div>            
           )}
+            <div className="centered">
+              <Image className="ml-4" src="/quick-game/clock.png" width={30} height={30}/>{parseInt(clock/60)}min:{clock % 60}seg
+            </div>
           <StoryParagraphs story={story} chosenStory={chosenStory} setChosenStory={setChosenStory}/>
           <button className='bg-white rounded-full p-2' onClick={() => (enviarVoto(info, chosenStory))}>Enviar Voto</button>
         </div>
