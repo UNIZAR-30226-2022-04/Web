@@ -1,4 +1,4 @@
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Image from "next/Image"
 
@@ -9,116 +9,39 @@ export default function Write() {
 
   const router = useRouter()
   const [windowUser, setWindowUser] = useState({}) 
+  const [userCoins, setUserCoins] = useState() 
 
-  const [punyetasM, setPunyetasM] = useState("")
+  const [punyetasMenu, setPunyetasMenu] = useState(false)
   const [punyetaCarro, setPunyetaCarro] = useState("")
   const [punyetasCompradas, setPunyetasCompradas] = useState([])
-  const [previous, setPrevious] = useState("")
   const [currentText, setCurrentText] = useState("")
-  const [punyeta, setPunyeta] = useState("ciego")
-  const [topic, setTopic] = useState("")
-  const [randomWords, setWords] = useState(["Rayo","Fuego","Hielo"])
-  const [time, setTime] = useState(1000)
+  
   const [clock, setClock] = useState(0)
+  const [dots, setDots] = useState("")
+
+  const [refresh, setRefresh] = useState(false)
+
+  // Info de una partida
+  const [turn, setTurn] = useState(0)
   const [rivals, setRivals] = useState([])
-  const [last, setLast ] = useState(false)
-  const [turn, setTurn ] = useState(0)
-  const [state, setState ] = useState("")
-  const [tick, setTick ] = useState(true)
-  const [dots, setDots ] = useState("")
+  const [roomID, setRoomID] = useState()
 
-
-  //Temporizador
-  useEffect(() => {
-    const start = new Date();
-    const interval = setInterval(() => {
-      const now = new Date();
-      const difference = now.getTime() - start.getTime();
-
-      const s = Math.floor(difference/1000);
-      setClock(time-s);
-
-      if (time < s) {
-        alert("Timer terminado");
-        onSubmit()
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [tick]);
-
-  // Obtiene los datos de la sala y 
-  const getData = async () =>{
-    const queryParams = new URLSearchParams(window.location.search);
-    var data = {
-      username: localStorage.getItem("username"),
-      password: localStorage.getItem("password"),
-      id: ("#"+queryParams.get("id"))
-    }
-    var options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json' 
-      },
-      body: JSON.stringify(data)
-    }
-    var res = await fetch("http://localhost:3000/api/quick_game/get_room",options)
-    res = await res.json()
-    //setRivals(res.participants.filter((rival) => rival.username != windowUser.username))
-    data = {
-      username: localStorage.getItem("username"),
-      password: localStorage.getItem("password"),
-      turn: turn,
-      id: ("#"+queryParams.get("id"))
-    }
-    options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json' 
-      },
-      body: JSON.stringify(data)
-    }
-    res = await fetch("http://localhost:3000/api/quick_game/play_quick_game",options)
-    res = await res.json()
-    console.log(res)
-    if(res.result != "error"){
-      setState(res.result)
-      setTime(res.s)
-      setTopic(res.topic)
-      setWords(res.randomWords)
-      setPrevious(res.lastParagraph)
-      setLast(res.isLast)
-      setPunyeta(res.puneta)
-      setTurn(res.turn)
-    }else{
-      router.push("/quickGame")
-      alert("Error al acceder a partida")
-    }
-  }
-
-  //Esperamos 3 segundos antes de volver a pedir el estado de la partida
-  useEffect(()=>{
-    if(state=="waiting_players"){
-      const sleep = async (ms) => {
-        await new Promise(r => setTimeout(r, ms));
-      }
-      sleep(3000).then(()=>{
-        getData()
-        if(dots.length==3){
-          setDots("")
-        }else{
-          setDots(dots+".")
-        }
-      })
-    }
-  },[tick])
+  const [game, setGame] = useState({
+    state: "",
+    time: 20,
+    topic: "",
+    randomWords: [],
+    lastParagraph: "",
+    last: false,
+    turn: 0,
+    punyeta: ""
+  })
 
   // Saca la información del usuario de la pantalla
-  // Porqué está aquí?
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
+      const queryParams = new URLSearchParams(window.location.search);
+      setRoomID("#"+queryParams.get("id"))
 
       const username = localStorage.getItem("username")
       const password = localStorage.getItem("password")
@@ -130,304 +53,393 @@ export default function Write() {
         username: username, 
         password: password,
         picture: picture,
-        coins: coins,
         stars: stars
       })
-      getData()
+
+      setUserCoins(coins)
+
     }else{
       router.push("/login")
     }
-  },[])
+  }, [])
 
-  // Si tadavía no hoy usuario, esperamos a que lo haya
-  // Solo usuario? Y si no hay sala?
-  if(!windowUser){
+  
+  // Obtiene los datos de la sala
+  useEffect(() => {
+    const getData = async () => {
+      if(!windowUser.username){
+        return
+      }
+      
+      // Información que necesitan las apis
+      const infoRoom = {
+        username: windowUser.username,
+        password: windowUser.password,
+        id: roomID
+      }
+
+      const infoTurn = {
+        username: localStorage.getItem("username"),
+        password: localStorage.getItem("password"),
+        turn: turn,
+        id: roomID
+      }
+
+      // Opciones para la realización de la llamada HTTP
+      const optionsRoom = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json' 
+        },
+        body: JSON.stringify(infoRoom)
+      }
+
+      const optionsTurn = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json' 
+        },
+        body: JSON.stringify(infoTurn)
+      }
+
+      // Llamadas a las apis
+      const resRoom = await fetch("http://localhost:3000/api/quick_game/get_room", optionsRoom)
+      const dataRoom = await resRoom.json()
+
+      const resTurn = await fetch("http://localhost:3000/api/quick_game/play_quick_game", optionsTurn)
+      const dataTurn = await resTurn.json()
+      
+      ///*
+      if(dataRoom.result != "error" && dataTurn.result != "error"){     
+        setGame({
+          state: dataTurn.result,
+          time: dataTurn.s,
+          topic: dataTurn.topic,
+          randomWords: dataTurn.randWords,
+          lastParagraph: dataTurn.lastParagraph,
+          last: dataTurn.isLast,
+          turn: dataTurn.turn,
+          punyeta: dataTurn.puneta          
+        })
+
+        setRivals(dataRoom.participants)
+      }else{
+        router.push("/quickGame")
+      }
+      //*/
+
+      //HARCODEADO STILL TO TEST
+      /* 
+      setGame({
+        state: "success",
+        time: 300,
+        topic: "",
+        randomWords: ["word1","word2","word3"],
+        lastParagraph: "Último párrafo si no es la primera",
+        last: true,
+        turn: 1,
+        punyeta: "",
+      })
+
+      setRivals(
+        [
+          {
+            username:"nombre",
+            picture: 1,
+            stars: 124
+          },
+          {
+            username:"pepino",
+            picture: 3,
+            stars: 124
+          },
+          {
+            username:"jamon",
+            picture: 2,
+            stars: 124
+          },
+        ]
+      )
+      */
+    }
+
+    getData()
+    
+  }, [windowUser])
+  
+  
+  //Temporizador
+  useEffect(() => {
+    const start = new Date();
+
+    const interval = setInterval(() => {
+      const now = new Date();
+      const difference = now.getTime() - start.getTime();
+
+      const s = Math.floor(difference/1000);
+      setClock(game.time-s);
+
+      if (game.time < s) {
+        submitParagraph(windowUser, roomID, currentText, turn, setTurn, game)
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+  
+
+  //Esperamos 3 segundos antes de volver a pedir el estado de la partida
+  useEffect(()=>{
+    if(game.state=="waiting_players"){
+      const sleep = async (ms) => {
+        await new Promise(r => setTimeout(r, ms));
+      }
+
+      sleep(3000).then(()=>{
+        setRefresh(!refresh)  // Refrescamos los datos
+        if(dots.length==3){
+          setDots("")
+        }else{
+          setDots(dots+".")
+        }
+      })
+    }
+  }, [])
+
+  // Si tadavía no hoy usuario o sala, esperamos a que lo haya
+  if(!windowUser || game.turn == 0){
     return <Spinner />
   }
 
   const layoutInfo = {
     username: windowUser.username,
     stars:    windowUser.stars,
-    coins:    windowUser.coins,
+    coins:    userCoins,
     image_ID: windowUser.picture
   }  
 
-  // Añade un párrafo a ¿¡¿¡¿TALE?!?!?
-  // Esto está mal, debe llamar a las apis de quick
-  const add_quick_game_paragraph = async () => {
-    var data = {
-      username:windowUser.username,
-      password:windowUser.password,
-      id:localStorage.getItem("id"),
-      body:currentText,
-      turn:turn,
-      punetas:punyetasCompradas
-    }
-    var options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json' 
-      },
-      body: JSON.stringify(data)
-    }
-    var res = await fetch("http://localhost:3000/api/tale_mode/add_tale_paragraph",options)
-    return res.json()
-  }
-
-  // te redirecciona a votación
-  // Porque on submit, porqué no toVotePage
-  const onSubmit = (e) => {
-    e.preventDefault()
-    add_quick_game_paragraph().then((res) =>{
-      if(res.result == "error"){
-        alert("Error al enviar parrafo")
-        router.push("/quickGame")
-      }
-      if(last){
-        router.push(`/quickGame/vote?id=${queryParams.get("id")}`)
-      }
-    })
-    getData()
-    setTurn(turn+1)
-  }
-
-  // Abre o cierra el menú de la puñetas
-  // No hace falta una función para esto 
-  const openClose = (e) => {
-    e.preventDefault()
-    if(punyetasM == ""){
-      setPunyetasM("punyeta")
-    }else{
-      setPunyetasM("")
-      setPunyetaCarro("")
-    }
-  }
-
-  // Devuelve lo visual del menú de puñetas 
-  function MenuPunyeta(){
-
-    // Devuelve un solo botón de las puñetas
-    function ButtonPunyeta({img,name,text,price}){
-      const choosePunyeta = (e) => {
-        e.preventDefault()
-        setPunyetasM("objetivo")
-        setPunyetaCarro(name)
-      }
-      return (
-        <button className="bg-white rounded m-2 flex w-40" onClick={choosePunyeta}>
-          <Image src={`/quick-game/${img}.png`} width={40} height={40}/>
-          <div className = "text-right">
-            <>{text}</>
-            <div>
-              <>{price}</>
-              <Image src={`/icons/mooncoin.png`} width={24} height={24}/>
-            </div>
-          </div>
-        </button>
-      )
-    }
-
-    return(
-      <ul>
-        <li>
-          <ButtonPunyeta img={"letras_reves"} name={"reves"} text={"Letras al revés"} price={150} />
-        </li>
-        <li>
-          <ButtonPunyeta img={"escribe_ciegas"} name={"ciego"} text={"Escribe a ciegas"} price={300} />
-        </li>
-        <li>
-          <ButtonPunyeta img={"desorden_total"} name={"desorden"} text={"Desorden total"} price={500} />
-        </li>
-      </ul>
-    )
-  }
-
-  // Muesta a quién va a dirigida la puñeta
-  // Porqué llama a hooks y a la vez muesta cosas?!?!?!
-  function DestinoPunyeta(){
-
-    function Rival({username,picture}){
-      const chooseTarget = (e) => {
-        e.preventDefault()
-        var precio
-        //Comprobamos precio de puñeta
-        switch(punyetaCarro){
-          case "reves":
-            precio = 150
-            break
-          case "ciego":
-            precio = 300
-            break
-          default :
-            precio=500
-        }
-        setPunyetasM("punyeta")
-        var dupla = {puneta:punyetaCarro,username:username}
-        if(windowUser.coins-precio < 0){
-          alert("Monedas no suficientes")
-          return
-        }
-        setWindowUser({
-          username: windowUser.username, 
-          password: windowUser.password,
-          picture: windowUser.picture,
-          coins: windowUser.coins-precio,
-          stars: windowUser.stars})
-        setPunyetasCompradas([...punyetasCompradas, dupla])
-
-        setRivals(rivals.filter((rival) => rival.username != username))
-        setPunyetasCompradas([...punyetasCompradas, dupla])
-        return
-      }
-
-      return (
-        <button className="bg-white rounded m-2 px-2" onClick={chooseTarget}>
-          <Image src={`/profPic/icon${picture}.png`} width={20} height={20} /><>{username}</>
-        </button>
-      )
-    }
-
-    return(
-      <ul>
-          {rivals.map((rival, index) => 
-            (
-              <li key={index}> 
-                <Rival username={rival.username} picture={rival.picture}/>
-              </li>
-            )
-          )}
-      </ul>
-    )
-  }
-
-   // Muestra un texto con las palabras obligatorias coloreadas
-  function SpecialInputBox(){
-
-    function SpecialText(){
-      var fullText = currentText
-      randomWords.map((palabraClave) => {
-          const textSplit = fullText.split(palabraClave)
-          textSplit.map((trozo, index) => {
-              if(index == 0){
-                  fullText = trozo
-              }else{
-                  fullText += ";" + palabraClave + ";" + trozo
-              }
-          });
-          
-      });
-  
-      return(
-          <div className={`${ punyeta == "reves" ? "font-reverse" : ""} ${ punyeta == "ciego" ? "font-blank" : ""} flex flex-row flex-wrap justify-center space-x-2 w-full`}>
-              {fullText.split(";").map(
-                  (trozo, index) => (
-                      <>
-                          {index % 2 == 0 ? (
-                              <div key={index}>
-                                  {trozo}
-                              </div>
-                          ):(
-                              <div key={index} className="text-green-600 font-bold">
-                                  {trozo}
-                              </div>
-                          )}
-                      </>
-                  )
-              )}
-          </div>
-      )
-    }
-    return(
-      <div className={`storyWrite border-green-800 text-2xl font-arial inline-flex flex-col h-48 w-8/12 ${ punyeta == "ciego" ? "bg-black" : "bg-white"}`}>
-        <SpecialText/>
-      </div>
-    )
-  }
-
-  // Muesta una plabra clave?
-  function DisplayPalabraClave({palabra}){
-    var incluida = currentText.includes(palabra)
-    return(
-      <div className={`px-1 mx-2 ${ incluida ? "bg-green-800 text-white" : "bg-green-600"}`}>{palabra}</div>
-    )
-  }
-
   // Página principal
   return (
-    <>
-      <Layout data={layoutInfo}>
-        <div className="relative storyBox">
-          <form onSubmit={onSubmit}>
-
-            <div className="centered">
-              <div className="commonTitle h-auto">{turn==0 ? <>Comienza la historia</> : <>Párrafo anterior</> } </div>
-            </div>
-
-            <div className='centered text-lg'>
-              { turn != 0 ? <div>{previous}</div>:"" }
-            </div>
-
-            <div className="">
-              { (topic != "")&&(turn==0) ? 
-                <div className="centered">
-                  <div>Tema de la historia</div>
-                  <div className="rounded bg-blue-400 ml-4">
-                  #{topic}
-                  <Image className="ml-4" src="/quick-game/twitter_trend.png" width={30} height={30}/>
-                  </div>
+    <Layout data={layoutInfo}>
+      <div className='flex flex-row w-full mb-20'>
+        <form className='flex flex-col items-center align-middle justify-center w-full h-full space-y-2' onSubmit={() => (submitParagraph(windowUser, roomID, currentText, turn, setTurn, game))}>
+          <div className="commonTitle h-auto">{turn==0 ? "Comienza la historia" : "Párrafo anterior" } </div>
+          <div>{game.previous}</div>
+          <div className="">
+            { game.topic != "" && turn==0 ?(
+              <div className="flex flex-row space-x-2 items-center">
+                <div>Tema de la historia</div>
+                <div className="rounded bg-blue-400 p-1">#{game.topic}</div>
+                <Image className="" src="/quick-game/twitter_trend.png" width={30} height={30}/>
+              </div>
+            ):(
+              <></>
+            )}
+            {game.topic == "" ?(
+              <div className='flex flex-col items-center'>
+                <div className="">Palabras a introducir</div>
+                <div className="flex flex-row space-x-2 items-center">
+                  <DisplayPalabraClave palabra={game.randomWords[0]} currentText={currentText}/>
+                  <DisplayPalabraClave palabra={game.randomWords[1]} currentText={currentText}/>
+                  <DisplayPalabraClave palabra={game.randomWords[2]} currentText={currentText}/>
                 </div>
-              :
-                ""
-              }
-              {topic == "" ?
-                <>
-                  <div className="centered">
-                    Palabras a introducir
-                  </div>
-                  <div className="centered">
-                    <DisplayPalabraClave palabra={randomWords[0]}/>
-                    <DisplayPalabraClave palabra={randomWords[1]}/>
-                    <DisplayPalabraClave palabra={randomWords[2]}/>
-                  </div>
-                </>
-              : 
-                ""  
-              }
-            </div>
-
-            <div className="centered">
-              <Image className="ml-4" src="/quick-game/clock.png" width={30} height={30}/>{parseInt(clock/60)}min:{clock % 60}seg
-            </div>
-
-            <div className="centered">
-              { topic =="" ? 
-              <>
-                <SpecialInputBox/>
-                <input className ="absolute rounded-2xl w-8/12 h-48 bg-transparent font-blank" required={true} maxLength={200} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
-              </> 
-              :
-
-              <textarea className={`storyWrite border-green-800 text-2xl font-arial inline-flex flex-col h-48 w-8/12 ${ punyeta == "reves" ? "font-reverse" : ""} ${ punyeta == "ciego" ? "font-blank bg-black" : ""}`} type="password" required={true} maxLength={200} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
-              }
-            </div>
-
-            <div className="clickable-item centered">
-              <input className="bg-blue-400 w-32 rounded-xl" type="submit" value="Enviar parrafo"/>
-            </div>
-
-          </form>
-        </div>
-        <div className="bg-green-800 flex flex-col w-60 mr-40">
-          <div className="flex-row">
-            <button onClick={openClose} className="text-xl text-white p-2">{ punyetasM == "objetivo"  ? "¿A quien le envias la puñeta?" : <>Comprar puñetas <Image src={`/quick-game/punyetas.png`} width={40} height={40}/></>}</button>
+              </div>
+            ):(
+              <></> 
+            )}
           </div>
-          { punyetasM == "punyeta" ? <MenuPunyeta/> : ""}
-          { punyetasM == "objetivo" ? <DestinoPunyeta/> : ""}
+
+          <div className="flex flex-row items-center">
+            <Image className="" src="/quick-game/clock.png" width={30} height={30}/>
+            <div>{parseInt(clock/60)}min:{clock % 60}seg</div>
+          </div>
+
+          <textarea className={`text-2xl font-arial h-2/5 w-2/5 p-3 rounded-lg ${ game.punyeta == "reves" ? "font-reverse" : ""} ${ game.punyeta == "ciego" ? "font-blank bg-black" : ""}`} type="password" required={true} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
+          <button className="commonButton bg-verde_top" type="submit">Enviar parrafo</button>
+
+        </form>
+        <div className="bg-green-800 flex flex-col align-middle w-1/4 items-center">
+          <div className="flex-row">
+            {game.last ? (
+              <div className='flex flex-row items-center space-x-2 text-center w-full p-4'>
+                <div className='text-white text-xl'>Mercado de Puñetas Cerrado</div>
+                <Image src={`/quick-game/punyetas.png`} width={60} height={60}/>
+              </div>
+            ):(
+              <button type="button" className="text-xl text-white m-2" onClick={() => (openClose(punyetasMenu, setPunyetasMenu, setPunyetaCarro))} >
+                {punyetasMenu == "objetivo"  ? (
+                  "¿A quien le envias la puñeta?"
+                ):(
+                  <div className='flex flex-row items-center space-x-2'>
+                    <div>Comprar puñetas</div>
+                    <Image src={`/quick-game/punyetas.png`} width={60} height={60}/>
+                  </div>
+                )}
+              </button>
+            )}
+            
+          </div>
+          
+          { punyetasMenu == "punyeta" ? (
+            <div className='flex flex-col space-y-2 2'>
+              <ButtonPunyeta img={"letras_reves"} name={"reves"} text={"Letras al revés"} price={150} setPunyetasMenu={setPunyetasMenu}  setPunyetaCarro={setPunyetaCarro} />
+              <ButtonPunyeta img={"escribe_ciegas"} name={"ciego"} text={"Escribe a ciegas"} price={300} setPunyetasMenu={setPunyetasMenu}  setPunyetaCarro={setPunyetaCarro}/>
+              <ButtonPunyeta img={"desorden_total"} name={"desorden"} text={"Desorden total"} price={500} setPunyetasMenu={setPunyetasMenu}  setPunyetaCarro={setPunyetaCarro}/>
+            </div>
+
+          ):(
+            <></>
+          )}
+          
+          { punyetasMenu == "objetivo" ?
+          (
+            <div className='flex flex-col space-y-2'>
+              {rivals.map((rival, index) => 
+                (
+                  <Rival key={index} coins={userCoins} setCoins={setUserCoins} rivalName={rival.username} picture={rival.picture} punyetaCarro={punyetaCarro} setPunyetasMenu={setPunyetasMenu} punyetasCompradas={punyetasCompradas} setPunyetasCompradas={setPunyetasCompradas} rivals={rivals} setRivals={setRivals}/>
+                )
+              )}
+              <button type="button" className='bg-white flex flex-row space-x-2 p-2 rounded items-center text-center' onClick={() => (setPunyetasMenu(""))}>{"<-"} A Nadie</button>
+            </div>
+          ):(
+            <></>
+          )}
         </div>
-        { state == "waiting_players" ? <div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white" >Esperando al resto de jugadores{dots}</div> : ""}
-      </Layout> 
-    </>
+      </div>
+      
+      { game.state == "waiting_players" ?(
+        <div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white" >Esperando al resto de jugadores{dots}</div>
+      ):(
+        <></>
+      )}
+    </Layout> 
   )
 }
-//        { state == "waiting_players" ? <div className="absolute w-screen h-screen" ><Image src="/quick-game/wait.png" height={500} width={1000}/></div> : ""}
+/*
+  FUNCIONES QUE SOLO EJECUTAN JS
+*/
+
+// te redirecciona a votación
+async function submitParagraph(windowUser, roomID, currentText, turn, setTurn, game) {
+  const res = await addParagraph(windowUser, roomID, currentText, turn, game.punyetas)
+
+  if(res.result == "error"){
+    alert("Error al enviar parrafo")
+    //router.push("/quickGame")
+  }
+
+  if(game.last){
+    //router.push(`/quickGame/vote?id=${roomID}`)
+  }
+
+  setTurn(turn+1)
+}
+
+// Añade un párrafo
+async function addParagraph (windowUser, roomID, currentText, turn, punyetas) {
+  const info = {
+    username:windowUser.username,
+    password:windowUser.password,
+    id:roomID,
+    body:currentText,
+    turn:turn,
+    punetas:punyetas
+  }
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json' 
+    },
+    body: JSON.stringify(info)
+  }
+  const res = await fetch("http://localhost:3000/api/quick_game/add_quick_game_paragraph", options)
+  const data = await res.json()
+  return data
+}
+
+// Abre o cierra el menú de la puñetas
+// No hace falta una función para esto 
+function openClose(punyetasMenu, setPunyetasMenu, setPunyetaCarro) {
+  if(punyetasMenu == ""){
+    setPunyetasMenu("punyeta")
+  }else{
+    setPunyetasMenu("")
+    setPunyetaCarro("")
+  }
+}
+
+function chooseTarget(coins, setCoins, rivalName, punyetaCarro, setPunyetasMenu, punyetasCompradas, setPunyetasCompradas, rivals, setRivals) {
+  var precio
+  //Comprobamos precio de puñeta
+  switch(punyetaCarro){
+    case "reves":
+      precio = 150
+      break
+    case "ciego":
+      precio = 300
+      break
+    default :
+      precio = 500
+  }
+
+  setPunyetasMenu("punyeta")
+  
+  const dupla = {
+    puneta:punyetaCarro,
+    username:rivalName
+  }
+
+  if(coins-precio < 0){
+    alert("Monedas no suficientes")
+    return
+  }
+  
+  setCoins(coins-precio)
+
+  setPunyetasCompradas([...punyetasCompradas, dupla])
+
+  setRivals( rivals.filter(rival => rival.username != rivalName) )
+  setPunyetasCompradas([...punyetasCompradas, dupla])
+  return
+}
+
+/*
+  FUNCIONES QUE MUESTRAN HTML
+*/
+// Muesta una plabra clave?
+function DisplayPalabraClave({currentText, palabra}){
+  const style = currentText.includes(palabra) ? "bg-green-800 text-white" : "bg-green-600"
+  return(
+    <div className={`${style} px-2 rounded-md text-center`}>{palabra}</div>
+  )
+}
+
+
+// Muesta a quién va a dirigida la puñeta
+function Rival({coins, setCoins, rivalName, picture, punyetaCarro, setPunyetasMenu, punyetasCompradas, setPunyetasCompradas, rivals, setRivals}){
+  return (
+    <button type="button" className="bg-white flex flex-row space-x-2 p-2 rounded items-center" onClick={() => (chooseTarget(coins, setCoins, rivalName, punyetaCarro, setPunyetasMenu, punyetasCompradas, setPunyetasCompradas, rivals, setRivals))}>
+      <Image src={`/profPic/icon${picture}.png`} width={50} height={50} />
+      <div className='text-xl'>{rivalName}</div>
+    </button>
+  )
+}
+
+// Devuelve un solo botón de las puñetas
+function ButtonPunyeta({img, name, text, price, setPunyetasMenu, setPunyetaCarro}){
+  return (
+    <button type="button" className="bg-white rounded flex flex-row justify-around items-center px-6" onClick={()=>(setPunyetasMenu("objetivo"), setPunyetaCarro(name))}>
+      <Image src={`/quick-game/${img}.png`} width={60} height={60}/>
+      <div className = "flex flex-col py-1">
+        <div>{text}</div>
+        <div className='flex flex-row items-center justify-center'>
+          <div>{price}</div>
+          <Image src={`/icons/mooncoin.png`} width={50} height={50}/>
+        </div>
+      </div>
+    </button>
+  )
+}

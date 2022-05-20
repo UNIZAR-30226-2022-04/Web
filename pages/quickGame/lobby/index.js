@@ -77,64 +77,56 @@ export default function QuickGame(){
             setRoom(data)
         }
         getData()
-    }, [windowUser])
+    }, [windowUser])    
 
     // Compruebo periódicamente que la partida no ha empezado
-    useEffect(() => {
-        /*
-        if(windowUser && room){
-                    if(windowUser.username != room.participants[0].username){
-                        const res = await fetch("http://localhost:3000/api/quick_game/get_room")
-                    }
-                }
-        */
-    }, [])
-
-    // Obtiene la sal y comprueba periodicamente si ha empezado
-    const getRoom = async () => {
-        if(windowUser && room){
-            if(windowUser.username != room.participants[0].username){
-                const ident = "#" + code.toString()
-            
-                const info = {
-                    username: windowUser.username,
-                    password: windowUser.password,
-                    id: ident
-                }
-
-                const options = {
-                    method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(info) 
-                }
-                // Llamada a la api
-                const res = await fetch('http://localhost:3000/api/quick_game/get_room', options)
-                const data = await res.json()       
-
-                // Si no ha ido bien o no estoy logeado volvemos a /
-                if(data.result === 'error'){
-                    console.log(data)
-                    alert("Error")
-                    router.push("/quickGame")
-                    return
-                }
-
-                if(data.hasStarted == 1){
-                    alert("Ha empezado")
-                }else if(data.hasStarted == 2){
-                    alert("En votacion")
-                }
-            }
+    useEffect(() => {            
+        if(!windowUser.username || !code){
+            return
         }
-    };
 
-    // Ejecuta el obtener sala cada 2000 ms
-    useEffect(() => {
-        const timer = setInterval(getRoom, 2000);
+        const getData = async () => {
+            // Opciones para llamar a la api
+            const ident = "#" + code.toString()
+            
+            const info = {
+                username: windowUser.username,
+                password: windowUser.password,
+                id: ident
+            }
+
+            const options = {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(info) 
+            }
+            // Llamada a la api
+            const res = await fetch('http://localhost:3000/api/quick_game/get_room', options)
+            const data = await res.json()       
+
+            // Si no ha ido bien o no estoy logeado volvemos a /
+            if(data.result === 'error'){
+                console.log(data)
+                alert("Error")
+                router.push("/quickGame")
+                return
+            }
+
+            if(data.hasStarted == 1){
+                router.push(`/quickGame/write?id=${room}`)
+            }else if(data.hasStarted == 2){
+                router.push(`/quickGame/vote?id=${room}`)
+            }
+
+            setRoom(data)
+        }       
+        
+        const timer = setInterval(getData, 2000);
         return () => clearInterval(timer);
-    }, []);
+
+    }, [windowUser])
 
     // Si tadavía no hoy usuario, esperamos a que lo haya
     if(!windowUser || !room){
@@ -174,7 +166,7 @@ export default function QuickGame(){
                     {windowUser.username == room.participants[0].username ?(
                         <>
                             <button type="button" className='commonButton bg-purple-500' onClick={() => (closeRoom(windowUser, router))}> CERRAR SALA </button> 
-                            <button type="button" className='commonButton bg-purple-500' onClick={() => (startGame(windowUser, router))}> EMPEZAR </button>  
+                            <button type="button" className='commonButton bg-purple-500' onClick={() => (startGame(windowUser, code, router))}> EMPEZAR </button>  
                         </>                        
                     ):(<></>)}
                     
@@ -205,7 +197,7 @@ async function leaveRoom(user, room, router){
     router.push("/quickGame")
 }
 
-function startGame(user, room, router){
+async function startGame(user, room, router){
     const info = {
         username: user.username,
         password: user.password,
@@ -220,7 +212,10 @@ function startGame(user, room, router){
         body: JSON.stringify(info) 
     }
 
-    fetch('http://localhost:3000/api/quick_game/', options)
+    const res = await fetch('http://localhost:3000/api/quick_game/play_quick_game', options)
+    const data = await res.json()
+
+    if(data.result == "success") router.push(`/quickGame/write?id=${room}`)
 }
 
 function closeRoom(user, room, router){
