@@ -5,6 +5,8 @@ import Layout from "components/Layout";
 import Rulette from "components/Rulette";
 import Spinner from "components/Spinner";
 
+import Image from "next/image";
+
 export default function StoryMode() {
 	const router = useRouter();
 
@@ -76,7 +78,7 @@ export default function StoryMode() {
 						onClick={() =>
 							join(windowUser, code, setErrorR, setErrorJ, router)
 						}
-						className="rounded-xl bg-green-800 text-white p-2 border-2 border-white"
+						className="commonButton w-full"
 					>
 						Unirse a sala
 					</button>
@@ -85,7 +87,7 @@ export default function StoryMode() {
 						onClick={() =>
 							random(windowUser, setErrorJ, setErrorR, router)
 						}
-						className="rounded-xl bg-green-800 text-white p-2 border-2 border-white"
+						className="commonButton"
 					>
 						Partida aleatoria
 					</button>
@@ -97,36 +99,34 @@ export default function StoryMode() {
 				</div>
 
 				<div className="flex flex-col space-y-2">
-					<p>Tiempo de escritura</p>
+					<p className="commonTitle">Tiempo de escritura</p>
 					<div className="flex flex-col">
-						<p className="text-2xl float-left text-white">
-							{parseInt(time / 60)}min:{time % 60}seg
-						</p>
 						<div className="flex flex-row text-2xl text-white">
-							<button
-								type="button"
-								onClick={() => changeTime(-5)}
-							>
+							<Image src="/quick-game/clock.png"height={30} width={50}/>
+							<div className="w-48 commonTitle ml-4">
+								{parseInt(time / 60)}min:{time % 60}seg
+							</div>
+							<button className="addReduceButton text-2xl font-bold mr-4"type="button" onClick={() => changeTime(-5)}>
 								-
 							</button>
-							<button type="button" onClick={() => changeTime(5)}>
+							<button className="addReduceButton text-2xl font-bold"type="button" onClick={() => changeTime(+5)}>
 								+
 							</button>
 						</div>
 					</div>
 
-					<p>Tipo de partida</p>
-					<div className="flex flex-row">
+					<p className="commonTitle">Tipo de partida</p>
+					<div className="flex flex-row text-white">
 						<input
-							className={`py-1 px-2 text-white ${
+							className={`px-8 py-2 font-bold ${
 								!privateGame ? "bg-green-800" : "bg-green-600"
 							}`}
 							type="button"
-							value="PUBLICA"
+							value="PÚBLICA"
 							onClick={() => setprivateGame(false)}
 						/>
 						<input
-							className={`py-1 px-2 text-white ${
+							className={`ml-2 px-8 py-2 font-bold ${
 								privateGame ? "bg-green-800" : "bg-green-600"
 							}`}
 							type="button"
@@ -135,13 +135,13 @@ export default function StoryMode() {
 						/>
 					</div>
 
-					<div>Modo de juego</div>
+					<div className="commonTitle">Modo de juego</div>
 					<div className="flex flex-row">
 						<input
-							className={`py-1 px-2 text-white ${
+							className={`py-2 px-8 rounded-xl text-white font-bold ${
 								gameMode == "random"
-									? "bg-green-800"
-									: "bg-green-600"
+									? "bg-yellow-400  border-4 border-white"
+									: "bg-yellow-600"
 							}`}
 							type="button"
 							value="ALEATORIAS"
@@ -149,10 +149,10 @@ export default function StoryMode() {
 						/>
 						<> </>
 						<input
-							className={`py-1 px-2 text-white ${
+							className={`ml-4 py-2 px-8 rounded-xl text-white font-bold ${
 								gameMode == "twitter"
-									? "bg-green-800"
-									: "bg-green-600"
+									? "bg-blue-400  border-4 border-white"
+									: "bg-blue-600"
 							}`}
 							type="button"
 							value="TWITTER"
@@ -173,9 +173,9 @@ export default function StoryMode() {
 								router
 							)
 						}
-						className="clickableItem rounded-xl bg-green-800 text-white p-2 border-2 border-white"
+						className="commonButton"
 					>
-						Crear partida
+						Crear sala
 					</button>
 				</div>
 			</div>
