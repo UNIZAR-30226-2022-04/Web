@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 import StoryParagraphs from "components/StoryParagraphs";
+import Meta from "components/Meta";
 
 export default function StoryVote() {
 	const [windowUser, setWindowUser] = useState({});
@@ -37,7 +38,7 @@ export default function StoryVote() {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 
@@ -67,7 +68,7 @@ export default function StoryVote() {
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
 				localStorage.setItem("logged", "no");
-				router.push("/login");
+				router.push("/");
 				return;
 			}
 
@@ -79,7 +80,7 @@ export default function StoryVote() {
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!windowUser || !story) {
-		return <Spinner />;
+		return <Spinner showLayout={true} />;
 	}
 
 	const layoutInfo = {
@@ -91,6 +92,7 @@ export default function StoryVote() {
 
 	return (
 		<Layout data={layoutInfo}>
+			<Meta title="En votación" />
 			<div className="w-full justify-top h-full align-middle items-center text-center space-y-4 p-5">
 				<h1 className="commonTitle">VOTACIONES</h1>
 				<h2 className="commonSubtitle">

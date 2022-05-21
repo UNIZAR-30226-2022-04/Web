@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Layout from "components/Layout";
 import Rulette from "components/Rulette";
 import Spinner from "components/Spinner";
+import Meta from "components/Meta";
 
 import Image from "next/image";
 
@@ -35,13 +36,13 @@ export default function StoryMode() {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!windowUser) {
-		return <Spinner />;
+		return <Spinner showLayout={true} />;
 	}
 
 	// Renderizamos la página
@@ -60,6 +61,7 @@ export default function StoryMode() {
 
 	return (
 		<Layout data={layoutInfo}>
+			<Meta title="Partida rápida" />
 			<div className="h-full w-2/4 flex flex-row justify-center items-center space-x-20 ml-32">
 				<div className="flex flex-col items-center space-y-4">
 					<input
@@ -103,14 +105,26 @@ export default function StoryMode() {
 					<p className="commonTitle">Tiempo de escritura</p>
 					<div className="flex flex-col">
 						<div className="flex flex-row text-2xl text-white">
-							<Image src="/quick-game/clock.png"height={30} width={50}/>
+							<Image
+								src="/quick-game/clock.png"
+								height={30}
+								width={50}
+							/>
 							<div className="w-48 commonTitle ml-4">
 								{parseInt(time / 60)}min:{time % 60}seg
 							</div>
-							<button className="addReduceButton text-2xl font-bold mr-4"type="button" onClick={() => changeTime(-5)}>
+							<button
+								className="addReduceButton text-2xl font-bold mr-4"
+								type="button"
+								onClick={() => changeTime(-5)}
+							>
 								-
 							</button>
-							<button className="addReduceButton text-xl font-bold"type="button" onClick={() => changeTime(+5)}>
+							<button
+								className="addReduceButton text-xl font-bold"
+								type="button"
+								onClick={() => changeTime(+5)}
+							>
 								+
 							</button>
 						</div>
@@ -120,7 +134,9 @@ export default function StoryMode() {
 					<div className="flex flex-row text-white">
 						<input
 							className={`px-8 py-2 font-bold ${
-								!privateGame ? "bg-verde_letras" : "bg-verde_publico_seleccionado"
+								!privateGame
+									? "bg-verde_letras"
+									: "bg-verde_publico_seleccionado"
 							}`}
 							type="button"
 							value="PÚBLICA"
@@ -128,7 +144,9 @@ export default function StoryMode() {
 						/>
 						<input
 							className={`ml-2 px-8 py-2 font-bold ${
-								privateGame ? "bg-verde_letras" : "bg-verde_publico_seleccionado"
+								privateGame
+									? "bg-verde_letras"
+									: "bg-verde_publico_seleccionado"
 							}`}
 							type="button"
 							value="PRIVADA"
@@ -268,8 +286,8 @@ async function tryJoin(windowUser, code) {
 		password: windowUser.password,
 		id: "#" + code,
 	};
-	if(code[0] === "#"){
-		info.id=code
+	if (code[0] === "#") {
+		info.id = code;
 	}
 	const options = {
 		method: "POST",

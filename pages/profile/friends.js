@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Meta from "components/Meta";
 
 import Layout from "components/Layout";
 import Rulette from "components/Rulette";
@@ -34,7 +35,7 @@ export default function Friends() {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, [router]);
 
@@ -75,12 +76,12 @@ export default function Friends() {
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
 				alert("Error en fetch de amigos");
-				router.push("/login");
+				router.push("/");
 				return;
 			}
 
-      setFriends(data.friends)
-      setNotifications(data.notifications)
+			setFriends(data.friends);
+			setNotifications(data.notifications);
 		};
 
 		if (windowUser != undefined) {
@@ -90,7 +91,7 @@ export default function Friends() {
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!windowUser || !friends || !notification) {
-		return <Spinner />;
+		return <Spinner showLayout={true} />;
 	}
 
 	const layoutInfo = {
@@ -102,78 +103,79 @@ export default function Friends() {
 
 	return (
 		<Layout data={layoutInfo}>
-			<div className="flex flex-col pl-20 justify-center space-y-2">
-				<div className="commonTitle">Buscar amigos</div>
-
-				<form
-					onSubmit={(e) =>
-						searchPerson(
-							e,
-							windowUser.username,
-							windowUser.password,
-							friends,
-							name,
-							setFound
-						)
-					}
-				>
-					<input
-						className="relative p-2 w-full rounded-lg"
-						value={name}
-						type="text"
-						placeholder="Introduce nombre"
-						onChange={(e) => setName(e.target.value)}
-					/>
-				</form>
-
-				{found ? (
-					<Friend
-						username={windowUser.username}
-						password={windowUser.password}
-						friend={name}
-						new_friend={true}
-						setFound={setFound}
-						reloader={setMustReload}
-						reloaderState={mustReload}
-					/>
-				) : (
-					<></>
-				)}
-
-				<div className="commonTitle">Tus amigos</div>
-
-				<div className="scrollBox">
-					<ul className="flex flex-col space-y-2 w-96">
-						{friends.map((friend, index) => (
-							<Friend
-								key={index}
-								username={windowUser.username}
-								password={windowUser.password}
-								friend={friend}
-								new_friend={false}
-								setFound={setFound}
-								reloaderState={mustReload}
-								reloader={setMustReload}
-							/>
-						))}
-					</ul>
+			<Meta title="Amigos" />
+			<div className="flex flex-row p-40 justify-center space-x-20">
+				<div className="flex flex-col space-y-5">
+					<div className="commonTitle">Tus amigos</div>
+					<div className="scrollBox">
+						<ul className="flex flex-col space-y-2 w-96">
+							{friends.map((friend, index) => (
+								<Friend
+									key={index}
+									username={windowUser.username}
+									password={windowUser.password}
+									friend={friend}
+									new_friend={false}
+									setFound={setFound}
+									reloaderState={mustReload}
+									reloader={setMustReload}
+								/>
+							))}
+						</ul>
+					</div>
 				</div>
-
-				<div className="commonTitle">Peticiones</div>
-
-				<div className="scrollBox">
-					<ul className="flex flex-col space-y-2">
-						{notification.map((request, index) => (
-							<FriendRequest
-								key={index}
-								username={windowUser.username}
-								password={windowUser.password}
-								friend={request.username}
-								reloader={setMustReload}
-								reloaderState={mustReload}
-							/>
-						))}
-					</ul>
+				<div className="flex flex-col space-y-5">
+					<div className="commonTitle">Peticiones</div>
+					<div className="scrollBox">
+						<ul className="flex flex-col space-y-2">
+							{notification.map((request, index) => (
+								<FriendRequest
+									key={index}
+									username={windowUser.username}
+									password={windowUser.password}
+									friend={request.username}
+									reloader={setMustReload}
+									reloaderState={mustReload}
+								/>
+							))}
+						</ul>
+					</div>
+				</div>
+				<div className="flex flex-col space-y-5">
+					<div className="commonTitle">Buscar amigos</div>
+					<form
+						onSubmit={(e) =>
+							searchPerson(
+								e,
+								windowUser.username,
+								windowUser.password,
+								friends,
+								name,
+								setFound
+							)
+						}
+					>
+						<input
+							className="relative p-2 w-full rounded-lg"
+							value={name}
+							type="text"
+							placeholder="Introduce nombre"
+							onChange={(e) => setName(e.target.value)}
+						/>
+					</form>
+					{found ? (
+						<Friend
+							username={windowUser.username}
+							password={windowUser.password}
+							friend={name}
+							new_friend={true}
+							setFound={setFound}
+							reloader={setMustReload}
+							reloaderState={mustReload}
+						/>
+					) : (
+						<></>
+					)}
 				</div>
 			</div>
 			<Rulette page="friends" />
@@ -191,7 +193,7 @@ function Friend({
 	reloader,
 }) {
 	return (
-		<div className="flex flex-row p-1 items-center justify-between px-2 bg-gris_claro">
+		<div className="flex flex-row p-1 items-center justify-between px-2 bg-gris_claro rounded-md">
 			<div className="text-xl text-gris font-arial-b">{friend}</div>
 
 			<button

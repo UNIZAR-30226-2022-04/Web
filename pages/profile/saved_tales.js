@@ -7,6 +7,7 @@ import Layout from "components/Layout";
 import Rulette from "components/Rulette";
 import separateStories from "lib/separateStories";
 import Spinner from "components/Spinner";
+import Meta from "components/Meta";
 
 export default function SavedTales() {
 	const router = useRouter();
@@ -30,7 +31,7 @@ export default function SavedTales() {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, [router]);
 
@@ -62,7 +63,7 @@ export default function SavedTales() {
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
 				localStorage.setItem("logged", "no");
-				router.push("/login");
+				router.push("/");
 				return;
 			}
 
@@ -74,7 +75,7 @@ export default function SavedTales() {
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!myStories) {
-		return <Spinner />;
+		return <Spinner showLayout={true} />;
 	}
 
 	// Renderizamos la página
@@ -109,6 +110,7 @@ export default function SavedTales() {
 function TalesList({ quicks, tales }) {
 	return (
 		<div className="flex flex-row ml-24 items-center space-x-20">
+			<Meta title="Biblioteca" />
 			<div className="flex flex-col space-y-3 items-center justify-center align-middle">
 				<h1 className="commonTitle">Partidas Rápidas</h1>
 				<div className="bg-scroll bg-contain overflow-auto">

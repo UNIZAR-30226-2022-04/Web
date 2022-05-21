@@ -5,6 +5,7 @@ import Layout from "components/Layout";
 import ListOfPeople from "components/ListOfPeople";
 import Rulette from "components/Rulette";
 import Spinner from "components/Spinner";
+import Meta from "components/Meta";
 
 export default function Stats() {
 	const router = useRouter();
@@ -18,7 +19,7 @@ export default function Stats() {
 			const password = localStorage.getItem("password");
 			setWindowUser({ username: username, password: password });
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, [router]);
 
@@ -41,25 +42,19 @@ export default function Stats() {
 			};
 
 			// Llamada a la api
-			alert("Yes1")
 			const res = await fetch(
 				`${process.env.NEXT_PUBLIC_URL}/api/general/home`,
 				options
 			);
-			alert("Yes2")
 			const data = await res.json();
-			alert("Yes3")
-			console.log(data);
-			alert("Yes4")
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
 				localStorage.setItem("logged", "no");
-				router.push("/login");
+				router.push("/");
 				return;
 			}
 
 			// Llama al hook que almacena la información del usuario
-			alert("Yes5")
 			setMyuser(data);
 		};
 		getData();
@@ -75,7 +70,7 @@ export default function Stats() {
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!myuser) {
-		return <Spinner />;
+		return <Spinner showLayout={true} />;
 	}
 
 	// Renderizamos la página
@@ -88,7 +83,8 @@ export default function Stats() {
 
 	return (
 		<Layout data={layoutInfo}>
-			<div className="ml-20 flex flex-col justify-center space-y-3 mb-16">
+			<Meta title="" />
+			<div className="ml-36 flex flex-col justify-center space-y-3 mb-32">
 				<h1 className="commonTitle">Estadísticas</h1>
 				<ListOfPeople data={myuser.bestFour} showFaces={false} />
 			</div>

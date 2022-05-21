@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
+import Meta from "components/Meta";
 
 export default function Write() {
 	const router = useRouter();
@@ -58,17 +59,17 @@ export default function Write() {
 
 			setUserCoins(coins);
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 
 	// Obtiene los datos de la sala
 	// Se ejcuta una vez por turno
-	useEffect(() => {		
+	useEffect(() => {
 		if (!windowUser.username || !roomID) {
 			return;
 		}
-		setCurrentText("")
+		setCurrentText("");
 
 		const getData = async () => {
 			// Información que necesitan las apis
@@ -146,19 +147,18 @@ export default function Write() {
 
 	//Temporizador
 	useEffect(() => {
-
 		const start = new Date();
 
 		const interval = setInterval(() => {
-			if(checkNextTurn){
-				return
+			if (checkNextTurn) {
+				return;
 			}
-			
+
 			const now = new Date();
 			const difference = now.getTime() - start.getTime();
 
 			const s = Math.floor(difference / 1000);
-			const tiempo = (game.time - s < 0) ? 0 : game.time - s
+			const tiempo = game.time - s < 0 ? 0 : game.time - s;
 			setClock(tiempo);
 
 			if (tiempo == 0) {
@@ -173,7 +173,7 @@ export default function Write() {
 					setCheckNextTurn,
 					router
 				);
-				setTurn(turn + 1)
+				setTurn(turn + 1);
 			}
 		}, 1000);
 
@@ -182,18 +182,17 @@ export default function Write() {
 
 	//Esperamos 3 segundos antes de volver a pedir el estado de la partida
 	useEffect(() => {
-		
 		const interval = setInterval(() => {
-			console.log("Check Continuo")
-			if(checkNextTurn == true){			
-				if (game.state == "waiting_players") {				
-					console.log("tengo que checkear el paso de turno")	
-					setRefresh(!refresh)					
-				}else{
-					console.log("paso de turno")
-					setCheckNextTurn(false)
+			console.log("Check Continuo");
+			if (checkNextTurn == true) {
+				if (game.state == "waiting_players") {
+					console.log("tengo que checkear el paso de turno");
+					setRefresh(!refresh);
+				} else {
+					console.log("paso de turno");
+					setCheckNextTurn(false);
 				}
-			}			
+			}
 		}, 1000);
 
 		return () => clearInterval(interval);
@@ -201,7 +200,7 @@ export default function Write() {
 
 	// Si tadavía no hoy usuario o sala, esperamos a que lo haya
 	if (!windowUser || game.turn == 0) {
-		return <Spinner />;
+		return <Spinner showLayout={true} />;
 	}
 
 	const layoutInfo = {
@@ -214,6 +213,7 @@ export default function Write() {
 	// Página principal
 	return (
 		<Layout data={layoutInfo} inGame={true}>
+			<Meta title={"#" + roomID} />
 			<div className="flex flex-row w-full mb-20">
 				<div className="flex flex-col items-center align-middle justify-center w-full h-full space-y-2">
 					<div className="commonTitle h-auto">
@@ -236,7 +236,7 @@ export default function Write() {
 									height={30}
 								/>
 							</div>
-						):(
+						) : (
 							<div className="flex flex-col items-center">
 								<div className="">Palabras a introducir</div>
 								<div className="flex flex-row space-x-2 items-center">
@@ -448,8 +448,8 @@ async function submitParagraph(
 		router.push(`/quickGame/vote?id=${roomID}`);
 	}
 
-	setCheckNextTurn(true)
-	setTurn(turn + 1)
+	setCheckNextTurn(true);
+	setTurn(turn + 1);
 }
 
 // Añade un párrafo

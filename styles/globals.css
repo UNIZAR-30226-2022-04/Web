@@ -3,59 +3,67 @@
 @tailwind utilities;
 
 @layer components {
-  /* COMMON STYLES */
-  .scrollBox{
-    @apply  relative
+	/* COMMON STYLES */
+	.scrollBox {
+		@apply relative
             h-40
             bg-scroll
             bg-contain
-            overflow-auto
-  }
+            overflow-auto;
+	}
 
-  .background{
-    @apply  fixed
+	.background {
+		@apply fixed
             h-screen 
             w-screen 
-            bg-gradient-to-tr            
+            bg-gradient-to-tr
             from-degradado_abajo
-            to-degradado_arriba 
-  }
+            to-degradado_arriba;
+	}
+	.backgroundDark {
+		@apply fixed
+            h-screen 
+            w-screen 
+            bg-gradient-to-tr       
+            to-degradado_arriba
+            from-slate-900;
+	}
 
-  .clickableItem{
-    @apply  cursor-pointer
-            hover:underline
-  }
+	.clickableItem {
+		@apply cursor-pointer
+            hover:underline;
+	}
 
-  .commonTitle{
-    @apply  text-3xl
+	.commonTitle {
+		@apply text-3xl
             text-white
             font-bold
             txtShadw
-            font-arial-b
-  }
+            font-arial-b;
+	}
 
-  .commonSubtitle{
-    @apply  text-xl 
+	.commonSubtitle {
+		@apply text-xl 
             justify-start
             text-white
             font-bold
             txtShadw
-            font-arial-b
-  }
+            font-arial-b;
+	}
 
-  .commonButton{ 
-    @apply  rounded-lg
+	.commonButton {
+		@apply rounded-lg
             shadow-lg 
             shadow-verde_letras
             font-bangers
             text-white
             text-2xl
             px-4 
-            py-2
-  }
+            py-2;
+	}
 
-  .addReduceButton{
-    @apply  bg-verde_top 
+	.addReduceButton {
+		@apply bg-verde_top 
             rounded-full 
             w-12 
             p-2 
@@ -64,61 +72,61 @@
             text-center 
             text-white 
             shadow-verde_plus_minus_back 
-            shadow-md
-  }
+            shadow-md;
+	}
 }
 
 @font-face {
-  font-family: "ARIAL-BOLD";
-  src: url("./fonts/arial_bold.ttf");
+	font-family: "ARIAL-BOLD";
+	src: url("./fonts/arial_bold.ttf");
 }
 
 @font-face {
-  font-family: "ARIAL-REGULAR";
-  src: url("./fonts/arial_regular.ttf");
+	font-family: "ARIAL-REGULAR";
+	src: url("./fonts/arial_regular.ttf");
 }
 
 @font-face {
-  font-family: "BANGERS-REGULAR";
-  src: url("./fonts/bangers_regular.ttf");
+	font-family: "BANGERS-REGULAR";
+	src: url("./fonts/bangers_regular.ttf");
 }
 
 @font-face {
-  font-family: "GRADUATE";
-  src: url("./fonts/graduate.ttf");
+	font-family: "GRADUATE";
+	src: url("./fonts/graduate.ttf");
 }
 
 @font-face {
-  font-family: "BLANK";
-  src: url("./fonts/AdobeBlank.ttf");
+	font-family: "BLANK";
+	src: url("./fonts/AdobeBlank.ttf");
 }
 
 @font-face {
-  font-family: "REVERSE";
-  src: url("./fonts/Reverse.ttf");
+	font-family: "REVERSE";
+	src: url("./fonts/Reverse.ttf");
 }
 
-.font-blank{
-  font-family: "blank";
+.font-blank {
+	font-family: "blank";
 }
 
 .txtShadw {
-  text-shadow: 3px 3px #0ca789
+	text-shadow: 3px 3px #0ca789;
 }
 
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+	padding: 0;
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+		Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }

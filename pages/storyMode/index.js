@@ -6,6 +6,7 @@ import Layout from "components/Layout";
 import Rulette from "components/Rulette";
 import StoryList from "components/StoryList";
 import Spinner from "components/Spinner";
+import Meta from "components/Meta";
 
 export default function StoryMode() {
 	const router = useRouter();
@@ -35,7 +36,7 @@ export default function StoryMode() {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 	// Hace fetch de la api
@@ -65,7 +66,7 @@ export default function StoryMode() {
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
 				localStorage.setItem("logged", "no");
-				router.push("/login");
+				router.push("/");
 				return;
 			}
 
@@ -73,12 +74,11 @@ export default function StoryMode() {
 			setMyTales(data);
 		};
 		getData();
-	
 	}, [windowUser]);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!myTales) {
-		return <Spinner />;
+		return <Spinner showLayout={true} />;
 	}
 
 	// Renderizamos la página
@@ -91,6 +91,7 @@ export default function StoryMode() {
 
 	return (
 		<Layout data={layoutInfo}>
+			<Meta title="Modo relato" />
 			<div className="ml-20 flex flex-row items-center space-x-40 mb-16">
 				<div className="flex flex-col ml-5 bg-scroll bg-contain overflow-y-auto h-[400px] pr-2">
 					<h1 className="commonTitle">Mis Relatos</h1>

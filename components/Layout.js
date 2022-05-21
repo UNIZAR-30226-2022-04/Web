@@ -82,7 +82,7 @@ function Crates({ person, changeSettings, playing }) {
 					height="38"
 					onClick={() => {
 						localStorage.setItem("logged", "No");
-						Router.push("/login");
+						Router.push("/");
 					}}
 				/>
 			</div>

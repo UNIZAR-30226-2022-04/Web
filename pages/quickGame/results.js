@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import ListOfPeople from "components/ListOfPeople";
+import Meta from "components/Meta";
 
 import Image from "next/image";
 
@@ -40,7 +41,7 @@ export default function Results() {
 		if (data.result === "error") {
 			alert("hola");
 			localStorage.setItem("logged", "no");
-			router.push("/login");
+			router.push("/");
 			return;
 		}
 		// Llama al hook que almacena la información del usuario
@@ -65,7 +66,7 @@ export default function Results() {
 			});
 			getData();
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 
@@ -133,7 +134,7 @@ export default function Results() {
 		};
 		getResults().then((res) => {
 			for (var i = 0; i < res.clasification.length; i++) {
-				console.log(res.clasification[i])
+				console.log(res.clasification[i]);
 				if (res.clasification[i].username == windowUser.username) {
 					setPosition(i + 1);
 					break;
@@ -157,6 +158,7 @@ export default function Results() {
 
 	return (
 		<Layout data={layoutInfo} inGame={true}>
+			<Meta title="Resultados" />
 			<div className="flex flex-col w-screen">
 				<div className="flex">
 					<div className="w-1/12" />
@@ -166,7 +168,9 @@ export default function Results() {
 						</div>
 						<div className="flex flex-row pt-20">
 							<div>
-								<div className="text-6xl commonTitle">{position}º</div>
+								<div className="text-6xl commonTitle">
+									{position}º
+								</div>
 							</div>
 							<div>
 								<div className="h-10" />

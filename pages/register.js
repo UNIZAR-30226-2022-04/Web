@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import Layout from "components/Layout";
+import Meta from "components/Meta";
 
 //import Lottie from 'react-lottie'
 //import registerLottie from '/public/lottie/register.json'
@@ -20,6 +21,7 @@ export default function Register() {
 
 	return (
 		<Layout noInfo={true}>
+			<Meta title="Crear cuenta" />
 			<div className="background">
 				<div className="flex flex-col items-center justify-center w-full mt-24">
 					<Image src={"/frankenstory.png"} height={150} width={600} />

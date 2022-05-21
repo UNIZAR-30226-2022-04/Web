@@ -7,6 +7,7 @@ import Spinner from "components/Spinner";
 
 var sha512 = require(`sha512`);
 var SecureRandom = require("securerandom");
+import Meta from "components/Meta";
 
 export default function Settings() {
 	const [passwd, setPass] = useState("");
@@ -34,13 +35,13 @@ export default function Settings() {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!windowUser) {
-		return <Spinner />;
+		return <Spinner showLayout={true} />;
 	}
 
 	const layoutInfo = {
@@ -52,6 +53,7 @@ export default function Settings() {
 
 	return (
 		<Layout data={layoutInfo} inSettingsScreen="true">
+			<Meta title="Ajustes" />
 			<div className="background">
 				<div className="flex flex-col items-center justify-center w-full mt-24">
 					<div className="flex flex-row items-center space-x-5">

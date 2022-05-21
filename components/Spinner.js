@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import Layout from "./Layout";
+import Meta from "./Meta";
 
 export default function Spinner({ showLayout }) {
 	const [windowUser, setWindowUser] = useState({});
@@ -24,16 +25,19 @@ export default function Spinner({ showLayout }) {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, [router]);
 
 	return (
 		<>
 			{showLayout === true ? (
-				<Layout data={windowUser} inSettingsScreen={false}>
+				<Layout
+					data={windowUser}
+					inSettingsScreen={false}
+					inGame={true}
+				>
 					<div className="flex flex-col w-screen h-screen items-center justify-center align-middle">
-						<h1 className="commonTitle">LOADING</h1>
 						<Image
 							src="/mooncodeLoading.gif"
 							width={500}
@@ -44,7 +48,6 @@ export default function Spinner({ showLayout }) {
 				</Layout>
 			) : (
 				<div className="background flex flex-col w-screen h-screen items-center justify-center align-middle">
-					<h1 className="commonTitle">LOADING</h1>
 					<Image
 						src="/mooncodeLoading.gif"
 						width={500}

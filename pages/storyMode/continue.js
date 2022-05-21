@@ -2,7 +2,7 @@ import Layout from "components/Layout";
 import WriteStory from "components/WriteStory";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Spinner from "components/Spinner";
+import Meta from "components/Meta";
 
 export default function Continue() {
 	const router = useRouter();
@@ -28,7 +28,7 @@ export default function Continue() {
 			const queryParams = new URLSearchParams(window.location.search);
 			setCreator(queryParams.get("creator"));
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 
@@ -41,6 +41,7 @@ export default function Continue() {
 
 	return (
 		<Layout data={layoutInfo}>
+			<Meta title={"Relato de " + creator} />
 			<WriteStory first={false} creator={creator} />
 		</Layout>
 	);

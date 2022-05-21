@@ -18,7 +18,7 @@ export default function ListOfPeople({ data, showFaces }) {
 function PersonInfo({ person, index, faces }) {
 	const image = `/profPic/icon${person.picture}.png`;
 	return (
-		<div className="flex flex-row h-full justify-between items-center bg-gray-200 px-2 rounded-lg">
+		<div className="flex flex-row h-full justify-between items-center bg-gray-200 px-2 rounded-lg hover:scale-105">
 			<div className="flex flex-row">
 				{faces ? (
 					<>

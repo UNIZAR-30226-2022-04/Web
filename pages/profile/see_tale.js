@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
+import Meta from "components/Meta";
 
 export default function See_Tale() {
 	const router = useRouter();
@@ -27,7 +28,7 @@ export default function See_Tale() {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, [router]);
 
@@ -60,7 +61,7 @@ export default function See_Tale() {
 
 			if (data.result === "error") {
 				localStorage.setItem("logged", "no");
-				router.push("/login");
+				router.push("/");
 				return;
 			}
 
@@ -71,7 +72,7 @@ export default function See_Tale() {
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!windowUser || !story) {
-		return <Spinner />;
+		return <Spinner showLayout={true} />;
 	}
 
 	const layoutInfo = {
@@ -83,6 +84,7 @@ export default function See_Tale() {
 
 	return (
 		<Layout data={layoutInfo}>
+			<Meta title={title} />
 			<div className="flex flex-col w-full items-center m-10 space-y-3">
 				<div className="commonTitle">{title}</div>
 				<div className="relative bg-scroll bg-contain overflow-auto text-center mx-32 h-auto text-xl font-arial-r">

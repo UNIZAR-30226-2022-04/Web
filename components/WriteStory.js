@@ -29,7 +29,7 @@ const WriteStory = ({ first }) => {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, [router]);
 
@@ -175,7 +175,7 @@ const WriteStory = ({ first }) => {
 	};
 
 	if ((!first && !parrafos) || !storyInfo) {
-		return <Spinner showLayout={false} />;
+		return <Spinner showLayout={true} />;
 	}
 
 	var lastWrite;
@@ -183,7 +183,8 @@ const WriteStory = ({ first }) => {
 	var placeh;
 
 	if (!first) {
-		lastWrite = parrafos[parrafos.length - 1].username == windowUser.username;
+		lastWrite =
+			parrafos[parrafos.length - 1].username == windowUser.username;
 		disabled = lastWrite ? "yes" : "";
 		placeh = lastWrite ? "No puedes escribir ahora" : "Escribe tu parrafo";
 	}

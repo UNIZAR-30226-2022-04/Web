@@ -2,6 +2,7 @@ import Layout from "components/Layout";
 import WriteStory from "components/WriteStory";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Meta from "components/Meta";
 
 export default function Continue() {
 	const router = useRouter();
@@ -24,7 +25,7 @@ export default function Continue() {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 
@@ -37,6 +38,7 @@ export default function Continue() {
 
 	return (
 		<Layout data={layoutInfo}>
+			<Meta title={"Historia de " + windowUser.username} />
 			<WriteStory first={true} creator={windowUser.username} />
 		</Layout>
 	);

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 import ListOfPeople from "components/ListOfPeople";
+import Meta from "components/Meta";
 
 export default function QuickGame() {
 	const router = useRouter();
@@ -31,7 +32,7 @@ export default function QuickGame() {
 				stars: stars,
 			});
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 
@@ -130,7 +131,7 @@ export default function QuickGame() {
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!windowUser || !room) {
-		return <Spinner />;
+		return <Spinner showLayout={true} />;
 	}
 
 	// Renderizamos la página
@@ -143,6 +144,7 @@ export default function QuickGame() {
 
 	return (
 		<Layout data={layoutInfo} inGame={true}>
+			<Meta title={"#" + code} />
 			<div className="flex flex-col items-center justify-center w-screen space-y-5">
 				<div className="commonTitle">Código de la Sala: #{code}</div>
 				<div className="flex flex-row justify-center items-center space-x-20 ml-5">

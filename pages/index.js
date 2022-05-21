@@ -1,6 +1,7 @@
 import Layout from "components/Layout";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import Meta from "components/Meta";
 
 export default function Home() {
 	const router = useRouter();
@@ -12,6 +13,7 @@ export default function Home() {
 
 	return (
 		<Layout noInfo={true}>
+			<Meta title="¡Únete y juega!" />
 			<div className="background">
 				<div className="flex flex-col items-center justify-center w-full space-y-6 mt-24">
 					<img

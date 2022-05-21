@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import Layout from "components/Layout";
+import Meta from "components/Meta";
 
 //import Lottie from 'react-lottie'
 //import loginLottie from '/public/lottie/login.json'
@@ -23,6 +24,7 @@ export default function Login() {
 
 	return (
 		<Layout noInfo={true}>
+			<Meta title="Iniciar sesión" />
 			<div className="background">
 				<div className="flex flex-col items-center justify-center w-full mt-24">
 					<Image
