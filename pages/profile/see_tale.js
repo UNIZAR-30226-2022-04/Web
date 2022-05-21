@@ -29,7 +29,7 @@ export default function See_Tale() {
 		} else {
 			router.push("/login");
 		}
-	}, []);
+	}, [router]);
 
 	useEffect(() => {
 		const queryParams = new URLSearchParams(window.location.search);

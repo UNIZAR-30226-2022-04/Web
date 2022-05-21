@@ -6,93 +6,25 @@ import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 import StoryParagraphs from "components/StoryParagraphs";
 
-const placeholder = {
-	result: "waiting_players",
-	topic: "El Quijote", //vacío si no hay tema de twitter
-	isLast: false,
-	turn: 1,
-	s: 60,
-	paragraphs: [
-		{
-			text: "uno dos tres cuatro cinco uno seis siete ocho nueve",
-			words: ["uno", "tres", "word3"],
-		},
-		{
-			text: "kgk tgoejrhgji hrthkrghijwehrbg ergjrst hji",
-			words: ["word1", "hrthkrghijwehrbg", "word3"],
-		},
-		{
-			text: "uno dos tres cuatro cinco uno seis siete ocho nueve",
-			words: ["uno", "tres", "word3"],
-		},
-		{
-			text: "kgk tgoejrhgji hrthkrghijwehrbg ergjrst hji",
-			words: ["word1", "hrthkrghijwehrbg", "word3"],
-		},
-		{
-			text: "uno dos tres cuatro cinco uno seis siete ocho nueve",
-			words: ["uno", "tres", "word3"],
-		},
-		{
-			text: "kgk tgoejrhgji hrthkrghijwehrbg ergjrst hji",
-			words: ["word1", "hrthkrghijwehrbg", "word3"],
-		},
-	],
-};
-
 export default function QuickVote() {
+	const router = useRouter();
+
 	const [windowUser, setWindowUser] = useState({});
 	const [id, setId] = useState("");
-	const [story, setStory] = useState("");
-	const router = useRouter();
+	const [story, setStory] = useState({
+		state: "",
+		topic: "",
+		paragraphs: [],
+		last: false
+	});
+	const [refresh, setRefresh] = useState(false)
+	
+	
+	const [checkNextVote, setCheckNextVote] = useState(false)
 	const [chosenStory, setChosenStory] = useState(0);
-	const [tick, setTick] = useState(true);
 	const [time, setTime] = useState(1000);
 	const [clock, setClock] = useState(0);
-	const [dots, setDots] = useState("");
 	const [turn, setTurn] = useState(0);
-
-	const info = {
-		username: windowUser.username,
-		password: windowUser.username,
-		id: id,
-	};
-
-	useEffect(() => {
-		const start = new Date();
-		const interval = setInterval(() => {
-			const now = new Date();
-			const difference = now.getTime() - start.getTime();
-
-			const s = Math.floor(difference / 1000);
-			setClock(time - s);
-
-			if (time < s) {
-				alert("Timer terminado");
-				enviarVoto(info, voto);
-			}
-		}, 1000);
-
-		return () => clearInterval(interval);
-	}, [tick]);
-
-	//Esperamos 3 segundos antes de volver a pedir el estado de la partida
-	useEffect(() => {
-		if (story.result === "waiting_players") {
-			const sleep = async (ms) => {
-				await new Promise((r) => setTimeout(r, ms));
-			};
-			sleep(3000).then(() => {
-				getData();
-				setTick(!tick);
-				if (dots.length == 3) {
-					setDots("");
-				} else {
-					setDots(dots + ".");
-				}
-			});
-		}
-	}, [tick]);
 
 	useEffect(() => {
 		if (localStorage.getItem("logged") == "si") {
@@ -112,69 +44,128 @@ export default function QuickVote() {
 				coins: coins,
 				stars: stars,
 			});
-			console.log("SACO DATOS");
 		} else {
-			console.log("VOY A LOGIN");
 			router.push("/login");
 		}
 	}, []);
 
-	const getData = async () => {
-		// Opciones para llamar a la api
-		const body = {
-			username: windowUser.username,
-			password: windowUser.password,
-			turn: turn,
-			id: id,
-		};
-		const options = {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(body),
-		};
-
-		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_URL}/api/quick_game/resume_vote_quick_game`,
-			options
-		);
-		const data = await res.json();
-
-		data.result = "correcto"; // DEBUG
-
-		// Si no ha ido bien o no estoy logeado volvemos a /
-		if (data.result == "error") {
-			alert("Error al obtener datos votacion");
-			router.push("/quickGame");
-			return;
-		} /*else if(data.turn != turn){
-      alert("Recibidos datos del turno incorrecto")
-      router.push("/quickGame")
-    }*/
-
-		// Llama al hook que almacena la información del usuario
-		setStory(placeholder);
-		setTime(placeholder.s);
-		setTurn(turn + 1);
-		//setStory(data)
-		//setTime(data.s)
-	};
-
 	// Hace fetch de la api
 	useEffect(() => {
 		// Función que llama a la api
-		if (windowUser.username == undefined) {
-			console.log("no permito sacar datos");
+		if (!windowUser.username || !id) {
 			return;
 		}
-		getData();
-	}, [windowUser]);
 
-	console.log(story);
+		const getData = async () => {
+			// Opciones para llamar a la api
+			const body = {
+				username: windowUser.username,
+				password: windowUser.password,
+				turn: turn,
+				id: '#' + id,
+			};
+			const options = {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(body),
+			};
+			
+			var res = undefined
+
+			while(!res){
+				res = await fetch(
+					`${process.env.NEXT_PUBLIC_URL}/api/quick_game/resume_vote_quick_game`,
+					options
+				);
+				if(!res.ok){
+					res = undefined
+				}
+			}
+
+			const data = await res.json();
+				
+			// Si no ha ido bien o no estoy logeado volvemos a /
+			if (data.result == "error") {
+				alert("Error al obtener datos votacion");
+				console.log(data)
+				router.push("/quickGame");
+				return;
+			
+			}
+			
+			const parrafos = data.paragraphs.map((parrafo) => {
+				return {
+					text: parrafo.body,
+					words: parrafo.words
+				}
+			})
+
+			console.log("Parrafos: ", parrafos)
+
+			// Llama al hook que almacena la información del usuario
+			setStory({
+				state: data.result,
+				topic: data.topic,
+				last: data.isLast,
+				paragraphs: parrafos
+			})
+			setTime(data.s)
+		};
+
+		getData();
+	}, [windowUser, turn, refresh]);
+
+	// Controla  el tiempo de voto
+	useEffect(() => {
+		const start = new Date();
+
+		const interval = setInterval(() => {
+			if(checkNextVote){
+				return
+			}
+			const now = new Date();
+			const difference = now.getTime() - start.getTime();
+
+			const s = Math.floor(difference / 1000);
+			const tiempo = (time - s < 0) ? 0 : story.time - s
+			setClock(tiempo);
+
+			if (tiempo == 0) {
+				enviarVoto(
+					info,
+					0, 
+					setCheckNextVote, 
+					router
+				);
+				setTurn(turn + 1)
+			}
+		}, 1000);
+
+		return () => clearInterval(interval);
+	}, [windowUser, id, checkNextVote, story]);
+	
+	// Controla la espera de jugadores
+	useEffect(() => {		
+		const interval = setInterval(() => {
+			console.log("Check Continuo")
+			if(checkNextVote == true){			
+				if (story.state == "waiting_players") {				
+					console.log("tengo que checkear el paso de turno")	
+					setRefresh(!refresh)					
+				}else{
+					console.log("paso de turno")
+					setCheckNextVote(false)
+				}
+			}			
+		}, 1000);
+
+		return () => clearInterval(interval);
+	}, [windowUser, checkNextVote, story]);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
-	if (!windowUser || !story) {
+	if (!windowUser || !story.turn == 0) {
 		return <Spinner />;
 	}
 
@@ -223,14 +214,14 @@ export default function QuickVote() {
 				/>
 				<button
 					className="bg-white rounded-full p-2"
-					onClick={() => enviarVoto(info, chosenStory)}
+					onClick={() => enviarVoto(windowUser, id, chosenStory, setCheckNextVote, router)}
 				>
 					Enviar Voto
 				</button>
 			</div>
-			{story.result == "waiting_players" ? (
+			{story.state == "waiting_players" ? (
 				<div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white">
-					Esperando al resto de jugadores{dots}
+					Esperando al resto de jugadores
 				</div>
 			) : (
 				""
@@ -239,36 +230,38 @@ export default function QuickVote() {
 	);
 }
 
-async function enviarVoto(info, voto) {
-	const body = {
-		username: info.username,
-		password: info.password,
-		id: info.id,
+async function enviarVoto(windowUser, id, voto, setCheckNextVote, router) {
+	
+	const info = {
+		username: windowUser.username,
+		password: windowUser.password,
+		id: id,
 		paragraph: voto,
 	};
+
 	const options = {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 		},
-		body: JSON.stringify(body),
+		body: JSON.stringify(info),
 	};
 
 	const res = await fetch(
 		`${process.env.NEXT_PUBLIC_URL}/api/quick_game/vote_quick_game`,
 		options
 	);
+
 	const data = await res.json();
 
 	if (!data) {
 		alert("Datos no encontrados");
+
 	} else if (data.result === "error") {
-		alert("Error al enviar datos");
+		alert("Error al enviar datos:", data.reason);
 		router.push("/quickGame");
+
 	} else {
-		if (story.isLast) {
-			router.push("/quickGame/results");
-		}
-		setTick(!tick);
+		setCheckNextVote(true)
 	}
 }

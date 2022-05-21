@@ -16,8 +16,8 @@ export default function Write() {
 	const [currentText, setCurrentText] = useState("");
 
 	const [clock, setClock] = useState(0);
-	const [dots, setDots] = useState("");
 
+	const [checkNextTurn, setCheckNextTurn] = useState(false);
 	const [refresh, setRefresh] = useState(false);
 
 	// Info de una partida
@@ -64,10 +64,11 @@ export default function Write() {
 
 	// Obtiene los datos de la sala
 	// Se ejcuta una vez por turno
-	useEffect(() => {
+	useEffect(() => {		
 		if (!windowUser.username || !roomID) {
 			return;
 		}
+		setCurrentText("")
 
 		const getData = async () => {
 			// Información que necesitan las apis
@@ -121,7 +122,7 @@ export default function Write() {
 					state: dataTurn.result,
 					time: dataTurn.s,
 					topic: dataTurn.topic,
-					randomWords: dataTurn.randWords,
+					randomWords: dataTurn.randomWords,
 					lastParagraph: dataTurn.lastParagraph,
 					last: dataTurn.isLast,
 					turn: dataTurn.turn,
@@ -141,20 +142,26 @@ export default function Write() {
 		};
 
 		getData();
-	}, [windowUser, roomID, turn]);
+	}, [windowUser, roomID, turn, refresh]);
 
 	//Temporizador
 	useEffect(() => {
+
 		const start = new Date();
 
 		const interval = setInterval(() => {
+			if(checkNextTurn){
+				return
+			}
+			
 			const now = new Date();
 			const difference = now.getTime() - start.getTime();
 
 			const s = Math.floor(difference / 1000);
-			setClock(game.time - s);
+			const tiempo = (game.time - s < 0) ? 0 : game.time - s
+			setClock(tiempo);
 
-			if (game.time < s) {
+			if (tiempo == 0) {
 				submitParagraph(
 					windowUser,
 					roomID,
@@ -162,30 +169,35 @@ export default function Write() {
 					turn,
 					setTurn,
 					punyetasCompradas,
-					game
+					game,
+					setCheckNextTurn,
+					router
 				);
+				setTurn(turn + 1)
 			}
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, []);
+	}, [windowUser, roomID, checkNextTurn, game]);
 
 	//Esperamos 3 segundos antes de volver a pedir el estado de la partida
 	useEffect(() => {
-		if (game.state == "waiting_players") {
-			const sleep = async (ms) => {
-				await new Promise((r) => setTimeout(r, ms));
-			};
-
-			sleep(3000).then(() => {
-				if (dots.length == 3) {
-					setDots("");
-				} else {
-					setDots(dots + ".");
+		
+		const interval = setInterval(() => {
+			console.log("Check Continuo")
+			if(checkNextTurn == true){			
+				if (game.state == "waiting_players") {				
+					console.log("tengo que checkear el paso de turno")	
+					setRefresh(!refresh)					
+				}else{
+					console.log("paso de turno")
+					setCheckNextTurn(false)
 				}
-			});
-		}
-	}, []);
+			}			
+		}, 1000);
+
+		return () => clearInterval(interval);
+	}, [windowUser, checkNextTurn, game]);
 
 	// Si tadavía no hoy usuario o sala, esperamos a que lo haya
 	if (!windowUser || game.turn == 0) {
@@ -207,11 +219,11 @@ export default function Write() {
 					<div className="commonTitle h-auto">
 						{turn == 0
 							? "Comienza la historia"
-							: "Párrafo anterior"}{" "}
+							: "Párrafo anterior"}
 					</div>
-					<div>{game.previous}</div>
+					<div>{game.lastParagraph}</div>
 					<div className="">
-						{game.topic != "" ? (
+						{game.topic ? (
 							<div className="flex flex-row space-x-2 items-center">
 								<div>Tema de la historia</div>
 								<div className="rounded bg-blue-400 p-1">
@@ -224,7 +236,7 @@ export default function Write() {
 									height={30}
 								/>
 							</div>
-						) : (
+						):(
 							<div className="flex flex-col items-center">
 								<div className="">Palabras a introducir</div>
 								<div className="flex flex-row space-x-2 items-center">
@@ -280,7 +292,9 @@ export default function Write() {
 								turn,
 								setTurn,
 								punyetasCompradas,
-								game
+								game,
+								setCheckNextTurn,
+								router
 							)
 						}
 					>
@@ -392,7 +406,7 @@ export default function Write() {
 
 			{game.state == "waiting_players" ? (
 				<div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white">
-					Esperando al resto de jugadores{dots}
+					Esperando al resto de jugadores
 				</div>
 			) : (
 				<></>
@@ -412,7 +426,9 @@ async function submitParagraph(
 	turn,
 	setTurn,
 	punyetas,
-	game
+	game,
+	setCheckNextTurn,
+	router
 ) {
 	const res = await addParagraph(
 		windowUser,
@@ -428,12 +444,12 @@ async function submitParagraph(
 		router.push("/quickGame");
 	}
 
-	// BUG HERE
 	if (game.last) {
 		router.push(`/quickGame/vote?id=${roomID}`);
 	}
 
-	setTurn(turn + 1);
+	setCheckNextTurn(true)
+	setTurn(turn + 1)
 }
 
 // Añade un párrafo

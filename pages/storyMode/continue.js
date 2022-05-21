@@ -32,11 +32,6 @@ export default function Continue() {
 		}
 	}, []);
 
-	// Si tadavía no hoy usuario, esperamos a que lo haya
-	if (!windowUser) {
-		return <Spinner />;
-	}
-
 	const layoutInfo = {
 		username: windowUser.username,
 		stars: windowUser.stars,

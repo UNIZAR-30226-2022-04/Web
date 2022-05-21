@@ -94,7 +94,7 @@ const WriteStory = ({ first }) => {
 			}
 		};
 		getPrevious();
-	}, [storyInfo, router]);
+	}, [windowUser, storyInfo, router]);
 
 	const create_tale = async () => {
 		if (storyInfo.id == undefined) {
@@ -183,9 +183,7 @@ const WriteStory = ({ first }) => {
 	var placeh;
 
 	if (!first) {
-		lastWrite =
-			parrafos[parrafos.length - 1].username == windowUser.username &&
-			!(storyInfo.creator == windowUser.username);
+		lastWrite = parrafos[parrafos.length - 1].username == windowUser.username;
 		disabled = lastWrite ? "yes" : "";
 		placeh = lastWrite ? "No puedes escribir ahora" : "Escribe tu parrafo";
 	}

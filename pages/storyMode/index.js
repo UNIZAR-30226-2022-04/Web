@@ -73,7 +73,8 @@ export default function StoryMode() {
 			setMyTales(data);
 		};
 		getData();
-	}, []);
+	
+	}, [windowUser]);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!myTales) {
