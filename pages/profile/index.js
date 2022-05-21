@@ -41,14 +41,16 @@ export default function Stats() {
 			};
 
 			// Llamada a la api
+			alert("Yes1")
 			const res = await fetch(
 				`${process.env.NEXT_PUBLIC_URL}/api/general/home`,
 				options
 			);
+			alert("Yes2")
 			const data = await res.json();
-
+			alert("Yes3")
 			console.log(data);
-
+			alert("Yes4")
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
 				localStorage.setItem("logged", "no");
@@ -57,6 +59,7 @@ export default function Stats() {
 			}
 
 			// Llama al hook que almacena la información del usuario
+			alert("Yes5")
 			setMyuser(data);
 		};
 		getData();

@@ -60,13 +60,14 @@ export default function StoryMode() {
 
 	return (
 		<Layout data={layoutInfo}>
-			<div className="h-full w-2/4 flex flex-row justify-center items-center space-x-20">
+			<div className="h-full w-2/4 flex flex-row justify-center items-center space-x-20 ml-32">
 				<div className="flex flex-col items-center space-y-4">
 					<input
 						type="text"
-						placeholder="Código"
+						placeholder="Código #XXXX"
 						value={code}
 						onChange={(e) => setCode(e.target.value)}
+						className="border-2 border-verde_letras rounded p-1"
 					/>
 					{errorJ != "" ? (
 						<div className="centered text-red-700">{errorJ}</div>
@@ -78,7 +79,7 @@ export default function StoryMode() {
 						onClick={() =>
 							join(windowUser, code, setErrorR, setErrorJ, router)
 						}
-						className="commonButton w-full"
+						className="commonButton w-full bg-verde_letras"
 					>
 						Unirse a sala
 					</button>
@@ -87,7 +88,7 @@ export default function StoryMode() {
 						onClick={() =>
 							random(windowUser, setErrorJ, setErrorR, router)
 						}
-						className="commonButton"
+						className="commonButton w-full bg-verde_letras"
 					>
 						Partida aleatoria
 					</button>
@@ -109,7 +110,7 @@ export default function StoryMode() {
 							<button className="addReduceButton text-2xl font-bold mr-4"type="button" onClick={() => changeTime(-5)}>
 								-
 							</button>
-							<button className="addReduceButton text-2xl font-bold"type="button" onClick={() => changeTime(+5)}>
+							<button className="addReduceButton text-xl font-bold"type="button" onClick={() => changeTime(+5)}>
 								+
 							</button>
 						</div>
@@ -119,7 +120,7 @@ export default function StoryMode() {
 					<div className="flex flex-row text-white">
 						<input
 							className={`px-8 py-2 font-bold ${
-								!privateGame ? "bg-green-800" : "bg-green-600"
+								!privateGame ? "bg-verde_letras" : "bg-verde_publico_seleccionado"
 							}`}
 							type="button"
 							value="PÚBLICA"
@@ -127,7 +128,7 @@ export default function StoryMode() {
 						/>
 						<input
 							className={`ml-2 px-8 py-2 font-bold ${
-								privateGame ? "bg-green-800" : "bg-green-600"
+								privateGame ? "bg-verde_letras" : "bg-verde_publico_seleccionado"
 							}`}
 							type="button"
 							value="PRIVADA"
@@ -173,7 +174,7 @@ export default function StoryMode() {
 								router
 							)
 						}
-						className="commonButton"
+						className="commonButton bg-verde_letras"
 					>
 						Crear sala
 					</button>
@@ -267,6 +268,9 @@ async function tryJoin(windowUser, code) {
 		password: windowUser.password,
 		id: "#" + code,
 	};
+	if(code[0] === "#"){
+		info.id=code
+	}
 	const options = {
 		method: "POST",
 		headers: {
