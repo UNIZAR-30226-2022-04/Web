@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import Image from 'next/image'
 
 import Layout from 'components/Layout'
 import ListOfPeople from 'components/ListOfPeople'

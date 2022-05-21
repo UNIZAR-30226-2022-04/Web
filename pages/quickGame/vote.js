@@ -20,6 +20,20 @@ const placeholder = {
         text:"kgk tgoejrhgji hrthkrghijwehrbg ergjrst hji", 
         words:["word1","hrthkrghijwehrbg","word3"]
       },
+      { text:"uno dos tres cuatro cinco uno seis siete ocho nueve", 
+      words:["uno","tres","word3"]
+    },
+    {
+      text:"kgk tgoejrhgji hrthkrghijwehrbg ergjrst hji", 
+      words:["word1","hrthkrghijwehrbg","word3"]
+    },
+    { text:"uno dos tres cuatro cinco uno seis siete ocho nueve", 
+    words:["uno","tres","word3"]
+  },
+  {
+    text:"kgk tgoejrhgji hrthkrghijwehrbg ergjrst hji", 
+    words:["word1","hrthkrghijwehrbg","word3"]
+  },
   ]
 }
 
@@ -33,13 +47,14 @@ export default function QuickVote(){
   const [time, setTime] = useState(1000)
   const [clock, setClock] = useState(0)
   const [dots, setDots] = useState("")
-
+  const [turn, setTurn] = useState(0)
+  
   const info = {
     username: windowUser.username,
-    password: windowUser.password,
-    id: parseInt(id)
+    password: windowUser.username,
+    id: id
   }
-  
+
   useEffect(() => {
     const start = new Date();
     const interval = setInterval(() => {
@@ -51,7 +66,7 @@ export default function QuickVote(){
 
       if (time < s) {
         alert("Timer terminado");
-        onSubmit()
+        enviarVoto(info,voto)
       }
     }, 1000);
 
@@ -60,7 +75,7 @@ export default function QuickVote(){
 
     //Esperamos 3 segundos antes de volver a pedir el estado de la partida
     useEffect(()=>{
-      if(story.result=="waiting_players"){
+      if(story.result==="waiting_players"){
       const sleep = async (ms) => {
         await new Promise(r => setTimeout(r, ms));
       }
@@ -106,12 +121,18 @@ export default function QuickVote(){
       
 
     // Opciones para llamar a la api
+    const body ={
+      username: windowUser.username,
+      password: windowUser.password,
+      turn: turn,
+      id: id
+    }
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(info) 
+      body: JSON.stringify(body) 
     }
     
     const res = await fetch('http://localhost:3000/api/quick_game/resume_vote_quick_game', options)
@@ -120,17 +141,21 @@ export default function QuickVote(){
     data.result = "correcto" // DEBUG
 
     // Si no ha ido bien o no estoy logeado volvemos a /
-    if(data.result === "error"){
-      localStorage.setItem("logged", "no")
-      router.push("/login")
+    if(data.result == "error"){
+      alert("Error al obtener datos votacion")
+      router.push("/quickGame")
       return
-    }
+    }/*else if(data.turn != turn){
+      alert("Recibidos datos del turno incorrecto")
+      router.push("/quickGame")
+    }*/
 
     // Llama al hook que almacena la información del usuario
-    //setStory(placeholder)
-    //setTime(placeholder.s)
-    setStory(data)
-    setTime(data.s)
+    setStory(placeholder)
+    setTime(placeholder.s)
+    setTurn(turn+1)
+    //setStory(data)
+    //setTime(data.s)
   }
 
   // Hace fetch de la api
@@ -203,13 +228,14 @@ async function enviarVoto(info, voto){
   const data = await res.json();
 
   if(!data){
-    
+    alert("Datos no encontrados")    
   }else if(data.result === "error"){
-
+    alert("Error al enviar datos")
+    router.push("/quickGame")
   }else{
     if(story.isLast){
       router.push("/quickGame/results")
     }
     setTick(!tick)
   }
-}
+} 
