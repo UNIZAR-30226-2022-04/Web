@@ -1,7 +1,7 @@
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
 import { findGame, checkEmpty } from "../../../lib/Game";
-import { state } from "../../../lib/GamesManager";
+import { REVIEW_TIME } from "../../../lib/GamesManager";
 
 export default async (req, res) => {
 	const message = req.body;
@@ -50,7 +50,7 @@ export default async (req, res) => {
 				result: result,
 				paragraphs: paragraphs,
 				winner: idx,
-				s: game.getRemainingTime()
+				s: REVIEW_TIME
 			});
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });
