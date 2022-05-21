@@ -12,7 +12,7 @@ export default function Results() {
 
 	const [windowUser, setWindowUser] = useState({});
 
-	const [results, setResults] = useState(false);
+	const [results, setResults] = useState();
 
 	const [position, setPosition] = useState(-1);
 
