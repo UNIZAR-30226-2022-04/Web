@@ -1,10 +1,9 @@
-import { addPlayerGame, createGame } from "../../../lib/Game";
+import { addPlayerGame, checkEmpty, findGame } from "../../../lib/Game";
 import Player from "../../../lib/Player";
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
 import { gamesList } from "../../../lib/GamesManager";
 import { MAX_AMOUNT_PLAYERS } from "../../../lib/GamesManager";
-import { state } from "../../../lib/GamesManager";
 
 export default async (req, res) => {
 	const message = req.body;
@@ -36,11 +35,15 @@ export default async (req, res) => {
 					user.stars,
 					user.mooncoins
 				);
-				const oldGame = gamesList.find(
+				var oldGame = gamesList.find(
 					(game) =>
 						game.players.find((player) => player.username == p.username) !=
 						undefined
 				);
+				if (oldGame != undefined) {
+					await checkEmpty(oldGame.room_id);
+					oldGame = findGame(oldGame.room_id);
+				}
 				if (oldGame != undefined){
 					res.status(200).json({
 						result: "success",

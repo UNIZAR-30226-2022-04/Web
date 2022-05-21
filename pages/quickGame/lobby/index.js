@@ -68,9 +68,8 @@ export default function QuickGame(){
 
             // Si no ha ido bien o no estoy logeado volvemos a /
             if(data.result === 'error'){
-                console.log(data)
-                alert("Error")
-                router.push("/quickGame")
+                console.log("Error first get room", data)
+                await leaveRoom(windowUser, ident, router)
                 return
             }
 
@@ -108,16 +107,15 @@ export default function QuickGame(){
 
             // Si no ha ido bien o no estoy logeado volvemos a /
             if(data.result === 'error'){
-                console.log(data)
-                alert("Error")
-                router.push("/quickGame")
+                console.log("Error check started", data)
+                await leaveRoom(windowUser, ident, router)                
                 return
             }
 
             if(data.hasStarted == 1){
-                router.push(`/quickGame/write?id=${room}`)
+                router.push(`/quickGame/write?id=${code}`)
             }else if(data.hasStarted == 2){
-                router.push(`/quickGame/vote?id=${room}`)
+                router.push(`/quickGame/vote?id=${code}`)
             }
 
             setRoom(data)
