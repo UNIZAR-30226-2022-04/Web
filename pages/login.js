@@ -97,7 +97,7 @@ const onSubmit = (e, name, password, router) => {
 						localStorage.setItem("username", name);
 						localStorage.setItem("password", hash);
 
-						router.push("http://localhost:3000/profile");
+						router.push("/profile");
 					} else {
 						if (res2.reason == "user_not_found") {
 							alert("Usuario desconocido");
@@ -130,7 +130,10 @@ const tryLogin = async (user, pass) => {
 		body: JSON.stringify(info),
 	};
 
-	const res = await fetch("http://localhost:3000/api/general/login", options);
+	const res = await fetch(
+		"https://frankenstory-mooncode.herokuapp.com/api/general/login",
+		options
+	);
 	const data = await res.json();
 	return data;
 };
@@ -150,7 +153,7 @@ const getSalt = async (name) => {
 	};
 
 	const res = await fetch(
-		"http://localhost:3000/api/general/get_salt",
+		"https://frankenstory-mooncode.herokuapp.com/api/general/get_salt",
 		options
 	);
 	return res.json();
