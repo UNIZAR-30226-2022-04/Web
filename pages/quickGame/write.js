@@ -24,7 +24,6 @@ export default function Write() {
   // Info de una partida
   const [turn, setTurn] = useState(0)
   const [rivals, setRivals] = useState([])
-  const [rivalsPersistent, setRivalsPersistent ] = useState([])
   const [roomID, setRoomID] = useState()
 
   const [game, setGame] = useState({
@@ -39,10 +38,11 @@ export default function Write() {
   })
 
   // Saca la información del usuario de la pantalla
+  // Solo se obtiene al principio
   useEffect(()=>{
     if(localStorage.getItem("logged") == "si"){
       const queryParams = new URLSearchParams(window.location.search);
-      setRoomID("#"+queryParams.get("id"))
+      setRoomID(queryParams.get("id"))
 
       const username = localStorage.getItem("username")
       const password = localStorage.getItem("password")
@@ -66,24 +66,25 @@ export default function Write() {
 
   
   // Obtiene los datos de la sala
+  // Se ejcuta una vez por turno
   useEffect(() => {
-    const getData = async () => {
-      if(!windowUser.username){
-        return
-      }
-      
+    if(!windowUser.username || !roomID){
+      return
+    }
+
+    const getData = async () => {    
       // Información que necesitan las apis
       const infoRoom = {
         username: windowUser.username,
         password: windowUser.password,
-        id: roomID
+        id: '#' + roomID
       }
 
       const infoTurn = {
-        username: localStorage.getItem("username"),
-        password: localStorage.getItem("password"),
+        username: windowUser.username,
+        password: windowUser.password,
         turn: turn,
-        id: roomID
+        id: '#' + roomID
       }
 
       // Opciones para la realización de la llamada HTTP
@@ -112,7 +113,6 @@ export default function Write() {
       const resTurn = await fetch("http://localhost:3000/api/quick_game/play_quick_game", optionsTurn)
       const dataTurn = await resTurn.json()
       
-      ///*
       if(dataRoom.result != "error" && dataTurn.result != "error"){     
         setGame({
           state: dataTurn.result,
@@ -124,62 +124,19 @@ export default function Write() {
           turn: dataTurn.turn,
           punyeta: dataTurn.puneta          
         })
+        setRivals(dataRoom.participants.filter(rival => rival.username != windowUser.username))
 
-        setRivalsPersistent(dataRoom.participants)
-        setRivals(rivalsPersistent)
       }else{
-        /**setGame({
-          state: "waiting_players",
-          time: 20,
-          topic: "",
-          randomWords: [],
-          lastParagraph: "",
-          last: false,
-          turn: 1,
-          punyeta: ""
-        })*/
+        console.log("ERROR AL OBTENER DATOS DE ESCRITURA")
+        console.log("SALA:", dataRoom)
+        console.log("TURNO:", dataTurn)
         router.push("/quickGame")
       }
-      //*/
-
-      //HARCODEADO STILL TO TEST
-      /* 
-      setGame({
-        state: "success",
-        time: 300,
-        topic: "",
-        randomWords: ["word1","word2","word3"],
-        lastParagraph: "Último párrafo si no es la primera",
-        last: true,
-        turn: 1,
-        punyeta: "",
-      })
-
-      setRivals(
-        [
-          {
-            username:"nombre",
-            picture: 1,
-            stars: 124
-          },
-          {
-            username:"pepino",
-            picture: 3,
-            stars: 124
-          },
-          {
-            username:"jamon",
-            picture: 2,
-            stars: 124
-          },
-        ]
-      )
-      */
     }
 
     getData()
     
-  }, [windowUser])
+  }, [windowUser, roomID, turn])
   
   
   //Temporizador
@@ -194,7 +151,7 @@ export default function Write() {
       setClock(game.time-s);
 
       if (game.time < s) {
-        //submitParagraph(windowUser, roomID, currentText, turn, setTurn, game)
+        submitParagraph(windowUser, roomID, currentText, turn, setTurn, punyetasCompradas, game)
       }
     }, 1000);
 
@@ -210,7 +167,6 @@ export default function Write() {
       }
 
       sleep(3000).then(()=>{
-        setRefresh(!refresh)  // Refrescamos los datos
         if(dots.length==3){
           setDots("")
         }else{
@@ -218,7 +174,7 @@ export default function Write() {
         }
       })
     }
-  }, [refresh])
+  }, [])
 
   // Si tadavía no hoy usuario o sala, esperamos a que lo haya
   if(!windowUser || game.turn == 0){
@@ -236,20 +192,17 @@ export default function Write() {
   return (
     <Layout data={layoutInfo}>
       <div className='flex flex-row w-full mb-20'>
-        <form className='flex flex-col items-center align-middle justify-center w-full h-full space-y-2' onSubmit={() => (submitParagraph(windowUser, roomID, currentText, turn, setTurn, game))}>
+        <div className='flex flex-col items-center align-middle justify-center w-full h-full space-y-2' >
           <div className="commonTitle h-auto">{turn==0 ? "Comienza la historia" : "Párrafo anterior" } </div>
           <div>{game.previous}</div>
           <div className="">
-            { game.topic != "" && turn==0 ?(
+            { game.topic != "" ?(
               <div className="flex flex-row space-x-2 items-center">
                 <div>Tema de la historia</div>
                 <div className="rounded bg-blue-400 p-1">#{game.topic}</div>
                 <Image className="" src="/quick-game/twitter_trend.png" width={30} height={30}/>
               </div>
             ):(
-              <></>
-            )}
-            {game.topic == "" ?(
               <div className='flex flex-col items-center'>
                 <div className="">Palabras a introducir</div>
                 <div className="flex flex-row space-x-2 items-center">
@@ -258,8 +211,6 @@ export default function Write() {
                   <DisplayPalabraClave palabra={game.randomWords[2]} currentText={currentText}/>
                 </div>
               </div>
-            ):(
-              <></> 
             )}
           </div>
 
@@ -269,9 +220,9 @@ export default function Write() {
           </div>
 
           <textarea className={`text-2xl font-arial h-2/5 w-2/5 p-3 rounded-lg ${ game.punyeta == "reves" ? "font-reverse" : ""} ${ game.punyeta == "ciego" ? "font-blank bg-black" : ""}`} type="password" required={true} value={currentText} placeholder="Escribe tu parrafo" onChange={(e) => setCurrentText(e.target.value)}/>
-          <button className="commonButton bg-verde_top" type="submit">Enviar parrafo</button>
+          <button className="commonButton bg-verde_top" type="button" onClick={() => (submitParagraph(windowUser, roomID, currentText, turn, setTurn, punyetasCompradas, game))}>Enviar parrafo</button>
 
-        </form>
+        </div>
         <div className="bg-green-800 flex flex-col align-middle w-1/4 items-center">
           <div className="flex-row">
             {game.last ? (
@@ -334,21 +285,21 @@ export default function Write() {
 */
 
 // te redirecciona a votación
-async function submitParagraph(windowUser, roomID, currentText, turn, setTurn, game) {
-  const res = await addParagraph(windowUser, roomID, currentText, turn, game.punyetas)
+async function submitParagraph(windowUser, roomID, currentText, turn, setTurn, punyetas, game) {
+  const res = await addParagraph(windowUser, roomID, currentText, turn, punyetas)
+  console.log("Mensaje Envío Parrafo: ", res)
 
-  if(res.result == "error"){
+  if(res.result != "success"){
     alert("Error al enviar parrafo")
-    //router.push("/quickGame")
+    router.push("/quickGame")
   }
 
+  // BUG HERE
   if(game.last){
-    //router.push(`/quickGame/vote?id=${roomID}`)
+    router.push(`/quickGame/vote?id=${roomID}`)
   }
 
   setTurn(turn+1)
-  setRefresh(!refresh)
-  setRivals(rivalsPersistent)
 }
 
 // Añade un párrafo
@@ -356,7 +307,7 @@ async function addParagraph (windowUser, roomID, currentText, turn, punyetas) {
   const info = {
     username:windowUser.username,
     password:windowUser.password,
-    id:roomID,
+    id:'#' + roomID,
     body:currentText,
     turn:turn,
     punetas:punyetas
@@ -369,6 +320,9 @@ async function addParagraph (windowUser, roomID, currentText, turn, punyetas) {
     },
     body: JSON.stringify(info)
   }
+
+  console.log("ADD PARAGRAPH INFO: ", info)
+
   const res = await fetch("http://localhost:3000/api/quick_game/add_quick_game_paragraph", options)
   const data = await res.json()
   return data
@@ -412,11 +366,14 @@ function chooseTarget(coins, setCoins, rivalName, punyetaCarro, setPunyetasMenu,
   }
   
   setCoins(coins-precio)
+  
+  
+  var pyt = punyetasCompradas
+  pyt.push(dupla)
 
-  setPunyetasCompradas([...punyetasCompradas, dupla])
-
+  setPunyetasCompradas(pyt)
   setRivals( rivals.filter(rival => rival.username != rivalName) )
-  setPunyetasCompradas([...punyetasCompradas, dupla])
+
   return
 }
 

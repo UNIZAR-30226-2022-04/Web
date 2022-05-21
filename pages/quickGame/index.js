@@ -34,7 +34,7 @@ export default function StoryMode(){
       })
 
     }else{
-router.push("/login")
+      router.push("/login")
     }
   }, [])
  
@@ -60,7 +60,7 @@ router.push("/login")
   return(
     <Layout data={layoutInfo} >
       <div className='h-full w-2/4 flex flex-row justify-center items-center space-x-20'>
-        <form className="flex flex-col items-center space-y-4">
+        <div className="flex flex-col items-center space-y-4">
           <input type="text" placeholder='Código' value={code} onChange={(e) => setCode(e.target.value)}/>
           { errorJ != "" ? (
             <div className="centered text-red-700">{errorJ}</div>
@@ -74,9 +74,9 @@ router.push("/login")
           ):(
             <></>
           )}
-        </form>
+        </div>
 
-        <form className ="flex flex-col space-y-2">
+        <div className ="flex flex-col space-y-2">
           <p>Tiempo de escritura</p>
           <div className="flex flex-col">
               <p className="text-2xl float-left text-white">{parseInt(time/60)}min:{time % 60}seg</p>
@@ -98,7 +98,7 @@ router.push("/login")
             <input className={`py-1 px-2 text-white ${ gameMode=="twitter" ? 'bg-green-800' : 'bg-green-600'}`} type="button" value="TWITTER" onClick={() => setGameMode("twitter")}/><> </>
           </div>
           <button type="button" onClick={()=>(create(windowUser, time, privateGame, gameMode, setErrorR, setErrorJ, router))} className="clickableItem rounded-xl bg-green-800 text-white p-2 border-2 border-white">Crear partida</button>
-        </form>
+        </div>
       </div>
       <Rulette page='quickGame'/>            
     </Layout>
@@ -112,7 +112,6 @@ async function create (windowUser, time, isPrivate, gameMode, setErrorR, setErro
   if(res.result != "success"){
     setErrorJ(res.reason)
   }else{
-    console.log(res)
     router.push(`quickGame/lobby?code=${res.id.slice(1)}`)
   }
 }
@@ -121,10 +120,14 @@ async function join (windowUser, code, setErrorR, setErrorJ, router) {
   setErrorR("")
   const res = await tryJoin(windowUser, code)
 
+  if(res.reason == "player_in_game"){
+    router.push(`quickGame/lobby?code=${code}`)
+    return
+  }
+  
   if(res.result != "success"){
     setErrorJ(res.reason)
   }else{
-    console.log(res)
     router.push(`quickGame/lobby?code=${code}`)
   }
 }
@@ -133,16 +136,15 @@ async function random(windowUser, setErrorJ, setErrorR, router) {
   setErrorJ("")
   
   const res = await tryRandom(windowUser)
-
-  alert(res.result)
+  
+  if(res.reason == "player_in_game"){
+    router.push(`quickGame/lobby?code=${res.id.slice(1)}`)
+    return
+  }
 
   if(res.result != "success"){
-
     setErrorR(res.reason)
-  
   }else{
-    alert(res.id)
-    console.log(res)
     router.push(`quickGame/lobby?code=${res.id.slice(1)}`)
   }
 }
@@ -175,7 +177,6 @@ async function tryJoin(windowUser, code) {
     password:windowUser.password,
     id:"#"+code
   }
-  alert(info.id)
   const options = {
     method: 'POST',
     headers: {
