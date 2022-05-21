@@ -155,7 +155,7 @@ export default function Results() {
 	};
 
 	return (
-		<Layout data={layoutInfo}>
+		<Layout data={layoutInfo} inGame={true}>
 			<div className="flex flex-col w-screen">
 				<div className="flex">
 					<div className="w-1/12" />

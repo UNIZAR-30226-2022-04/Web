@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
+import Layout from "components/Layout";
 
 //import Lottie from 'react-lottie'
 //import loginLottie from '/public/lottie/login.json'
@@ -21,58 +22,74 @@ export default function Login() {
 	}, [router]);
 
 	return (
-		<div className="background h-screen w-screen flex flex-col items-center justify-center">
-			<Image
-				src={"/frankenstory.png"}
-				height={150}
-				width={600}
-				alt={"LOGO"}
-			/>
-			<div className="flex flex-row justify-center items-center">
-				<form
-					className="flex flex-col items-center justify-center"
-					onSubmit={(e) => onSubmit(e, name, password, router)}
-				>
-					<h1 className="commonTitle font-arial-b">INICIAR SESIÓN</h1>
-					<div className="w-96 flex flex-col space-y-2">
-						<div>
-							<div className="commonSubtitle">Usuario</div>
-							<input
-								className="w-full p-2 bg-white rounded-lg"
-								maxLength={30}
-								type="text"
-								value={name}
-								placeholder="Usuario"
-								onChange={(e) => setName(e.target.value)}
-							/>
-						</div>
-						<div>
-							<div className="commonSubtitle">Contraseña</div>
-							<input
-								className="w-full p-2 bg-white rounded-lg"
-								maxLength={30}
-								type="password"
-								value={password}
-								placeholder="Contraseña"
-								onChange={(e) => setPassword(e.target.value)}
-							/>
-						</div>
-						<button
-							className="commonButton bg-verde_top"
-							type="submit"
+		<Layout noInfo={true}>
+			<div className="background">
+				<div className="flex flex-col items-center justify-center w-full mt-24">
+					<Image
+						src={"/frankenstory.png"}
+						height={150}
+						width={600}
+						alt={"LOGO"}
+					/>
+					<div className="flex flex-row justify-center items-center">
+						<form
+							className="flex flex-col items-center justify-center"
+							onSubmit={(e) =>
+								onSubmit(e, name, password, router)
+							}
 						>
-							Iniciar sesión
-						</button>
+							<h1 className="commonTitle font-arial-b">
+								INICIAR SESIÓN
+							</h1>
+							<div className="w-96 flex flex-col space-y-2">
+								<div>
+									<div className="commonSubtitle">
+										Usuario
+									</div>
+									<input
+										className="w-full p-2 bg-white rounded-lg"
+										maxLength={30}
+										type="text"
+										value={name}
+										placeholder="Usuario"
+										onChange={(e) =>
+											setName(e.target.value)
+										}
+									/>
+								</div>
+								<div>
+									<div className="commonSubtitle">
+										Contraseña
+									</div>
+									<input
+										className="w-full p-2 bg-white rounded-lg"
+										maxLength={30}
+										type="password"
+										value={password}
+										placeholder="Contraseña"
+										onChange={(e) =>
+											setPassword(e.target.value)
+										}
+									/>
+								</div>
+								<button
+									className="commonButton bg-verde_top hover:bg-emerald-600"
+									type="submit"
+								>
+									Iniciar sesión
+								</button>
+							</div>
+						</form>
 					</div>
-				</form>
+					<button
+						className="commonButton bg-verde_top hover:bg-emerald-600 static bottom-0 right-0 m-10"
+						onClick={() => router.push("/register")}
+					>
+						Crear cuenta 🡆
+					</button>
+				</div>
 			</div>
-			<button
-				className="commonButton bg-verde_top absolute bottom-0 right-0 m-10"
-				onClick={() => router.push("/register")}
-			>
-				Crear Cuenta {"->"}
-			</button>
-		</div>
+		</Layout>
 	);
 }
 

@@ -25,13 +25,13 @@ export default function Rulette({ page }) {
 				<RuletteButton
 					page={page}
 					thisPage="yourStories"
-					icon="/rulette/your_stories.png"
+					icon="/icons/read.png"
 					reference="/profile/saved_tales"
 				/>
 				<RuletteButton
 					page={page}
 					thisPage="friends"
-					icon="/rulette/friends.png"
+					icon="/rulette/friends-ico.png"
 					reference="/profile/friends"
 				/>
 			</div>

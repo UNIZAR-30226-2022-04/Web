@@ -186,7 +186,7 @@ export default function QuickVote() {
 	};
 
 	return (
-		<Layout data={layoutInfo}>
+		<Layout data={layoutInfo} inGame={true}>
 			<div className="w-screen justify-top h-full align-middle items-center text-center space-y-4">
 				<h1 className="commonTitle">VOTACIONES</h1>
 				<h2 className="commonSubtitle">

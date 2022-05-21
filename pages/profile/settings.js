@@ -52,146 +52,158 @@ export default function Settings() {
 
 	return (
 		<Layout data={layoutInfo} inSettingsScreen="true">
-			<div className="flex flex-col h-full w-full items-center justify-center">
-				<div className="flex flex-row items-center space-x-5">
-					<Image src="/icons/settings.png" width="28" height="28" />
-					<div className="commonTitle">Ajustes</div>
-				</div>
+			<div className="background">
+				<div className="flex flex-col items-center justify-center w-full mt-24">
+					<div className="flex flex-row items-center space-x-5">
+						<img src="/icons/settings.png" width="36" height="36" />
+						<div className="commonTitle">Ajustes</div>
+					</div>
 
-				<div className="flex flex-row items-center space-x-56 ">
-					<form className="flex flex-col space-y-2 ">
-						<div className="commonTitle">Contraseña</div>
-						<input
-							type="password"
-							value={passwd}
-							placeholder="**********"
-							onChange={(e) => setPass(e.target.value)}
-						/>
-						<div className="commonTitle">Repita la Contraseña</div>
-						<input
-							type="password"
-							value={passwdRep}
-							placeholder="**********"
-							onChange={(e) => setPassRep(e.target.value)}
-						/>
-						<button
-							className="buttonStyle bg-green-800 hover:bg-green-400"
-							type="button"
-							onClick={() =>
-								changePassword(windowUser, passwd, passwdRep)
-							}
-						>
-							Cambiar Contraseña
-						</button>
-					</form>
-
-					<div className="flex flex-col space-y-2 ">
-						<div className="flex flex-col items-center space-y-4">
-							<div className="flex flex-row space-x-3">
-								<ProfilePic
-									iconId="0"
-									path="/profPic/icon0.png"
-									selectedIcon={icon}
-									setIcon={setIcon}
-								/>
-								<ProfilePic
-									iconId="1"
-									path="/profPic/icon1.png"
-									selectedIcon={icon}
-									setIcon={setIcon}
-								/>
-								<ProfilePic
-									iconId="2"
-									path="/profPic/icon2.png"
-									selectedIcon={icon}
-									setIcon={setIcon}
-								/>
-								<ProfilePic
-									iconId="3"
-									path="/profPic/icon3.png"
-									selectedIcon={icon}
-									setIcon={setIcon}
+					<div className="flex flex-row items-center space-x-56 mt-20">
+						<form className="flex flex-col space-y-8">
+							<div className="flex flex-col space-y-2">
+								<div className="commonTitle">Contraseña</div>
+								<input
+									type="password"
+									value={passwd}
+									placeholder="**********"
+									onChange={(e) => setPass(e.target.value)}
 								/>
 							</div>
-
-							<div className="flex flex-row space-x-3">
-								<ProfilePic
-									iconId="4"
-									path="/profPic/icon4.png"
-									selectedIcon={icon}
-									setIcon={setIcon}
-								/>
-								<ProfilePic
-									iconId="5"
-									path="/profPic/icon5.png"
-									selectedIcon={icon}
-									setIcon={setIcon}
-								/>
-								<ProfilePic
-									iconId="6"
-									path="/profPic/icon6.png"
-									selectedIcon={icon}
-									setIcon={setIcon}
-								/>
-								<ProfilePic
-									iconId="7"
-									path="/profPic/icon7.png"
-									selectedIcon={icon}
-									setIcon={setIcon}
+							<div className="flex flex-col space-y-2">
+								<div className="commonTitle">
+									Repita la Contraseña
+								</div>
+								<input
+									type="password"
+									value={passwdRep}
+									placeholder="**********"
+									onChange={(e) => setPassRep(e.target.value)}
 								/>
 							</div>
+							<button
+								className="commonButton bg-verde_top hover:bg-emerald-600"
+								type="button"
+								onClick={() =>
+									changePassword(
+										windowUser,
+										passwd,
+										passwdRep
+									)
+								}
+							>
+								Cambiar Contraseña
+							</button>
+						</form>
 
-							<div className="flex flex-row space-x-3">
-								<ProfilePic
-									iconId="8"
-									path="/profPic/icon8.png"
-									selectedIcon={icon}
-									setIcon={setIcon}
-								/>
-								<ProfilePic
-									iconId="9"
-									path="/profPic/icon9.png"
-									selectedIcon={icon}
-									setIcon={setIcon}
-								/>
+						<div className="flex flex-col space-y-8">
+							<div className="flex flex-col items-center space-y-4">
+								<div className="flex flex-row space-x-3">
+									<ProfilePic
+										iconId="0"
+										path="/profPic/icon0.png"
+										selectedIcon={icon}
+										setIcon={setIcon}
+									/>
+									<ProfilePic
+										iconId="1"
+										path="/profPic/icon1.png"
+										selectedIcon={icon}
+										setIcon={setIcon}
+									/>
+									<ProfilePic
+										iconId="2"
+										path="/profPic/icon2.png"
+										selectedIcon={icon}
+										setIcon={setIcon}
+									/>
+									<ProfilePic
+										iconId="3"
+										path="/profPic/icon3.png"
+										selectedIcon={icon}
+										setIcon={setIcon}
+									/>
+								</div>
+
+								<div className="flex flex-row space-x-3">
+									<ProfilePic
+										iconId="4"
+										path="/profPic/icon4.png"
+										selectedIcon={icon}
+										setIcon={setIcon}
+									/>
+									<ProfilePic
+										iconId="5"
+										path="/profPic/icon5.png"
+										selectedIcon={icon}
+										setIcon={setIcon}
+									/>
+									<ProfilePic
+										iconId="6"
+										path="/profPic/icon6.png"
+										selectedIcon={icon}
+										setIcon={setIcon}
+									/>
+									<ProfilePic
+										iconId="7"
+										path="/profPic/icon7.png"
+										selectedIcon={icon}
+										setIcon={setIcon}
+									/>
+								</div>
+
+								<div className="flex flex-row space-x-3">
+									<ProfilePic
+										iconId="8"
+										path="/profPic/icon8.png"
+										selectedIcon={icon}
+										setIcon={setIcon}
+									/>
+									<ProfilePic
+										iconId="9"
+										path="/profPic/icon9.png"
+										selectedIcon={icon}
+										setIcon={setIcon}
+									/>
+								</div>
 							</div>
+							<button
+								className="commonButton bg-amber-500 hover:bg-amber-700"
+								type="button"
+								onClick={() => changeIcon(windowUser, icon)}
+							>
+								Cambiar Icono
+							</button>
+							{deleteCheck == "" ? (
+								<button
+									className="commonButton bg-red-600 hover:bg-red-800"
+									type="button"
+									onClick={() =>
+										deleteUser(
+											windowUser,
+											deleteCheck,
+											setDeleteCheck
+										)
+									}
+								>
+									Eliminar Cuenta
+								</button>
+							) : (
+								<button
+									className="commonButton bg-red-600 hover:bg-red-800"
+									type="button"
+									onClick={() =>
+										deleteUser(
+											windowUser,
+											deleteCheck,
+											setDeleteCheck
+										)
+									}
+								>
+									Estoy seguro
+								</button>
+							)}
 						</div>
-						<button
-							className="buttonStyle bg-blue-800 hover:bg-blue-400"
-							type="button"
-							onClick={() => changeIcon(windowUser, icon)}
-						>
-							Cambiar Icono
-						</button>
-						{deleteCheck == "" ? (
-							<button
-								className="buttonStyle bg-red-800 hover:bg-red-400 "
-								type="button"
-								onClick={() =>
-									deleteUser(
-										windowUser,
-										deleteCheck,
-										setDeleteCheck
-									)
-								}
-							>
-								Eliminar Cuenta
-							</button>
-						) : (
-							<button
-								className="buttonStyle bg-red-800 hover:bg-red-400 "
-								type="button"
-								onClick={() =>
-									deleteUser(
-										windowUser,
-										deleteCheck,
-										setDeleteCheck
-									)
-								}
-							>
-								Estoy seguro
-							</button>
-						)}
 					</div>
 				</div>
 			</div>

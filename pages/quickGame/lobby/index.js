@@ -142,7 +142,7 @@ export default function QuickGame() {
 	};
 
 	return (
-		<Layout data={layoutInfo}>
+		<Layout data={layoutInfo} inGame={true}>
 			<div className="flex flex-col items-center justify-center w-screen space-y-5">
 				<div className="commonTitle">Código de la Sala: #{code}</div>
 				<div className="flex flex-row justify-center items-center space-x-20 ml-5">

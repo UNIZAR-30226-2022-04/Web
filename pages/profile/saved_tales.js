@@ -89,11 +89,11 @@ export default function SavedTales() {
 
 	const quick_stories = [
 		{
-			date: "12/07/21",
+			date: "12/07/22",
 			type: "quick_twitter",
 		},
 		{
-			date: "12/07/21",
+			date: "12/07/22",
 			type: "quick_random",
 		},
 	];

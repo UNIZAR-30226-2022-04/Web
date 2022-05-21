@@ -201,7 +201,7 @@ export default function Write() {
 
 	// Página principal
 	return (
-		<Layout data={layoutInfo}>
+		<Layout data={layoutInfo} inGame={true}>
 			<div className="flex flex-row w-full mb-20">
 				<div className="flex flex-col items-center align-middle justify-center w-full h-full space-y-2">
 					<div className="commonTitle h-auto">
