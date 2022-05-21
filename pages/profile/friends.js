@@ -9,8 +9,8 @@ import Spinner from "components/Spinner";
 export default function Friends() {
 	const router = useRouter();
 	const [windowUser, setWindowUser] = useState({});
-	const [notification, useNotifications] = useState();
-	const [friends, useFriends] = useState();
+	const [notification, setNotifications] = useState();
+	const [friends, setFriends] = useState();
 
 	const [name, setName] = useState("");
 	const [found, setFound] = useState(false);
@@ -78,6 +78,9 @@ export default function Friends() {
 				router.push("/login");
 				return;
 			}
+
+      setFriends(data.friends)
+      setNotifications(data.notifications)
 		};
 
 		if (windowUser != undefined) {
