@@ -24,6 +24,7 @@ export default function Write() {
   // Info de una partida
   const [turn, setTurn] = useState(0)
   const [rivals, setRivals] = useState([])
+  const [rivalsPersistent, setRivalsPersistent ] = useState([])
   const [roomID, setRoomID] = useState()
 
   const [game, setGame] = useState({
@@ -124,8 +125,19 @@ export default function Write() {
           punyeta: dataTurn.puneta          
         })
 
-        setRivals(dataRoom.participants)
+        setRivalsPersistent(dataRoom.participants)
+        setRivals(rivalsPersistent)
       }else{
+        /**setGame({
+          state: "waiting_players",
+          time: 20,
+          topic: "",
+          randomWords: [],
+          lastParagraph: "",
+          last: false,
+          turn: 1,
+          punyeta: ""
+        })*/
         router.push("/quickGame")
       }
       //*/
@@ -182,7 +194,7 @@ export default function Write() {
       setClock(game.time-s);
 
       if (game.time < s) {
-        submitParagraph(windowUser, roomID, currentText, turn, setTurn, game)
+        //submitParagraph(windowUser, roomID, currentText, turn, setTurn, game)
       }
     }, 1000);
 
@@ -206,7 +218,7 @@ export default function Write() {
         }
       })
     }
-  }, [])
+  }, [refresh])
 
   // Si tadavía no hoy usuario o sala, esperamos a que lo haya
   if(!windowUser || game.turn == 0){
@@ -335,6 +347,8 @@ async function submitParagraph(windowUser, roomID, currentText, turn, setTurn, g
   }
 
   setTurn(turn+1)
+  setRefresh(!refresh)
+  setRivals(rivalsPersistent)
 }
 
 // Añade un párrafo
