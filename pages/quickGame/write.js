@@ -105,13 +105,13 @@ export default function Write() {
 
 			// Llamadas a las apis
 			const resRoom = await fetch(
-				"http://localhost:3000/api/quick_game/get_room",
+				`${process.env.NEXT_PUBLIC_URL}/api/quick_game/get_room`,
 				optionsRoom
 			);
 			const dataRoom = await resRoom.json();
 
 			const resTurn = await fetch(
-				"http://localhost:3000/api/quick_game/play_quick_game",
+				`${process.env.NEXT_PUBLIC_URL}/api/quick_game/play_quick_game`,
 				optionsTurn
 			);
 			const dataTurn = await resTurn.json();
@@ -458,7 +458,7 @@ async function addParagraph(windowUser, roomID, currentText, turn, punyetas) {
 	console.log("ADD PARAGRAPH INFO: ", info);
 
 	const res = await fetch(
-		"http://localhost:3000/api/quick_game/add_quick_game_paragraph",
+		`${process.env.NEXT_PUBLIC_URL}/api/quick_game/add_quick_game_paragraph`,
 		options
 	);
 	const data = await res.json();

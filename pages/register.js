@@ -103,7 +103,6 @@ const tryRegister = async (user, pass, mail) => {
 		salt: salt,
 	};
 
-	const url = "http://localhost:3000/api/general/register";
 	const options = {
 		method: "POST",
 		headers: {
@@ -112,7 +111,10 @@ const tryRegister = async (user, pass, mail) => {
 		},
 		body: JSON.stringify(info),
 	};
-	const res = await fetch(url, options);
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_URL}/api/general/register`,
+		options
+	);
 	return res.json();
 };
 
@@ -129,7 +131,7 @@ async function onSubmit(e, name, mail, password, passwordR, router) {
 	} else {
 		const res = await tryRegister(name, password, mail);
 		if (res.result == "success") {
-			window.location = `http://localhost:3000/profile`;
+			window.location = `${process.env.NEXT_PUBLIC_URL}/profile`;
 		} else {
 			if (res.reason == "user_already_registered") {
 				alert("El nombre de usuario introducido ya esta en uso");

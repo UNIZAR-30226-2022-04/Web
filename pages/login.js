@@ -131,7 +131,7 @@ const tryLogin = async (user, pass) => {
 	};
 
 	const res = await fetch(
-		"https://frankenstory-mooncode.herokuapp.com/api/general/login",
+		`${process.env.NEXT_PUBLIC_URL}/api/general/login`,
 		options
 	);
 	const data = await res.json();
@@ -153,7 +153,7 @@ const getSalt = async (name) => {
 	};
 
 	const res = await fetch(
-		"https://frankenstory-mooncode.herokuapp.com/api/general/get_salt",
+		`${process.env.NEXT_PUBLIC_URL}/api/general/get_salt`,
 		options
 	);
 	return res.json();

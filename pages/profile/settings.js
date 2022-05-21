@@ -1,253 +1,364 @@
-import Image from 'next/image'
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
-import Layout from 'components/Layout'
-import Spinner from 'components/Spinner'
+import Layout from "components/Layout";
+import Spinner from "components/Spinner";
 
-var sha512 = require(`sha512`)
-var SecureRandom = require('securerandom');
+var sha512 = require(`sha512`);
+var SecureRandom = require("securerandom");
 
 export default function Settings() {
-  const [passwd, setPass] = useState("")
-  const [passwdRep, setPassRep] = useState("")
-  const [icon, setIcon] = useState("")
-  const [deleteCheck, setDeleteCheck] = useState("")
+	const [passwd, setPass] = useState("");
+	const [passwdRep, setPassRep] = useState("");
+	const [icon, setIcon] = useState("");
+	const [deleteCheck, setDeleteCheck] = useState("");
 
-  const router = useRouter()
+	const router = useRouter();
 
-  const [windowUser, setWindowUser] = useState({}) 
+	const [windowUser, setWindowUser] = useState({});
 
+	useEffect(() => {
+		if (localStorage.getItem("logged") == "si") {
+			const username = localStorage.getItem("username");
+			const password = localStorage.getItem("password");
+			const picture = localStorage.getItem("picture");
+			const coins = localStorage.getItem("coins");
+			const stars = localStorage.getItem("stars");
 
-  useEffect(()=>{
-    if(localStorage.getItem("logged") == "si"){
-      const username = localStorage.getItem("username")
-      const password = localStorage.getItem("password")
-      const picture = localStorage.getItem("picture")
-      const coins = localStorage.getItem("coins")
-      const stars = localStorage.getItem("stars")
+			setWindowUser({
+				username: username,
+				password: password,
+				picture: picture,
+				coins: coins,
+				stars: stars,
+			});
+		} else {
+			router.push("/login");
+		}
+	}, []);
 
-      setWindowUser({
-        username: username, 
-        password: password,
-        picture: picture,
-        coins: coins,
-        stars: stars
-      })
-    }else{
-      router.push("/login")
-    }
-  }, [])
+	// Si tadavía no hoy usuario, esperamos a que lo haya
+	if (!windowUser) {
+		return <Spinner />;
+	}
 
-  // Si tadavía no hoy usuario, esperamos a que lo haya
-  if(!windowUser){
-    return <Spinner />
-  }
+	const layoutInfo = {
+		username: windowUser.username,
+		stars: windowUser.stars,
+		coins: windowUser.coins,
+		image_ID: windowUser.picture,
+	};
 
-  const layoutInfo = {
-    username: windowUser.username,
-    stars:    windowUser.stars,
-    coins:    windowUser.coins,
-    image_ID: windowUser.picture
-  }  
+	return (
+		<Layout data={layoutInfo} inSettingsScreen="true">
+			<div className="flex flex-col h-full w-full items-center justify-center">
+				<div className="flex flex-row items-center space-x-5">
+					<Image src="/icons/settings.png" width="28" height="28" />
+					<div className="commonTitle">Ajustes</div>
+				</div>
 
-  return(
-    <Layout data={layoutInfo} inSettingsScreen='true'>  
+				<div className="flex flex-row items-center space-x-56 ">
+					<form className="flex flex-col space-y-2 ">
+						<div className="commonTitle">Contraseña</div>
+						<input
+							type="password"
+							value={passwd}
+							placeholder="**********"
+							onChange={(e) => setPass(e.target.value)}
+						/>
+						<div className="commonTitle">Repita la Contraseña</div>
+						<input
+							type="password"
+							value={passwdRep}
+							placeholder="**********"
+							onChange={(e) => setPassRep(e.target.value)}
+						/>
+						<button
+							className="buttonStyle bg-green-800 hover:bg-green-400"
+							type="button"
+							onClick={() =>
+								changePassword(windowUser, passwd, passwdRep)
+							}
+						>
+							Cambiar Contraseña
+						</button>
+					</form>
 
-      <div className='flex flex-col h-full w-full items-center justify-center'>
-        
-        <div className='flex flex-row items-center space-x-5'>
-          <Image src='/icons/settings.png' width="28" height="28" />
-          <div className='commonTitle'>Ajustes</div>
-        </div> 
-        
-        <div className='flex flex-row items-center space-x-56 '>
-          <form className='flex flex-col space-y-2 '>       
-              <div className='commonTitle'>Contraseña</div>
-              <input type="password" value={passwd} placeholder="**********" onChange={(e) => setPass(e.target.value)}/>
-              <div className='commonTitle' >Repita la Contraseña</div>
-              <input type="password" value={passwdRep} placeholder="**********" onChange={(e) => setPassRep(e.target.value)}/>
-              <button className='buttonStyle bg-green-800 hover:bg-green-400' type="button" onClick={() => changePassword(windowUser, passwd, passwdRep)}>Cambiar Contraseña</button>
-          </form>
+					<div className="flex flex-col space-y-2 ">
+						<div className="flex flex-col items-center space-y-4">
+							<div className="flex flex-row space-x-3">
+								<ProfilePic
+									iconId="0"
+									path="/profPic/icon0.png"
+									selectedIcon={icon}
+									setIcon={setIcon}
+								/>
+								<ProfilePic
+									iconId="1"
+									path="/profPic/icon1.png"
+									selectedIcon={icon}
+									setIcon={setIcon}
+								/>
+								<ProfilePic
+									iconId="2"
+									path="/profPic/icon2.png"
+									selectedIcon={icon}
+									setIcon={setIcon}
+								/>
+								<ProfilePic
+									iconId="3"
+									path="/profPic/icon3.png"
+									selectedIcon={icon}
+									setIcon={setIcon}
+								/>
+							</div>
 
-          <div className='flex flex-col space-y-2 '>
-              <div className="flex flex-col items-center space-y-4">
-                
-                <div className="flex flex-row space-x-3">
-                  <ProfilePic iconId='0' path='/profPic/icon0.png' selectedIcon={icon} setIcon={setIcon}/>
-                  <ProfilePic iconId='1' path='/profPic/icon1.png' selectedIcon={icon} setIcon={setIcon}/>
-                  <ProfilePic iconId='2' path='/profPic/icon2.png' selectedIcon={icon} setIcon={setIcon}/>
-                  <ProfilePic iconId='3' path='/profPic/icon3.png' selectedIcon={icon} setIcon={setIcon}/>           
-                </div>
+							<div className="flex flex-row space-x-3">
+								<ProfilePic
+									iconId="4"
+									path="/profPic/icon4.png"
+									selectedIcon={icon}
+									setIcon={setIcon}
+								/>
+								<ProfilePic
+									iconId="5"
+									path="/profPic/icon5.png"
+									selectedIcon={icon}
+									setIcon={setIcon}
+								/>
+								<ProfilePic
+									iconId="6"
+									path="/profPic/icon6.png"
+									selectedIcon={icon}
+									setIcon={setIcon}
+								/>
+								<ProfilePic
+									iconId="7"
+									path="/profPic/icon7.png"
+									selectedIcon={icon}
+									setIcon={setIcon}
+								/>
+							</div>
 
-                <div className="flex flex-row space-x-3">
-                  <ProfilePic iconId='4' path='/profPic/icon4.png' selectedIcon={icon} setIcon={setIcon}/>
-                  <ProfilePic iconId='5' path='/profPic/icon5.png' selectedIcon={icon} setIcon={setIcon}/>
-                  <ProfilePic iconId='6' path='/profPic/icon6.png' selectedIcon={icon} setIcon={setIcon}/>
-                  <ProfilePic iconId='7' path='/profPic/icon7.png' selectedIcon={icon} setIcon={setIcon}/>
-                </div>
-
-                <div className="flex flex-row space-x-3">   
-                  <ProfilePic iconId='8' path='/profPic/icon8.png' selectedIcon={icon} setIcon={setIcon}/>
-                  <ProfilePic iconId='9' path='/profPic/icon9.png' selectedIcon={icon} setIcon={setIcon}/>
-                </div>
-            </div>  
-            <button className='buttonStyle bg-blue-800 hover:bg-blue-400' type="button" onClick={() => changeIcon(windowUser, icon)}>Cambiar Icono</button>
-            {deleteCheck == ''?(
-              <button className='buttonStyle bg-red-800 hover:bg-red-400 ' type="button" onClick={() => deleteUser(windowUser, deleteCheck, setDeleteCheck)}>Eliminar Cuenta</button>
-            ):(
-              <button className='buttonStyle bg-red-800 hover:bg-red-400 ' type="button" onClick={() => deleteUser(windowUser, deleteCheck, setDeleteCheck)}>Estoy seguro</button>
-            )}
-            
-          </div>
-
-        </div>
-      </div>
-            
-    </Layout>
-  )
+							<div className="flex flex-row space-x-3">
+								<ProfilePic
+									iconId="8"
+									path="/profPic/icon8.png"
+									selectedIcon={icon}
+									setIcon={setIcon}
+								/>
+								<ProfilePic
+									iconId="9"
+									path="/profPic/icon9.png"
+									selectedIcon={icon}
+									setIcon={setIcon}
+								/>
+							</div>
+						</div>
+						<button
+							className="buttonStyle bg-blue-800 hover:bg-blue-400"
+							type="button"
+							onClick={() => changeIcon(windowUser, icon)}
+						>
+							Cambiar Icono
+						</button>
+						{deleteCheck == "" ? (
+							<button
+								className="buttonStyle bg-red-800 hover:bg-red-400 "
+								type="button"
+								onClick={() =>
+									deleteUser(
+										windowUser,
+										deleteCheck,
+										setDeleteCheck
+									)
+								}
+							>
+								Eliminar Cuenta
+							</button>
+						) : (
+							<button
+								className="buttonStyle bg-red-800 hover:bg-red-400 "
+								type="button"
+								onClick={() =>
+									deleteUser(
+										windowUser,
+										deleteCheck,
+										setDeleteCheck
+									)
+								}
+							>
+								Estoy seguro
+							</button>
+						)}
+					</div>
+				</div>
+			</div>
+		</Layout>
+	);
 }
 
-function ProfilePic({iconId, path, selectedIcon, setIcon}){
-  if(selectedIcon == iconId){
-    return(
-      <div className='rounded-full h-12 w-12 ring ring-violet-800'>
-        <Image id={iconId}  src={path} width="50" height="50" onClick={(e) => setIcon(e.target.id) }/>
-      </div>
-    )
-  }else{
-    return(
-      <div className='hover:ring hover:ring-violet-300 rounded-full h-12 w-12'>
-        <Image id={iconId}  src={path} width="50" height="50" onClick={(e) => setIcon(e.target.id) }/>
-      </div>
-    )
-  }
-  
+function ProfilePic({ iconId, path, selectedIcon, setIcon }) {
+	if (selectedIcon == iconId) {
+		return (
+			<div className="rounded-full h-12 w-12 ring ring-violet-800">
+				<Image
+					id={iconId}
+					src={path}
+					width="50"
+					height="50"
+					onClick={(e) => setIcon(e.target.id)}
+				/>
+			</div>
+		);
+	} else {
+		return (
+			<div className="hover:ring hover:ring-violet-300 rounded-full h-12 w-12">
+				<Image
+					id={iconId}
+					src={path}
+					width="50"
+					height="50"
+					onClick={(e) => setIcon(e.target.id)}
+				/>
+			</div>
+		);
+	}
 }
 
-async function changeIcon(user, icon){
-  if(icon != ''){
-    const info = {
-      "username": user.username,
-      "password": user.password,
-      "newPicture": parseInt(icon)
-    }
-    
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(info) 
-    }
-    
-    const result = await fetch('http://localhost:3000/api/general/change_picture', options)
-    const resultJson = await result.json()
-    if(resultJson.result == 'success'){
-      localStorage.setItem("picture",parseInt(icon))
-      window.location.reload()
-    }else{
-      alert("Icono no cambiado")
-    }
-  }
+async function changeIcon(user, icon) {
+	if (icon != "") {
+		const info = {
+			username: user.username,
+			password: user.password,
+			newPicture: parseInt(icon),
+		};
+
+		const options = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(info),
+		};
+
+		const result = await fetch(
+			`${process.env.NEXT_PUBLIC_URL}/api/general/change_picture`,
+			options
+		);
+		const resultJson = await result.json();
+		if (resultJson.result == "success") {
+			localStorage.setItem("picture", parseInt(icon));
+			window.location.reload();
+		} else {
+			alert("Icono no cambiado");
+		}
+	}
 }
 
 // cambiar alerts por algo mejor
-async function changePassword(user, passwd, passwdRep){
-  if(passwd == ''){
-    alert("Las contraseñas no puede estar vacía")
-    return
-  
-  }
-  
-  if(passwd != passwdRep){
-    alert("Las contraseñas no coinciden")
-    return
-  
-  }
-  
-  if(passwd.length < 1){
-    alert("Las contraseñas debe superar los 10 caracteres")
-    return
-  }
+async function changePassword(user, passwd, passwdRep) {
+	if (passwd == "") {
+		alert("Las contraseñas no puede estar vacía");
+		return;
+	}
 
+	if (passwd != passwdRep) {
+		alert("Las contraseñas no coinciden");
+		return;
+	}
 
-  const salt = await getSalt(user)
-  const passHash = sha512(passwd+salt)
-  const newPasswd = passHash.toString('hex')
-  
-  const info = {
-    "username": user.username,
-    "password": user.password,
-    "newPassword": newPasswd
-  }
+	if (passwd.length < 1) {
+		alert("Las contraseñas debe superar los 10 caracteres");
+		return;
+	}
 
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(info) 
-  }
-  
-  const result = await fetch('http://localhost:3000/api/general/change_password', options)
-  const resultJson = await result.json()
-  
-  if(resultJson.result == 'success'){
-    localStorage.setItem("password",newPasswd)
-    window.location.reload()
-  }else{
-    alert("Conteseña no cambiada")
-  }
-  
+	const salt = await getSalt(user);
+	const passHash = sha512(passwd + salt);
+	const newPasswd = passHash.toString("hex");
+
+	const info = {
+		username: user.username,
+		password: user.password,
+		newPassword: newPasswd,
+	};
+
+	const options = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify(info),
+	};
+
+	const result = await fetch(
+		`${process.env.NEXT_PUBLIC_URL}/api/general/change_password`,
+		options
+	);
+	const resultJson = await result.json();
+
+	if (resultJson.result == "success") {
+		localStorage.setItem("password", newPasswd);
+		window.location.reload();
+	} else {
+		alert("Conteseña no cambiada");
+	}
 }
 
-async function deleteUser(user, deleteCheck, setDeleteCheck){
-  if(deleteCheck == ''){
-    alert("Seguro que quieres borrar la cuenta, esta acción no se puede deshacer")
-    setDeleteCheck("estoy seguro")
-  }else{
-    setDeleteCheck('')
-    
-    const info = {
-      username: user.username,
-      password: user.password
-    }
+async function deleteUser(user, deleteCheck, setDeleteCheck) {
+	if (deleteCheck == "") {
+		alert(
+			"Seguro que quieres borrar la cuenta, esta acción no se puede deshacer"
+		);
+		setDeleteCheck("estoy seguro");
+	} else {
+		setDeleteCheck("");
 
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(info) 
-    }
-    
-    const result = await fetch('http://localhost:3000/api/general/delete_user', options)
-    const resultJson = await result.json()
-    if(resultJson.result == 'success'){
-      window.location.reload()
-    }else{
-      alert("Cuenta no borrada")
-    }
-  }
+		const info = {
+			username: user.username,
+			password: user.password,
+		};
+
+		const options = {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(info),
+		};
+
+		const result = await fetch(
+			`${process.env.NEXT_PUBLIC_URL}/api/general/delete_user`,
+			options
+		);
+		const resultJson = await result.json();
+		if (resultJson.result == "success") {
+			window.location.reload();
+		} else {
+			alert("Cuenta no borrada");
+		}
+	}
 }
 
-const getSalt = async (name) =>{
+const getSalt = async (name) => {
+	const info = {
+		username: name.username,
+	};
 
-  const info = {
-    username:name.username
-  }
+	const options = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		},
+		body: JSON.stringify(info),
+	};
 
-  const options = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json' 
-    },
-    body: JSON.stringify(info)
-  }
-
-  const res = await fetch("http://localhost:3000/api/general/get_salt", options)
-  const data = await res.json()
-  return data.salt
-}
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_URL}/api/general/get_salt`,
+		options
+	);
+	const data = await res.json();
+	return data.salt;
+};
