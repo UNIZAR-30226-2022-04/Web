@@ -41,7 +41,7 @@ export default function StoryMode() {
 	// Hace fetch de la api
 	useEffect(() => {
 		// Función que llama a la api
-		if (windowUser.username == undefined) {
+		if (!windowUser.username) {
 			return;
 		}
 
@@ -73,7 +73,7 @@ export default function StoryMode() {
 			setMyTales(data);
 		};
 		getData();
-	});
+	}, []);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!myTales) {
