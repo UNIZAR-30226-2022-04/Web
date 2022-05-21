@@ -132,7 +132,8 @@ export default function Results() {
 			return placeholder;
 		};
 		getResults().then((res) => {
-			for (var i = 0; i < 10; i++) {
+			for (var i = 0; i < res.clasification.length; i++) {
+				console.log(res.clasification[i])
 				if (res.clasification[i].username == windowUser.username) {
 					setPosition(i + 1);
 					break;
@@ -161,11 +162,11 @@ export default function Results() {
 					<div className="w-1/12" />
 					<div className="w-5/12">
 						<div className="text-center commonTitle my-4 text-6xl">
-							Resultados
+							Puntuación
 						</div>
 						<div className="flex flex-row pt-20">
 							<div>
-								<div className="text-6xl">{position}º</div>
+								<div className="text-6xl commonTitle">{position}º</div>
 							</div>
 							<div>
 								<div className="h-10" />
@@ -205,7 +206,7 @@ export default function Results() {
 				<div className="text-center">
 					<input
 						type="button"
-						className="clickableItem rounded-xl bg-green-800 text-white p-2 border-2 border-white text-center font-bold"
+						className="commonButton"
 						value="Recoger"
 						onClick={() => router.push("/quickGame")}
 					/>
