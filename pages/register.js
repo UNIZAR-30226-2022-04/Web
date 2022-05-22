@@ -23,8 +23,14 @@ export default function Register() {
 		<Layout noInfo={true}>
 			<Meta title="Crear cuenta" />
 			<div className="background">
-				<div className="flex flex-col items-center justify-center w-full mt-24">
+				<div className="flex flex-col items-center justify-center w-full h-full -mt-10">
 					<Image src={"/frankenstory.png"} height={150} width={600} />
+					<Image
+						src={"/animated/register.gif"}
+						height={120}
+						width={120}
+						alt={"login gif"}
+					/>
 					<div className="flex flex-row items-center justify-center">
 						<form
 							className="flex flex-col items-center justify-center"

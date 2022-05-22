@@ -26,12 +26,18 @@ export default function Login() {
 		<Layout noInfo={true}>
 			<Meta title="Iniciar sesión" />
 			<div className="background">
-				<div className="flex flex-col items-center justify-center w-full mt-24">
+				<div className="flex flex-col items-center justify-center w-full h-full -mt-20">
 					<Image
 						src={"/frankenstory.png"}
 						height={150}
 						width={600}
 						alt={"LOGO"}
+					/>
+					<Image
+						src={"/animated/login.gif"}
+						height={120}
+						width={120}
+						alt={"login gif"}
 					/>
 					<div className="flex flex-row justify-center items-center">
 						<form

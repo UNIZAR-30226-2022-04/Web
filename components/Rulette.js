@@ -13,13 +13,13 @@ export default function Rulette({ page }) {
 				<RuletteButton
 					page={page}
 					thisPage="story"
-					icon="/rulette/long_play.png"
+					icon="/animated/books.gif"
 					reference="/storyMode"
 				/>
 				<RuletteButton
 					page={page}
 					thisPage="quickGame"
-					icon="/rulette/quick_play.png"
+					icon="/animated/clock.gif"
 					reference="/quickGame"
 				/>
 				<RuletteButton
