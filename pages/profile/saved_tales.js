@@ -101,7 +101,10 @@ export default function SavedTales() {
 
 	return (
 		<Layout data={layoutInfo}>
-			<TalesList quicks={quick_stories} tales={stories.tale_stories} />
+			<TalesList
+				quicks={stories.quick_stories}
+				tales={stories.tale_stories}
+			/>
 			<Rulette page="yourStories" />
 		</Layout>
 	);
@@ -109,7 +112,7 @@ export default function SavedTales() {
 
 function TalesList({ quicks, tales }) {
 	return (
-		<div className="flex flex-row ml-24 items-center space-x-20">
+		<div className="ml-24 flex flex-row items-center space-x-16 mb-40">
 			<Meta title="Biblioteca" />
 			<div className="flex flex-col space-y-3 items-center justify-center align-middle">
 				<h1 className="commonTitle">Partidas Rápidas</h1>
