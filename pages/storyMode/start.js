@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Meta from "components/Meta";
 
-export default function Continue() {
+export default function Start() {
 	const router = useRouter();
 
 	const [windowUser, setWindowUser] = useState({});

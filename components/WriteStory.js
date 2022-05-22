@@ -91,8 +91,11 @@ export default function WriteStory ({ first, creator }) {
 						maxChar: data.maxCharacters,
 						isPublic: storyInfo.isPublic,
 					};
-
+					console.log(storyInfo)
+					alert("Antes")
 					setStoryInfo(story);
+					console.log(storyInfo)
+					alert("Despues")
 				} else {
 					alert("No se ha encontrado la historia");
 					router.push("/storyMode");
@@ -153,7 +156,7 @@ export default function WriteStory ({ first, creator }) {
 		};
 
 		const res = await fetch(
-			"http://localhost:3000/api/tale_mode/add_tale_paragraph",
+			`${process.env.NEXT_PUBLIC_URL}/api/tale_mode/add_tale_paragraph`,
 			options
 		);
 		const data = await res.json();
@@ -287,7 +290,6 @@ export default function WriteStory ({ first, creator }) {
 							</button>
 						</div>
 					)}
-
 					{!first && storyInfo.creator == windowUser.username ? (
 						<button
 							className="commonButton bg-red-500 shadow-red-800"
@@ -335,6 +337,6 @@ async function finishTale(user, tale, body, router) {
 		body: JSON.stringify(info),
 	};
 
-	await fetch("http://localhost:3000/api/tale_mode/add_tale_paragraph", options);
+	await fetch(`${process.env.NEXT_PUBLIC_URL}/api/tale_mode/add_tale_paragraph`, options);
 	router.push("/storyMode");
 }
