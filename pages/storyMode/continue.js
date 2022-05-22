@@ -42,7 +42,7 @@ export default function Continue() {
 	return (
 		<Layout data={layoutInfo}>
 			<Meta title={"Relato de " + creator} />
-			<WriteStory first={false} creator={creator} />
+			<WriteStory first={false}/>
 		</Layout>
 	);
 }

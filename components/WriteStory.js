@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Spinner from "./Spinner";
 
-export default function WriteStory ({ first, creator }) {
+export default function WriteStory ({ first }) {
 	const router = useRouter();
 
 	const [currentTitle, setCurrentTitle] = useState("");
@@ -42,14 +42,25 @@ export default function WriteStory ({ first, creator }) {
 	// Story info
 	useEffect(() => {
 		const queryParams = new URLSearchParams(window.location.search);
-		setStoryInfo({
-			id: parseInt(queryParams.get("id")),
-			creator: creator,
-			isLast: queryParams.get("lastTurn") != 0,
-			turns: parseInt(queryParams.get("turns")),
-			maxChar: parseInt(queryParams.get("characters")),
-			isPublic: queryParams.get("privacy") == 1,
+		if(first){
+			setStoryInfo({
+				id: "",
+				creator: "",
+				isLast: "",
+				turns: parseInt(queryParams.get("turns")),
+				maxChar: parseInt(queryParams.get("characters")),
+				isPublic: queryParams.get("privacy") == 1,
 		});
+		}else{
+			setStoryInfo({
+				id: parseInt(queryParams.get("id")),
+				creator: queryParams.get("creator"),
+				isLast: queryParams.get("lastTurn") != 0,
+				turns: "",
+				maxChar: 0,
+				isPublic: queryParams.get("privacy") == 1,
+			});
+		}
 	}, []);
 
 	useEffect(() => {
@@ -84,6 +95,7 @@ export default function WriteStory ({ first, creator }) {
 					setCurrentTitle(data.title);
 					setParrafos(data.paragraphs);
 
+					if(storyInfo.creator){
 					const story = {
 						id: storyInfo.id,
 						creator: storyInfo.creator,
@@ -91,11 +103,9 @@ export default function WriteStory ({ first, creator }) {
 						maxChar: data.maxCharacters,
 						isPublic: storyInfo.isPublic,
 					};
-					console.log(storyInfo)
-					alert("Antes")
 					setStoryInfo(story);
+					}
 					console.log(storyInfo)
-					alert("Despues")
 				} else {
 					alert("No se ha encontrado la historia");
 					router.push("/storyMode");
@@ -103,7 +113,7 @@ export default function WriteStory ({ first, creator }) {
 			}
 		};
 		getPrevious();
-	}, [windowUser, storyInfo, router]);
+	}, /*[windowUser, storyInfo, router]*/);
 
 	const create_tale = async () => {
 		if (storyInfo.id == undefined) {
@@ -183,7 +193,7 @@ export default function WriteStory ({ first, creator }) {
 		router.push("/storyMode");
 	};
 
-	if ((!first && !parrafos) || !storyInfo) {
+	if ((!first && !parrafos) || !storyInfo ) {
 		return <Spinner showLayout={true} />;
 	}
 
