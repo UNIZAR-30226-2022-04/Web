@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Spinner from "./Spinner";
 
-const WriteStory = ({ first }) => {
+export default function WriteStory ({ first, creator }) {
 	const router = useRouter();
 
 	const [currentTitle, setCurrentTitle] = useState("");
@@ -10,7 +10,13 @@ const WriteStory = ({ first }) => {
 	const [currentText, setCurrentText] = useState("");
 
 	const [windowUser, setWindowUser] = useState({});
-	const [storyInfo, setStoryInfo] = useState({});
+	const [storyInfo, setStoryInfo] = useState({
+		id: "",
+		creator: "",
+		isLast: false,
+		maxChar: 0,
+		isPublic: false,
+	});
 
 	// Local info
 	useEffect(() => {
@@ -29,7 +35,7 @@ const WriteStory = ({ first }) => {
 				stars: stars,
 			});
 		} else {
-			router.push("/");
+			router.push("/login");
 		}
 	}, [router]);
 
@@ -38,7 +44,7 @@ const WriteStory = ({ first }) => {
 		const queryParams = new URLSearchParams(window.location.search);
 		setStoryInfo({
 			id: parseInt(queryParams.get("id")),
-			creator: queryParams.get("creator"),
+			creator: creator,
 			isLast: queryParams.get("lastTurn") != 0,
 			turns: parseInt(queryParams.get("turns")),
 			maxChar: parseInt(queryParams.get("characters")),
@@ -47,7 +53,7 @@ const WriteStory = ({ first }) => {
 	}, []);
 
 	useEffect(() => {
-		if (storyInfo.id == undefined) {
+		if (!windowUser || !storyInfo.id ) {
 			return;
 		}
 
@@ -185,7 +191,7 @@ const WriteStory = ({ first }) => {
 	if (!first) {
 		lastWrite =
 			parrafos[parrafos.length - 1].username == windowUser.username;
-		disabled = lastWrite ? "yes" : "";
+		disabled = lastWrite && storyInfo.creator != windowUser.username ? "yes" : "";
 		placeh = lastWrite ? "No puedes escribir ahora" : "Escribe tu parrafo";
 	}
 
@@ -275,7 +281,7 @@ const WriteStory = ({ first }) => {
 							<button
 								className="commonButton bg-red-500 shadow-red-800"
 								type="button"
-								onClick={(e) => router.push("/storyMode")}
+								onClick={() => router.push("/storyMode")}
 							>
 								{"<-"}Volver
 							</button>
@@ -286,7 +292,7 @@ const WriteStory = ({ first }) => {
 						<button
 							className="commonButton bg-red-500 shadow-red-800"
 							type="button"
-							onClick={(e) =>
+							onClick={() =>
 								finishTale(
 									windowUser,
 									storyInfo,
@@ -329,8 +335,6 @@ async function finishTale(user, tale, body, router) {
 		body: JSON.stringify(info),
 	};
 
-	fetch("http://localhost:3000/api/tale_mode/add_tale_paragraph", options);
+	await fetch("http://localhost:3000/api/tale_mode/add_tale_paragraph", options);
 	router.push("/storyMode");
 }
-
-export default WriteStory;

@@ -16,6 +16,8 @@ export default function Write() {
 	const [punyetasCompradas, setPunyetasCompradas] = useState([]);
 	const [currentText, setCurrentText] = useState("");
 
+	const [startVoting, setStartVoting] = useState(false)
+
 	const [clock, setClock] = useState(0);
 
 	const [checkNextTurn, setCheckNextTurn] = useState(false);
@@ -119,21 +121,27 @@ export default function Write() {
 			const dataTurn = await resTurn.json();
 
 			if (dataRoom.result != "error" && dataTurn.result != "error") {
-				setGame({
-					state: dataTurn.result,
-					time: dataTurn.s,
-					topic: dataTurn.topic,
-					randomWords: dataTurn.randomWords,
-					lastParagraph: dataTurn.lastParagraph,
-					last: dataTurn.isLast,
-					turn: dataTurn.turn,
-					punyeta: dataTurn.puneta,
-				});
+				if(dataTurn.result != "error"){
+					setGame({
+						state: dataTurn.result,
+						time: dataTurn.s,
+						topic: dataTurn.topic,
+						randomWords: dataTurn.randomWords,
+						lastParagraph: dataTurn.lastParagraph,
+						last: dataTurn.isLast,
+						turn: dataTurn.turn,
+						punyeta: dataTurn.puneta,
+					});
+				}				
 				setRivals(
 					dataRoom.participants.filter(
 						(rival) => rival.username != windowUser.username
 					)
 				);
+
+			}else if(dataRoom.hasStarted == 2){
+				setStartVoting(true);
+
 			} else {
 				console.log("ERROR AL OBTENER DATOS DE ESCRITURA");
 				console.log("SALA:", dataRoom);
@@ -178,7 +186,7 @@ export default function Write() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, roomID, checkNextTurn, game]);
+	}, [windowUser, roomID, checkNextTurn,  game]);
 
 	//Esperamos 3 segundos antes de volver a pedir el estado de la partida
 	useEffect(() => {
@@ -189,6 +197,9 @@ export default function Write() {
 					console.log("tengo que checkear el paso de turno");
 					setRefresh(!refresh);
 				} else {
+					if (startVoting) {
+						router.push(`/quickGame/vote?id=${roomID}`);
+					}
 					console.log("paso de turno");
 					setCheckNextTurn(false);
 				}
@@ -196,7 +207,7 @@ export default function Write() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, checkNextTurn, game]);
+	}, [windowUser, checkNextTurn, game, startVoting, refresh]);
 
 	// Si tadavía no hoy usuario o sala, esperamos a que lo haya
 	if (!windowUser || game.turn == 0) {
@@ -442,10 +453,6 @@ async function submitParagraph(
 	if (res.result != "success") {
 		alert("Error al enviar parrafo");
 		router.push("/quickGame");
-	}
-
-	if (game.last) {
-		router.push(`/quickGame/vote?id=${roomID}`);
 	}
 
 	setCheckNextTurn(true);

@@ -12,11 +12,13 @@ export default function QuickVote() {
 
 	const [windowUser, setWindowUser] = useState({});
 	const [id, setId] = useState("");
+	
 	const [story, setStory] = useState({
 		state: "",
 		topic: "",
 		paragraphs: [],
-		last: false,
+		turn: 0,
+		last: false
 	});
 	const [refresh, setRefresh] = useState(false);
 
@@ -45,7 +47,7 @@ export default function QuickVote() {
 				stars: stars,
 			});
 		} else {
-			router.push("/");
+			router.push("/login");
 		}
 	}, []);
 
@@ -64,32 +66,34 @@ export default function QuickVote() {
 				turn: turn,
 				id: "#" + id,
 			};
+			
 			const options = {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					Accept: "application/json",
 				},
 				body: JSON.stringify(body),
 			};
 
-			var res = undefined;
-
-			while (!res) {
-				res = await fetch(
-					`${process.env.NEXT_PUBLIC_URL}/api/quick_game/resume_vote_quick_game`,
-					options
-				);
-				if (!res.ok) {
-					res = undefined;
-				}
+			const res = await fetch(
+				`${process.env.NEXT_PUBLIC_URL}/api/quick_game/resume_vote_quick_game`,
+				options
+			);
+			
+			if(!res.ok){
+				console.log("error responose: ", res)
+				alert("ERROR")
+				router.push("/quickGame");
+				return;
 			}
 
 			const data = await res.json();
 
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result == "error") {
-				alert("Error al obtener datos votacion");
 				console.log(data);
+				alert("Error al obtener datos votacion");
 				router.push("/quickGame");
 				return;
 			}
@@ -108,13 +112,14 @@ export default function QuickVote() {
 				state: data.result,
 				topic: data.topic,
 				last: data.isLast,
-				paragraphs: parrafos,
-			});
-			setTime(data.s);
+				turn: data.turn,
+				paragraphs: parrafos
+			})
+			setTime(data.s)
 		};
 
 		getData();
-	}, [windowUser, turn, refresh]);
+	}, [windowUser, id, turn, refresh, router]);
 
 	// Controla  el tiempo de voto
 	useEffect(() => {
@@ -138,7 +143,7 @@ export default function QuickVote() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, id, checkNextVote, story]);
+	}, [windowUser, id, checkNextVote, story, router]);
 
 	// Controla la espera de jugadores
 	useEffect(() => {
@@ -156,10 +161,12 @@ export default function QuickVote() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, checkNextVote, story]);
+	}, [windowUser, checkNextVote, story, refresh]);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!windowUser || !story.turn == 0) {
+		console.log("USER: ", windowUser)
+		console.log("STORY: ", story)
 		return <Spinner showLayout={true} />;
 	}
 
@@ -167,7 +174,7 @@ export default function QuickVote() {
 		username: windowUser.username,
 		stars: windowUser.stars,
 		coins: windowUser.coins,
-		image_ID: windowUser.picture,
+		image_ID: windowUser.picture
 	};
 
 	return (
@@ -178,7 +185,7 @@ export default function QuickVote() {
 				<h2 className="commonSubtitle">
 					Elige el párrafo que más te guste
 				</h2>
-				{story.topic == "" ? (
+				{!story.topic ? (
 					<></>
 				) : (
 					<div className="flex flex-row items-center justify-center space-x-2">
@@ -193,7 +200,7 @@ export default function QuickVote() {
 						</div>
 					</div>
 				)}
-				<div className="centered">
+				<div className="">
 					<Image
 						className="ml-4"
 						src="/quick-game/clock.png"
@@ -227,7 +234,7 @@ export default function QuickVote() {
 					Esperando al resto de jugadores
 				</div>
 			) : (
-				""
+				<></>
 			)}
 		</Layout>
 	);
@@ -237,7 +244,7 @@ async function enviarVoto(windowUser, id, voto, setCheckNextVote, router) {
 	const info = {
 		username: windowUser.username,
 		password: windowUser.password,
-		id: id,
+		id: '#' + id,
 		paragraph: voto,
 	};
 

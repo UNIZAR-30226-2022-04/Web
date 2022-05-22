@@ -28,7 +28,7 @@ export default function Continue() {
 			const queryParams = new URLSearchParams(window.location.search);
 			setCreator(queryParams.get("creator"));
 		} else {
-			router.push("/");
+			router.push("/login");
 		}
 	}, []);
 

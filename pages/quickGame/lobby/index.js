@@ -74,6 +74,12 @@ export default function QuickGame() {
 				return;
 			}
 
+			if (data.hasStarted == 1) {
+				router.push(`/quickGame/write?id=${code}`);
+			} else if (data.hasStarted == 2) {
+				router.push(`/quickGame/vote?id=${code}`);
+			}
+
 			setRoom(data);
 		};
 		getData();

@@ -29,11 +29,18 @@ export default function Spinner({ showLayout }) {
 		}
 	}, [router]);
 
+	const layoutInfo = {
+		username: windowUser.username,
+		stars: windowUser.stars,
+		coins: windowUser.coins,
+		image_ID: windowUser.picture
+	};
+
 	return (
 		<>
 			{showLayout === true ? (
 				<Layout
-					data={windowUser}
+					data={layoutInfo}
 					inSettingsScreen={false}
 					inGame={true}
 				>
