@@ -89,6 +89,8 @@ export default function StoryMode() {
 		image_ID: windowUser.picture,
 	};
 
+	const limiteMisRelatos = myTales.myTales.length == 3 ? "Termina un relato antes de crear otro" : ""
+
 	return (
 		<Layout data={layoutInfo}>
 			<Meta title="Modo relato" />
@@ -212,7 +214,7 @@ export default function StoryMode() {
 						type="button"
 						className="commonButton bg-verde_top"
 						onClick={() =>
-							createGame(privateGame, router, turnos, chars)
+							createGame(privateGame, router, turnos, chars, limiteMisRelatos)
 						}
 					>
 						Crear Partida
@@ -244,7 +246,13 @@ function changeTurnos(stateChanger, turnos) {
 	}
 }
 
-function createGame(privacy, router, turnos, chars2) {
+function createGame(privacy, router, turnos, chars2, limiteMisRelatos) {
+	
+	if(limiteMisRelatos){
+		alert(limiteMisRelatos)
+		return
+	}
+	
 	const turns = turnos;
 	const chars = chars2;
 	if (turns && chars) {
