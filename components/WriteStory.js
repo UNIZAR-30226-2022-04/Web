@@ -197,7 +197,7 @@ export default function WriteStory ({ first }) {
 	};
 
 	if ((!first && !parrafos) || !storyInfo ) {
-		return <Spinner showLayout={true} />;
+		return <Spinner showLayout={false} />;
 	}
 
 	var lastWrite;

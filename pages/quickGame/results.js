@@ -100,6 +100,21 @@ export default function Results() {
 			//placeholder
 			const data = {
 				result: "success",
+				clasification: [
+					{
+						username: "Omae wa",
+						stars: 5245,
+					},
+					{
+						username: "mo shindeiru",
+						stars: 3252,
+					},
+					{
+						username: "Jesus",
+						stars: 1250,
+					},
+				],
+				coins: 1250,
 			};
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
@@ -108,29 +123,9 @@ export default function Results() {
 				return;
 			}
 
-			const placeholder = {
-				result: "success",
-				clasification: [
-					{
-						username: "1",
-						stars: 1,
-					},
-					{
-						username: "1",
-						stars: 1,
-					},
-					{
-						username: "Jesus",
-						stars: 1,
-					},
-				],
-				coins: 42069,
-			};
-
 			//De momento usamos unos datos hardcodeados
-			setResults(placeholder);
-			//setResults(data)
-			return placeholder;
+			setResults(data)
+			return data;
 		};
 		getResults().then((res) => {
 			for (var i = 0; i < res.clasification.length; i++) {
@@ -201,7 +196,7 @@ export default function Results() {
 						<div className="commonTitle my-4 text-6xl">
 							Clasificación
 						</div>
-						<div className="scrollBox h-64 mt-20">
+						<div className="scrollBox h-64 px-4 mt-20">
 							<ListOfPeople data={results.clasification} />
 						</div>
 					</div>
@@ -210,7 +205,7 @@ export default function Results() {
 				<div className="text-center">
 					<input
 						type="button"
-						className="commonButton"
+						className="commonButton bg-verde_letras"
 						value="Recoger"
 						onClick={() => router.push("/quickGame")}
 					/>
