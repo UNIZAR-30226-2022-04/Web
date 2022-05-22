@@ -8,6 +8,7 @@ export default function WriteStory ({ first }) {
 	const [currentTitle, setCurrentTitle] = useState("");
 	const [parrafos, setParrafos] = useState("");
 	const [currentText, setCurrentText] = useState("");
+	const [refresh, setRefresh ] = useState(false)
 
 	const [windowUser, setWindowUser] = useState({});
 	const [storyInfo, setStoryInfo] = useState({
@@ -61,6 +62,7 @@ export default function WriteStory ({ first }) {
 				isPublic: queryParams.get("privacy") == 1,
 			});
 		}
+		setRefresh(!refresh)
 	}, []);
 
 	useEffect(() => {
@@ -112,8 +114,12 @@ export default function WriteStory ({ first }) {
 				}
 			}
 		};
+		const interval = setInterval(() => {
+			setRefresh(!refresh)
+		},1000)
 		getPrevious();
-	}, /*[windowUser, storyInfo, router]*/);
+		return () => clearInterval(interval)
+	}, [refresh, router]/*[windowUser, storyInfo, router]*/);
 
 	const create_tale = async () => {
 		if (storyInfo.id == undefined) {
