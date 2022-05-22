@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Meta from "components/Meta";
 
-export default function start() {
+export default function Start() {
 	const router = useRouter();
 
 	const [windowUser, setWindowUser] = useState({});
@@ -39,7 +39,7 @@ export default function start() {
 	return (
 		<Layout data={layoutInfo}>
 			<Meta title={"Historia de " + windowUser.username} />
-			<WriteStory first={true}/>
+			<WriteStory first={true} />
 		</Layout>
 	);
 }
