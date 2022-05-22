@@ -16,8 +16,6 @@ export default function Write() {
 	const [punyetasCompradas, setPunyetasCompradas] = useState([]);
 	const [currentText, setCurrentText] = useState("");
 
-	const [startVoting, setStartVoting] = useState(false)
-
 	const [clock, setClock] = useState(0);
 
 	const [checkNextTurn, setCheckNextTurn] = useState(false);
@@ -37,6 +35,7 @@ export default function Write() {
 		last: false,
 		turn: 0,
 		punyeta: "",
+		location: 1
 	});
 
 	// Saca la información del usuario de la pantalla
@@ -61,7 +60,7 @@ export default function Write() {
 
 			setUserCoins(coins);
 		} else {
-			router.push("/");
+			router.push("/login");
 		}
 	}, []);
 
@@ -131,6 +130,7 @@ export default function Write() {
 						last: dataTurn.isLast,
 						turn: dataTurn.turn,
 						punyeta: dataTurn.puneta,
+						location: dataRoom.hasStarted
 					});
 				}				
 				setRivals(
@@ -140,7 +140,7 @@ export default function Write() {
 				);
 
 			}else if(dataRoom.hasStarted == 2){
-				setStartVoting(true);
+				router.push(`/quickGame/vote?id=${roomID}`);
 
 			} else {
 				console.log("ERROR AL OBTENER DATOS DE ESCRITURA");
@@ -151,14 +151,14 @@ export default function Write() {
 		};
 
 		getData();
-	}, [windowUser, roomID, turn, refresh]);
+	}, [windowUser, roomID, turn, refresh, router]);
 
 	//Temporizador
 	useEffect(() => {
 		const start = new Date();
 
 		const interval = setInterval(() => {
-			if (checkNextTurn) {
+			if (game.state == "waiting_players") {
 				return;
 			}
 
@@ -170,6 +170,7 @@ export default function Write() {
 			setClock(tiempo);
 
 			if (tiempo == 0) {
+
 				submitParagraph(
 					windowUser,
 					roomID,
@@ -177,7 +178,6 @@ export default function Write() {
 					turn,
 					setTurn,
 					punyetasCompradas,
-					game,
 					setCheckNextTurn,
 					router
 				);
@@ -186,20 +186,23 @@ export default function Write() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, roomID, checkNextTurn,  game]);
+	}, [windowUser, roomID, checkNextTurn, game]);
 
-	//Esperamos 3 segundos antes de volver a pedir el estado de la partida
+	// Compruebo continuamente si estoy esperando al resto
 	useEffect(() => {
 		const interval = setInterval(() => {
 			console.log("Check Continuo");
+			console.log("PARTIDA: ", game.state, game.turn, game.last, game.location)
+			
 			if (checkNextTurn == true) {
 				if (game.state == "waiting_players") {
-					console.log("tengo que checkear el paso de turno");
-					setRefresh(!refresh);
-				} else {
-					if (startVoting) {
+					if(game.location == 2){
 						router.push(`/quickGame/vote?id=${roomID}`);
 					}
+					console.log("tengo que checkear el paso de turno");
+					setRefresh(!refresh);
+					
+				} else {					
 					console.log("paso de turno");
 					setCheckNextTurn(false);
 				}
@@ -207,10 +210,10 @@ export default function Write() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, checkNextTurn, game, startVoting, refresh]);
+	}, [windowUser, roomID, checkNextTurn, game]);
 
 	// Si tadavía no hoy usuario o sala, esperamos a que lo haya
-	if (!windowUser || game.turn == 0) {
+	if (!windowUser || game.state == "") {
 		return <Spinner showLayout={true} />;
 	}
 
@@ -303,7 +306,6 @@ export default function Write() {
 								turn,
 								setTurn,
 								punyetasCompradas,
-								game,
 								setCheckNextTurn,
 								router
 							)
@@ -437,7 +439,6 @@ async function submitParagraph(
 	turn,
 	setTurn,
 	punyetas,
-	game,
 	setCheckNextTurn,
 	router
 ) {

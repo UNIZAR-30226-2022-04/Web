@@ -88,17 +88,6 @@ export default function SavedTales() {
 
 	const stories = separateStories(myStories);
 
-	const quick_stories = [
-		{
-			date: "12/07/22",
-			type: "quick_twitter",
-		},
-		{
-			date: "12/07/22",
-			type: "quick_random",
-		},
-	];
-
 	return (
 		<Layout data={layoutInfo}>
 			<TalesList

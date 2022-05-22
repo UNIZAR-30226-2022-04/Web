@@ -16,7 +16,7 @@ export default function StoryMode() {
 	const [myTales, setMyTales] = useState("");
 
 	// Tale options
-	const [visibility, setVisibility] = useState(1);
+	const [privateGame, setPrivateGame] = useState(0);
 	const [turnos, setTurnos] = useState(10);
 	const [chars, setChars] = useState(120);
 
@@ -189,10 +189,10 @@ export default function StoryMode() {
 
 					<div className="flex flex-col justify-center item-center space-y-2">
 						<h1 className="commonSubtitle">Tipo de partida</h1>
-						{visibility == 0 ? (
+						{privateGame == 1 ? (
 							<button
 								type="button"
-								onClick={() => setVisibility(1)}
+								onClick={() => setPrivateGame(0)}
 								className="bg-red-700 text-white rounded-3xl font-arial-b p-1"
 							>
 								Privada
@@ -200,7 +200,7 @@ export default function StoryMode() {
 						) : (
 							<button
 								type="button"
-								onClick={() => setVisibility(0)}
+								onClick={() => setPrivateGame(1)}
 								className="bg-green-700 text-white rounded-3xl font-arial-b p-1"
 							>
 								Pública
@@ -212,7 +212,7 @@ export default function StoryMode() {
 						type="button"
 						className="commonButton bg-verde_top"
 						onClick={() =>
-							createGame(visibility, router, turnos, chars)
+							createGame(privateGame, router, turnos, chars)
 						}
 					>
 						Crear Partida
@@ -237,6 +237,8 @@ function changeCaracteres(stateChanger, chars) {
 function changeTurnos(stateChanger, turnos) {
 	if (turnos < 3) {
 		stateChanger(3);
+	}else if(turnos > 1000){
+		stateChanger(1000);
 	} else {
 		stateChanger(turnos);
 	}
@@ -246,7 +248,7 @@ function createGame(privacy, router, turnos, chars2) {
 	const turns = turnos;
 	const chars = chars2;
 	if (turns && chars) {
-		if (turns < 3 || turns > 1000) {
+		if (turns < 3) {
 			alert("No puede haber menos de 3 turnos");
 		} else if (chars < 30) {
 			alert("No puede haber menos de 30 carácter o más de 120");

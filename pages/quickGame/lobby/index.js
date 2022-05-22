@@ -11,7 +11,14 @@ export default function QuickGame() {
 	const router = useRouter();
 	const [windowUser, setWindowUser] = useState({});
 	const [code, setCode] = useState("");
-	const [room, setRoom] = useState("");
+	const [room, setRoom] = useState({
+		result: "",
+		mode: "",
+		reason: "",
+		participants: [],
+		hasStarted: 0
+	  
+	});
 
 	useEffect(() => {
 		if (localStorage.getItem("logged") == "si") {
@@ -136,9 +143,11 @@ export default function QuickGame() {
 	}, [windowUser]);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
-	if (!windowUser || !room) {
+	if (!windowUser || room.result == "") {
 		return <Spinner showLayout={true} />;
 	}
+
+	const disabled = room.participants.length > 1 ? "" : "yes"
 
 	// Renderizamos la página
 	const layoutInfo = {
@@ -199,6 +208,7 @@ export default function QuickGame() {
 							<button
 								type="button"
 								className="commonButton bg-purple-500"
+								disabled={disabled}
 								onClick={() =>
 									startGame(windowUser, code, router)
 								}
@@ -238,7 +248,7 @@ async function leaveRoom(user, room, router) {
 	router.push("/quickGame");
 }
 
-async function startGame(user, room, router) {
+async function startGame(user, room, router) {	
 	const info = {
 		username: user.username,
 		password: user.password,

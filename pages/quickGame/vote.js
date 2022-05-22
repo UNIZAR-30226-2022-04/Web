@@ -11,27 +11,28 @@ export default function QuickVote() {
 	const router = useRouter();
 
 	const [windowUser, setWindowUser] = useState({});
-	const [id, setId] = useState("");
+	const [roomID, setRoomID] = useState("");
 	
-	const [story, setStory] = useState({
+	const [game, setGame] = useState({
 		state: "",
 		topic: "",
 		paragraphs: [],
 		turn: 0,
-		last: false
+		last: false,
+		time: 999
 	});
 	const [refresh, setRefresh] = useState(false);
 
 	const [checkNextVote, setCheckNextVote] = useState(false);
 	const [chosenStory, setChosenStory] = useState(0);
-	const [time, setTime] = useState(1000);
 	const [clock, setClock] = useState(0);
 	const [turn, setTurn] = useState(0);
 
+	// Sava la info del usuario
 	useEffect(() => {
 		if (localStorage.getItem("logged") == "si") {
 			const queryParams = new URLSearchParams(window.location.search);
-			setId(queryParams.get("id"));
+			setRoomID(queryParams.get("id"));
 
 			const username = localStorage.getItem("username");
 			const password = localStorage.getItem("password");
@@ -46,6 +47,8 @@ export default function QuickVote() {
 				coins: coins,
 				stars: stars,
 			});
+
+			setCheckNextVote(true)
 		} else {
 			router.push("/login");
 		}
@@ -54,17 +57,17 @@ export default function QuickVote() {
 	// Hace fetch de la api
 	useEffect(() => {
 		// Función que llama a la api
-		if (!windowUser.username || !id) {
+		if (!windowUser.username || !roomID) {
 			return;
 		}
 
 		const getData = async () => {
 			// Opciones para llamar a la api
-			const body = {
+			const info = {
 				username: windowUser.username,
 				password: windowUser.password,
 				turn: turn,
-				id: "#" + id,
+				id: "#" + roomID,
 			};
 			
 			const options = {
@@ -73,8 +76,10 @@ export default function QuickVote() {
 					"Content-Type": "application/json",
 					Accept: "application/json",
 				},
-				body: JSON.stringify(body),
+				body: JSON.stringify(info),
 			};
+
+			console.log("ENVÍO: ", info)
 
 			const res = await fetch(
 				`${process.env.NEXT_PUBLIC_URL}/api/quick_game/resume_vote_quick_game`,
@@ -83,12 +88,12 @@ export default function QuickVote() {
 			
 			if(!res.ok){
 				console.log("error responose: ", res)
-				alert("ERROR")
-				router.push("/quickGame");
 				return;
 			}
 
 			const data = await res.json();
+
+			console.log(data)
 
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result == "error") {
@@ -98,61 +103,84 @@ export default function QuickVote() {
 				return;
 			}
 
-			const parrafos = data.paragraphs.map((parrafo) => {
-				return {
-					text: parrafo.body,
-					words: parrafo.words,
-				};
-			});
-
-			console.log("Parrafos: ", parrafos);
-
-			// Llama al hook que almacena la información del usuario
-			setStory({
-				state: data.result,
-				topic: data.topic,
-				last: data.isLast,
-				turn: data.turn,
-				paragraphs: parrafos
-			})
-			setTime(data.s)
+			if(data.result == "waiting_players"){
+				setGame({
+					state: data.result,
+					topic: "",
+					last: false,
+					turn: 0,
+					time: 0,
+					paragraphs: []
+				})
+			
+			}else{
+				const parrafos = data.paragraphs.map((parrafo) => {
+					return {
+						text: parrafo.body,
+						words: parrafo.words,
+					};
+				});
+	
+				console.log("Parrafos: ", parrafos);
+	
+				// Llama al hook que almacena la información de la partida
+				setGame({
+					state: data.result,
+					topic: data.topic,
+					last: data.isLast,
+					turn: data.turn,
+					time: data.s,
+					paragraphs: parrafos
+				})
+			}			
 		};
 
 		getData();
-	}, [windowUser, id, turn, refresh, router]);
+	}, [windowUser, roomID, turn, refresh, router]);
 
 	// Controla  el tiempo de voto
 	useEffect(() => {
 		const start = new Date();
 
 		const interval = setInterval(() => {
-			if (checkNextVote) {
+			if (game.state == "waiting_players") {
 				return;
 			}
+
 			const now = new Date();
 			const difference = now.getTime() - start.getTime();
 
 			const s = Math.floor(difference / 1000);
-			const tiempo = time - s < 0 ? 0 : story.time - s;
+			const tiempo = game.time - s < 0 ? 0 : game.time - s;
 			setClock(tiempo);
 
 			if (tiempo == 0) {
-				enviarVoto(info, 0, setCheckNextVote, router);
+				enviarVoto(
+					windowUser,
+					0,
+					chosenStory,
+					turn, 
+					setTurn, 
+					game.last,
+					setCheckNextVote,
+					router
+					);
 				setTurn(turn + 1);
 			}
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, id, checkNextVote, story, router]);
+	}, [windowUser, roomID, checkNextVote, game, router]);
 
 	// Controla la espera de jugadores
 	useEffect(() => {
 		const interval = setInterval(() => {
 			console.log("Check Continuo");
 			if (checkNextVote == true) {
-				if (story.state == "waiting_players") {
+				if (game.state == "waiting_players") {
 					console.log("tengo que checkear el paso de turno");
 					setRefresh(!refresh);
+				
 				} else {
 					console.log("paso de turno");
 					setCheckNextVote(false);
@@ -161,12 +189,12 @@ export default function QuickVote() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, checkNextVote, story, refresh]);
+	}, [windowUser, roomID, checkNextVote, game]);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
-	if (!windowUser || !story.turn == 0) {
+	if (!windowUser || game.state == "") {
 		console.log("USER: ", windowUser)
-		console.log("STORY: ", story)
+		console.log("STORY: ", game)
 		return <Spinner showLayout={true} />;
 	}
 
@@ -185,7 +213,7 @@ export default function QuickVote() {
 				<h2 className="commonSubtitle">
 					Elige el párrafo que más te guste
 				</h2>
-				{!story.topic ? (
+				{!game.topic ? (
 					<></>
 				) : (
 					<div className="flex flex-row items-center justify-center space-x-2">
@@ -196,7 +224,7 @@ export default function QuickVote() {
 								width={28}
 								height={28}
 							/>
-							<h1 className="text-white">#{story.topic}</h1>
+							<h1 className="text-white">#{game.topic}</h1>
 						</div>
 					</div>
 				)}
@@ -210,7 +238,7 @@ export default function QuickVote() {
 					{parseInt(clock / 60)}min:{clock % 60}seg
 				</div>
 				<StoryParagraphs
-					story={story}
+					story={game}
 					chosenStory={chosenStory}
 					setChosenStory={setChosenStory}
 				/>
@@ -219,8 +247,11 @@ export default function QuickVote() {
 					onClick={() =>
 						enviarVoto(
 							windowUser,
-							id,
+							roomID,
 							chosenStory,
+							turn, 
+							setTurn, 
+							game.last,
 							setCheckNextVote,
 							router
 						)
@@ -229,7 +260,7 @@ export default function QuickVote() {
 					Enviar Voto
 				</button>
 			</div>
-			{story.state == "waiting_players" ? (
+			{game.state == "waiting_players" ? (
 				<div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white">
 					Esperando al resto de jugadores
 				</div>
@@ -240,11 +271,32 @@ export default function QuickVote() {
 	);
 }
 
-async function enviarVoto(windowUser, id, voto, setCheckNextVote, router) {
+async function enviarVoto(windowUser, roomID, voto, turn, setTurn, isLast, setCheckNextVote, router) {
+	const res = await addVote(windowUser, roomID, voto)
+	
+	if (!res) {
+		alert("Datos no encontrados");
+		return
+	
+	} else if (res.result == "error") {
+		alert("Error al enviar datos:", res.reason);
+		router.push("/quickGame");
+		return
+	
+	} 
+
+	if(isLast){
+		router.push(`/quickGame/result?id=${roomID}`);
+	}
+	setCheckNextVote(true);
+	setTurn(turn + 1)
+}
+
+async function addVote(windowUser, roomID, voto){
 	const info = {
 		username: windowUser.username,
 		password: windowUser.password,
-		id: '#' + id,
+		id: '#' + roomID,
 		paragraph: voto,
 	};
 
@@ -263,12 +315,5 @@ async function enviarVoto(windowUser, id, voto, setCheckNextVote, router) {
 
 	const data = await res.json();
 
-	if (!data) {
-		alert("Datos no encontrados");
-	} else if (data.result === "error") {
-		alert("Error al enviar datos:", data.reason);
-		router.push("/quickGame");
-	} else {
-		setCheckNextVote(true);
-	}
+	return data
 }
