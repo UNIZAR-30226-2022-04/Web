@@ -24,7 +24,7 @@ function Story({ story, isVoteStory }) {
 	const lastTurn = story.turn == story.max_turns - 1 ? 1 : 0;
 	return (
 		<div className="flex flex-col">
-			<div className="flex flex-row justify-between w-80 items-center text-left space-y-1">
+			<div className="flex flex-row justify-between w-42 items-center text-left space-y-1">
 				<div className="flex flex-col">
 					<div className="font-bold font-arial-b text-verde_punetas">
 						{story.title}
@@ -41,7 +41,7 @@ function Story({ story, isVoteStory }) {
 
 				<div className="relative flex flex-row items-center">
 					<div className="pr-2 text-verde_punetas text-sm font-arial_r">
-						{story.turn}/{story.max_turns}
+						{story.turn + 1}/{story.max_turns}
 					</div>
 					{isVoteStory ? (
 						<Link

@@ -107,8 +107,9 @@ export default function Friends() {
 			<div className="flex flex-row p-40 justify-center space-x-20">
 				<div className="flex flex-col space-y-5">
 					<div className="commonTitle">Tus amigos</div>
-					<div className="scrollBox">
+					<div className="scrollBox overflow-y-auto h-[600px]">
 						<ul className="flex flex-col space-y-2 w-96">
+							{friends.length === 0 && <p>No tienes amigos.</p>}
 							{friends.map((friend, index) => (
 								<Friend
 									key={index}
@@ -128,6 +129,12 @@ export default function Friends() {
 					<div className="commonTitle">Peticiones</div>
 					<div className="scrollBox">
 						<ul className="flex flex-col space-y-2">
+							{notification.length === 0 && (
+								<p>
+									No tienes notificaciones de amistad
+									pendientes.
+								</p>
+							)}
 							{notification.map((request, index) => (
 								<FriendRequest
 									key={index}

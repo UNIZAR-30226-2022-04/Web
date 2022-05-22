@@ -92,21 +92,39 @@ export default function StoryMode() {
 	return (
 		<Layout data={layoutInfo}>
 			<Meta title="Modo relato" />
-			<div className="ml-20 flex flex-row items-center space-x-40 mb-16">
-				<div className="flex flex-col ml-5 bg-scroll bg-contain overflow-y-auto h-[400px] pr-2">
-					<h1 className="commonTitle">Mis Relatos</h1>
+			<div className="ml-12 flex flex-row items-center space-x-8 mb-40">
+				<div className="flex flex-col ml-5 bg-scroll bg-contain overflow-y-auto h-[600px] pr-2 w-52">
+					<h1 className="commonTitle mb-4">Mis Relatos</h1>
+					{myTales.myTales.length === 0 && (
+						<p>No tienes relatos abiertos creados.</p>
+					)}
 					<StoryList stories={myTales.myTales} isVoteStory={false} />
-					<h1 className="commonTitle">Relatos de Amigos</h1>
+				</div>
+				<div className="flex flex-col ml-5 bg-scroll bg-contain overflow-y-auto h-[600px] pr-2 w-52">
+					<h1 className="commonTitle mb-4">Relatos de Amigos</h1>
+					{myTales.friendTales.length === 0 && (
+						<p>No hay relatos de amigos disponibles.</p>
+					)}
 					<StoryList
 						stories={myTales.friendTales}
 						isVoteStory={false}
 					/>
-					<h1 className="commonTitle">Relatos Públicos</h1>
+				</div>
+				<div className="flex flex-col ml-5 bg-scroll bg-contain overflow-y-auto h-[600px] pr-2 w-52">
+					<h1 className="commonTitle mb-4">Relatos Públicos</h1>
+					{myTales.publicTales.length === 0 && (
+						<p>No hay relatos públicos disponibles.</p>
+					)}
 					<StoryList
 						stories={myTales.publicTales}
 						isVoteStory={false}
 					/>
-					<h1 className="commonTitle">Relatos en Votación</h1>
+				</div>
+				<div className="flex flex-col ml-5 bg-scroll bg-contain overflow-y-auto h-[600px] pr-2 w-52">
+					<h1 className="commonTitle mb-4">Relatos en Votación</h1>
+					{myTales.talesForVote.length === 0 && (
+						<p>No tienes relatos para votar disponibles.</p>
+					)}
 					<StoryList
 						stories={myTales.talesForVote}
 						isVoteStory={true}

@@ -66,9 +66,10 @@ export default function Settings() {
 							<div className="flex flex-col space-y-2">
 								<div className="commonTitle">Contraseña</div>
 								<input
+									className=" h-8 rounded-lg"
 									type="password"
 									value={passwd}
-									placeholder="**********"
+									placeholder=" **********"
 									onChange={(e) => setPass(e.target.value)}
 								/>
 							</div>
@@ -77,9 +78,10 @@ export default function Settings() {
 									Repita la Contraseña
 								</div>
 								<input
+									className=" h-8 rounded-lg"
 									type="password"
 									value={passwdRep}
-									placeholder="**********"
+									placeholder=" **********"
 									onChange={(e) => setPassRep(e.target.value)}
 								/>
 							</div>
