@@ -224,17 +224,24 @@ async function create(
 
 async function join(windowUser, code, setErrorR, setErrorJ, router) {
 	setErrorR("");
-	const res = await tryJoin(windowUser, code);
+	var urlCode = code
+	if (urlCode[0] === "#") {
+		urlCode = urlCode.slice(1);
+	}
+	const res = await tryJoin(windowUser, urlCode);
 
 	if (res.reason == "player_in_game") {
-		router.push(`quickGame/lobby?code=${code}`);
+		alert("Pog")
+		//LINEA ANTIGUA
+		//		router.push(`quickGame/lobby?code=${code}`);
+		router.push(`quickGame/lobby?code=${res.id.slice(1)}`);
 		return;
 	}
 
 	if (res.result != "success") {
 		setErrorJ(res.reason);
 	} else {
-		router.push(`quickGame/lobby?code=${code}`);
+		router.push(`quickGame/lobby?code=${urlCode}`);
 	}
 }
 
@@ -286,9 +293,6 @@ async function tryJoin(windowUser, code) {
 		password: windowUser.password,
 		id: "#" + code,
 	};
-	if (code[0] === "#") {
-		info.id = code;
-	}
 	const options = {
 		method: "POST",
 		headers: {
