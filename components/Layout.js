@@ -12,7 +12,7 @@ export default function Layout({
 	return (
 		<div className="background">
 			<div className="flex bg-teal-600 bg-opacity-60 shadow-lg items-center p-3">
-				<Link href={"/profile"}>
+				{inGame && (
 					<div className="clickableItem ml-5">
 						<Image
 							src="/frankenstory.png"
@@ -20,7 +20,18 @@ export default function Layout({
 							height="55"
 						/>
 					</div>
-				</Link>
+				)}
+				{!inGame && (
+					<Link href={"/profile"}>
+						<div className="clickableItem ml-5">
+							<Image
+								src="/frankenstory.png"
+								width="237"
+								height="55"
+							/>
+						</div>
+					</Link>
+				)}
 				{!noInfo && (
 					<Crates
 						person={data}
