@@ -1,6 +1,7 @@
 import { selectPlayerDB } from "../../../prisma/queries/SELECT/player";
 import { checkFields } from "../../../lib/checkFields";
 import { findGame } from "../../../lib/Game";
+import { checkEmpty } from "../../../lib/Game";
 import { state } from "../../../lib/GamesManager";
 
 export default async (req, res) => {
