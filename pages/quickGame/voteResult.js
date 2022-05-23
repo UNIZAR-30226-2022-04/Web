@@ -23,7 +23,7 @@ export default function VoteResult(){
     const [isLast, setIsLast] = useState(false)
     const [refresh, setRefresh] = useState(false);
     const [checkNextVote, setCheckNextVote] = useState(true);
-    const [turn, setTurn] = useState("");
+    const [turn, setTurn] = useState(0);
 
     // Sava la info del usuario
 	useEffect(() => {
@@ -31,7 +31,7 @@ export default function VoteResult(){
 			const queryParams = new URLSearchParams(window.location.search);
 			setRoomID(queryParams.get("id"));
             setIsLast(queryParams.get("last") == "true")
-            setTurn(queryParams.get("turn"))
+            setTurn(parseInt(queryParams.get("turn")))
 
 			const username = localStorage.getItem("username");
 			const password = localStorage.getItem("password");
@@ -56,7 +56,7 @@ export default function VoteResult(){
     	// Hace fetch de la api de ver mejor parrafo
 	useEffect(() => {
 		// Función que llama a la api
-		if (!windowUser.username || !roomID || !turn) {
+		if (!windowUser.username || !roomID || turn == 0) {
 			return;
 		}
 
@@ -280,15 +280,14 @@ export default function VoteResult(){
                 <div className="text-2xl font-bangers">
                     {clock} seconds left until next vote
                 </div>
-
-                {voteResult.state == "waiting_players" ? (
-                    <div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white">
-                        Esperando al resto de jugadores
-                    </div>
-                ) : (
-                    <></>
-                )}
             </div>
+            {voteResult.state == "waiting_players" ? (
+                <div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white">
+                    Esperando al resto de jugadores
+                </div>
+            ) : (
+                <></>
+            )}
         </Layout>
     )
 }

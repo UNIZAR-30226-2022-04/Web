@@ -85,7 +85,7 @@ export default function Write() {
 			const infoTurn = {
 				username: windowUser.username,
 				password: windowUser.password,
-				turn: turn,
+				turn: 0,
 				id: "#" + roomID,
 			};
 
@@ -317,7 +317,7 @@ export default function Write() {
 							)
 						}
 					>
-						Enviar parrafo
+						{game.last? "Terminar historia":"Enviar parrafo"}
 					</button>
 				</div>
 				<div className="bg-green-800 flex flex-col align-middle w-1/4 items-center">
