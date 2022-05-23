@@ -71,28 +71,9 @@ export default function Results() {
 				body: JSON.stringify(body),
 			};
 			// Llamada a la api
-			//const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/quick_game/points_voted_quick_game`, options)
-			//const data = await res.json()
+			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/quick_game/points_voted_quick_game`, options)
+			const data = await res.json()
 
-			//placeholder
-			const data = {
-				result: "success",
-				clasification: [
-					{
-						username: "Omae wa",
-						stars: 5245,
-					},
-					{
-						username: "mo shindeiru",
-						stars: 3252,
-					},
-					{
-						username: windowUser.username,
-						stars: 1250,
-					},
-				],
-				coins: 1250,
-			};
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
 				alert("Error al obtener datos");

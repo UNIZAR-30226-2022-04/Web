@@ -13,6 +13,8 @@ export default function QuickVote() {
 	const [windowUser, setWindowUser] = useState({});
 	const [roomID, setRoomID] = useState("");
 	
+	const [disableClick, setDisableClick] = useState("")
+
 	const [game, setGame] = useState({
 		state: "",
 		topic: "",
@@ -21,12 +23,13 @@ export default function QuickVote() {
 		last: false,
 		time: 999
 	});
+	
+
 	const [refresh, setRefresh] = useState(false);
 
 	const [checkNextVote, setCheckNextVote] = useState(false);
 	const [chosenStory, setChosenStory] = useState(0);
 	const [clock, setClock] = useState(0);
-	const [turn, setTurn] = useState(0);
 
 	// Sava la info del usuario
 	useEffect(() => {
@@ -54,7 +57,7 @@ export default function QuickVote() {
 		}
 	}, []);
 
-	// Hace fetch de la api
+	// Hace fetch de la api de votaciones
 	useEffect(() => {
 		// Función que llama a la api
 		if (!windowUser.username || !roomID) {
@@ -66,7 +69,7 @@ export default function QuickVote() {
 			const info = {
 				username: windowUser.username,
 				password: windowUser.password,
-				turn: turn,
+				turn: 0,
 				id: "#" + roomID,
 			};
 			
@@ -136,7 +139,7 @@ export default function QuickVote() {
 		};
 
 		getData();
-	}, [windowUser, roomID, turn, refresh, router]);
+	}, [windowUser, roomID, refresh, router]);
 
 	// Controla  el tiempo de voto
 	useEffect(() => {
@@ -157,15 +160,12 @@ export default function QuickVote() {
 			if (tiempo == 0) {
 				enviarVoto(
 					windowUser,
-					0,
+					roomID,
 					chosenStory,
-					turn, 
-					setTurn, 
-					game.last,
-					setCheckNextVote,
+					game,
+					setDisableClick,
 					router
-					);
-				setTurn(turn + 1);
+				);
 			}
 		}, 1000);
 
@@ -243,16 +243,15 @@ export default function QuickVote() {
 					setChosenStory={setChosenStory}
 				/>
 				<button
+					disabled={disableClick}
 					className="bg-white rounded-full p-2"
 					onClick={() =>
 						enviarVoto(
 							windowUser,
 							roomID,
 							chosenStory,
-							turn, 
-							setTurn, 
-							game.last,
-							setCheckNextVote,
+							game,
+							setDisableClick,
 							router
 						)
 					}
@@ -271,7 +270,8 @@ export default function QuickVote() {
 	);
 }
 
-async function enviarVoto(windowUser, roomID, voto, turn, setTurn, isLast, setCheckNextVote, router) {
+async function enviarVoto(windowUser, roomID, voto, game, setDisableClick, router) {
+	setDisableClick("si")
 	const res = await addVote(windowUser, roomID, voto)
 	
 	if (!res) {
@@ -285,11 +285,7 @@ async function enviarVoto(windowUser, roomID, voto, turn, setTurn, isLast, setCh
 	
 	} 
 
-	if(isLast){
-		router.push(`/quickGame/result?id=${roomID}`);
-	}
-	setCheckNextVote(true);
-	setTurn(turn + 1)
+	router.push(`/quickGame/voteResult?id=${roomID}&turn=${game.turn}&last=${game.last}`)
 }
 
 async function addVote(windowUser, roomID, voto){

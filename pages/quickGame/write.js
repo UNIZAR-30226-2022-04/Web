@@ -21,6 +21,8 @@ export default function Write() {
 	const [checkNextTurn, setCheckNextTurn] = useState(false);
 	const [refresh, setRefresh] = useState(false);
 
+	const [disableClick, setDisableClick] = useState("")
+
 	// Info de una partida
 	const [turn, setTurn] = useState(0);
 	const [rivals, setRivals] = useState([]);
@@ -179,6 +181,7 @@ export default function Write() {
 					setTurn,
 					punyetasCompradas,
 					setCheckNextTurn,
+					setDisableClick,
 					router
 				);
 				setTurn(turn + 1);
@@ -205,6 +208,7 @@ export default function Write() {
 				} else {					
 					console.log("paso de turno");
 					setCheckNextTurn(false);
+					setDisableClick("")
 				}
 			}
 		}, 1000);
@@ -296,6 +300,7 @@ export default function Write() {
 						onChange={(e) => setCurrentText(e.target.value)}
 					/>
 					<button
+						disabled={disableClick}
 						className="commonButton bg-verde_top"
 						type="button"
 						onClick={() =>
@@ -307,6 +312,7 @@ export default function Write() {
 								setTurn,
 								punyetasCompradas,
 								setCheckNextTurn,
+								setDisableClick,
 								router
 							)
 						}
@@ -329,6 +335,7 @@ export default function Write() {
 							</div>
 						) : (
 							<button
+							disabled={disableClick}
 								type="button"
 								className="text-xl text-white m-2"
 								onClick={() =>
@@ -404,6 +411,7 @@ export default function Write() {
 								/>
 							))}
 							<button
+								disabled={disableClick}
 								type="button"
 								className="bg-white flex flex-row space-x-2 p-2 rounded items-center text-center"
 								onClick={() => setPunyetasMenu("")}
@@ -440,8 +448,10 @@ async function submitParagraph(
 	setTurn,
 	punyetas,
 	setCheckNextTurn,
+	setDisableClick,
 	router
 ) {
+	setDisableClick("yes")
 	const res = await addParagraph(
 		windowUser,
 		roomID,
@@ -456,6 +466,7 @@ async function submitParagraph(
 		router.push("/quickGame");
 	}
 
+	
 	setCheckNextTurn(true);
 	setTurn(turn + 1);
 }
@@ -572,6 +583,7 @@ function Rival({
 	setPunyetasCompradas,
 	rivals,
 	setRivals,
+	disableClick
 }) {
 	return (
 		<button
