@@ -89,7 +89,7 @@ export default function StoryMode() {
 		image_ID: windowUser.picture,
 	};
 
-	const limiteMisRelatos = myTales.myTales.length == 3 ? "Termina un relato antes de crear otro" : ""
+	const limiteMisRelatos = myTales.myTales.length >= 3 ? "Termina un relato antes de crear otro" : ""
 
 	return (
 		<Layout data={layoutInfo}>
