@@ -16,7 +16,7 @@ export default function Results() {
 
 	const [results, setResults] = useState({
 		result: "",
-		clasification: [],
+		classification: [],
 		coins: 0,
 	});
 
@@ -71,7 +71,7 @@ export default function Results() {
 				body: JSON.stringify(body),
 			};
 			// Llamada a la api
-			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/quick_game/points_voted_quick_game`, options)
+			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/quick_game/points_quick_game`, options)
 			const data = await res.json()
 
 			// Si no ha ido bien o no estoy logeado volvemos a /
@@ -86,9 +86,8 @@ export default function Results() {
 		};
 		
 		getResults().then((res) => {
-			for (var i = 0; i < res.clasification.length; i++) {
-				console.log(res.clasification[i]);
-				if (res.clasification[i].username == windowUser.username) {
+			for (var i = 0; i < res.classification.length; i++) {
+				if (res.classification[i].username == windowUser.username) {
 					setPosition(i + 1);
 					break;
 				}
@@ -137,7 +136,7 @@ export default function Results() {
 										width={50}
 										height={50}
 									/>
-									<div className="text-4xl text-white font-bold">
+									<div className="pl-2 text-4xl text-white font-bold">
 										+{results.coins}
 									</div>
 									<Image
@@ -152,21 +151,26 @@ export default function Results() {
 							<div className="commonTitle text-6xl">
 								Clasificación
 							</div>
-							<div className="bg-scroll overflow-x-hidden overflow-y-auto w-auto h-64">
-								<ListOfPeople data={results.clasification} />
+							<div className="bg-scroll overflow-x-visible overflow-y-auto w-auto h-64">
+								<ListOfPeople data={results.classification} />
 							</div>
 						</div>
 					</div>
-				</div>
-
-				<button
+				</div>				
+			</div>
+			<button
 					type="button"
 					className="absolute bottom-3 commonButton bg-verde_letras"
-					onClick={() => (router.push("/quickGame"))}
+					onClick={() => (updateCoinsAndLeave(windowUser, parseInt(results.coins), router))}
 				>
 					Recoger
 				</button>
-			</div>
 		</Layout>
 	);
+}
+
+function updateCoinsAndLeave(user, coinsToAdd, router){
+	var newCoins = user.coins + coinsToAdd;
+	localStorage.setItem("coins", newCoins);
+	router.push("/quickGame");
 }

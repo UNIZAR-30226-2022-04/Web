@@ -4,7 +4,7 @@ export default function StoryParagraphs({
 	setChosenStory,
 }) {
 	return (
-		<div className="flex flex-row flex-wrap w-full h-1/2 justify-center items-center space-y-5 space-x-5 overflow-y-scroll overflow-x-hidden">
+		<div className="flex flex-row flex-wrap w-full h-1/2 justify-center items-center space-x-5 overflow-y-scroll overflow-x-hidden">
 			{story.paragraphs.map((paragraph, index) => (
 				<Paragraph
 					key={index}
