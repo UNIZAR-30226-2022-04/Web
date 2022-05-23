@@ -26,7 +26,7 @@ export default async (req, res) => {
 			const game = gamesList.find(
 				(game) =>
 					game.players.find(
-						(player) => player.username == player.username
+						(player) => player.username == message.username
 					) != undefined
 			);
 
@@ -39,7 +39,7 @@ export default async (req, res) => {
 			}
 
 			game.deletePlayer(message.username);
-		
+
 			if (game.players.length == 0) {
 				const gameIndex = gamesList.indexOf(game);
 				gamesList.splice(gameIndex);
