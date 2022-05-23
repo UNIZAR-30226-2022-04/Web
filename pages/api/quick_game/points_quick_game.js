@@ -20,6 +20,7 @@ export default async (req, res) => {
 	// checks if username exists
 	if (user != undefined) {
 		if (user.password_hash == message.password) {
+			await checkEmpty(message.id);
 			const game = findGame(message.id);
 
 			if (game == undefined) {
@@ -30,13 +31,11 @@ export default async (req, res) => {
 				return;
 			}
 			const result =
-			(game.state == state.END)
-				? "success"
-				: "waiting_players";
+				game.state == state.END ? "success" : "waiting_players";
 
-			if (result == "waiting_players"){
+			if (result == "waiting_players") {
 				res.status(200).json({
-					result: result
+					result: result,
 				});
 				return;
 			}
@@ -46,7 +45,7 @@ export default async (req, res) => {
 			res.status(200).json({
 				result: result,
 				classification: ranking,
-                coins: pl.scored
+				coins: pl.scored,
 			});
 		} else {
 			res.status(200).json({ result: "error", reason: "wrong_password" });
