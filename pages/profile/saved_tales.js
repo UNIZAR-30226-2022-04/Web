@@ -31,7 +31,7 @@ export default function SavedTales() {
 				stars: stars,
 			});
 		} else {
-			router.push("/");
+			router.push("/login");
 		}
 	}, [router]);
 

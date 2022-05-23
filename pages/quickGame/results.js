@@ -161,7 +161,7 @@ export default function Results() {
 			<button
 					type="button"
 					className="absolute bottom-3 commonButton bg-verde_letras"
-					onClick={() => (updateCoinsAndLeave(windowUser, parseInt(results.coins), router))}
+					onClick={() => (updateCoinsAndLeave(windowUser, results.coins, router))}
 				>
 					Recoger
 				</button>
@@ -170,7 +170,7 @@ export default function Results() {
 }
 
 function updateCoinsAndLeave(user, coinsToAdd, router){
-	var newCoins = user.coins + coinsToAdd;
+	var newCoins = parseInt(user.coins) + parseInt(coinsToAdd);
 	localStorage.setItem("coins", newCoins);
 	router.push("/quickGame");
 }

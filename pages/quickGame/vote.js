@@ -170,7 +170,7 @@ export default function QuickVote() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, roomID, checkNextVote, game, router]);
+	}, [windowUser, roomID, checkNextVote, chosenStory, game, setDisableClick, router]);
 
 	// Controla la espera de jugadores
 	useEffect(() => {

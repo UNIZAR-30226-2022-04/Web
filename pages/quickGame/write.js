@@ -184,12 +184,13 @@ export default function Write() {
 					setDisableClick,
 					router
 				);
+				setCheckNextTurn(true);
 				setTurn(turn + 1);
 			}
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, roomID, checkNextTurn, game]);
+	}, [windowUser, roomID, currentText, checkNextTurn, setCheckNextTurn, punyetasCompradas, setTurn, setDisableClick, game, router]);
 
 	// Compruebo continuamente si estoy esperando al resto
 	useEffect(() => {
