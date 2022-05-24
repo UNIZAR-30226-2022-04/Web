@@ -16,8 +16,7 @@ export default function QuickGame() {
 		mode: "",
 		reason: "",
 		participants: [],
-		hasStarted: 0
-	  
+		hasStarted: 0,
 	});
 
 	useEffect(() => {
@@ -147,7 +146,7 @@ export default function QuickGame() {
 		return <Spinner showLayout={true} />;
 	}
 
-	const disabled = room.participants.length > 1 ? "" : "yes"
+	const disabled = room.participants.length > 1 ? "" : "yes";
 
 	// Renderizamos la página
 	const layoutInfo = {
@@ -164,24 +163,24 @@ export default function QuickGame() {
 				<div className="commonTitle">Código de la Sala: #{code}</div>
 				<div className="flex flex-row justify-center items-center space-x-20 ml-5">
 					<ListOfPeople data={room.participants} showFaces={true} />
-					<div className="flex flex-col  space-y-5">
+					<div className="flex flex-col justify-center items-center space-y-5">
 						{room.mode == "random" ? (
-							<div className="flex flex-row bg-purple-500 rounded-lg items-center justify-center space-x-2 p-2">
-								<Image
+							<div className="flex flex-col items-center justify-center commonButton rounded-xl text-white w-36 bg-amber-600 border-2 border-white">
+								<img
 									src="/quick-game/random_words.png"
-									width="30"
-									height="30"
+									className="relative h-20 w-20"
 								/>
-								<p className="">Modo Aleatorio</p>
+								<p>PALABRAS</p>
+								<p>OBLIGATORIAS</p>
 							</div>
 						) : (
-							<div className="flex flex-row rounded-lg items-center justify-center space-x-2 p-2 bg-blue-500">
-								<Image
-									src="/quick-game/twitter_trend.png"
-									width="30"
-									height="30"
+							<div className="flex flex-col items-center justify-center commonButton rounded-xl text-white w-36 bg-sky-500 border-2 border-white">
+								<img
+									src="/quick-game/tendencias_twitter.png"
+									className="relative h-20 w-20"
 								/>
-								<p>Modo Tendencias Twitter</p>
+								<p>TENDENCIAS</p>
+								<p>TWITTER</p>
 							</div>
 						)}
 					</div>
@@ -189,32 +188,20 @@ export default function QuickGame() {
 				<div className="flex flex-row space-x-3 items-center justify-center">
 					<button
 						type="button"
-						className="commonButton bg-purple-500"
+						className="commonButton bg-red-500 hover:bg-red-700"
 						onClick={() => leaveRoom(windowUser, room, router)}
 					>
-						{" "}
-						{"<-"} SALIR
+						Abandonar
 					</button>
 					{windowUser.username == room.participants[0].username ? (
 						<>
 							<button
-								type="button"
-								className="commonButton bg-purple-500"
-								onClick={() => closeRoom(windowUser, router)}
-							>
-								{" "}
-								CERRAR SALA{" "}
-							</button>
-							<button
-								type="button"
-								className="commonButton bg-purple-500"
-								disabled={disabled}
+								className="commonButton bg-violet-400 hover:bg-violet-600"
 								onClick={() =>
 									startGame(windowUser, code, router)
 								}
 							>
-								{" "}
-								EMPEZAR{" "}
+								<p>COMENZAR</p>
 							</button>
 						</>
 					) : (
@@ -248,7 +235,7 @@ async function leaveRoom(user, room, router) {
 	router.push("/quickGame");
 }
 
-async function startGame(user, room, router) {	
+async function startGame(user, room, router) {
 	const info = {
 		username: user.username,
 		password: user.password,
