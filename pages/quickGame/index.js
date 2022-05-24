@@ -62,123 +62,141 @@ export default function StoryMode() {
 	return (
 		<Layout data={layoutInfo}>
 			<Meta title="Partida rápida" />
-			<div className="h-full w-2/4 flex flex-row justify-center items-center space-x-20 ml-32">
-				<div className="flex flex-col items-center space-y-4">
-					<input
-						type="text"
-						placeholder="Código #XXXX"
-						value={code}
-						onChange={(e) => setCode(e.target.value)}
-						className="border-2 border-verde_letras rounded p-1"
-					/>
-					{errorJ != "" ? (
-						<div className="centered text-red-700">{errorJ}</div>
-					) : (
-						<></>
-					)}
+			<div className="h-full w-2/4 flex flex-row justify-center items-center space-x-40 ml-44">
+				<div className="flex flex-col items-center space-y-6 rounded-xl bg-white-300 p-8">
+					<div className="flex flex-col items-center space-y-4 rounded-xl bg-white-300 p-8">
+						<h1 className="commonTitle mb-4">Introducir código</h1>
+						<input
+							type="text"
+							placeholder="Código #XXXX"
+							value={code}
+							onChange={(e) => setCode(e.target.value)}
+							className="border-2 border-verde_letras  rounded-lg p-2"
+						/>
+
+						<button
+							type="button"
+							onClick={() =>
+								join(
+									windowUser,
+									code,
+									setErrorR,
+									setErrorJ,
+									router
+								) &&
+								errorJ != "" &&
+								alert("La sala introducida no existe.")
+							}
+							className="commonButton w-full bg-verde_top hover:bg-emerald-600"
+						>
+							Unirse a sala
+						</button>
+					</div>
 					<button
 						type="button"
 						onClick={() =>
-							join(windowUser, code, setErrorR, setErrorJ, router)
+							random(windowUser, setErrorJ, setErrorR, router) &&
+							errorR != "" &&
+							alert("No hay salas disponibles.")
 						}
-						className="commonButton w-full bg-verde_letras"
-					>
-						Unirse a sala
-					</button>
-					<button
-						type="button"
-						onClick={() =>
-							random(windowUser, setErrorJ, setErrorR, router)
-						}
-						className="commonButton w-full bg-verde_letras"
+						className="commonButton w-full bg-violet-400 hover:bg-violet-600"
 					>
 						Partida aleatoria
 					</button>
-					{errorR != "" ? (
-						<div className="centered text-red-700">{errorR}</div>
-					) : (
-						<></>
-					)}
 				</div>
 
-				<div className="flex flex-col space-y-2">
-					<p className="commonTitle">Tiempo de escritura</p>
-					<div className="flex flex-col">
-						<div className="flex flex-row text-2xl text-white">
-							<Image
-								src="/quick-game/clock.png"
-								height={30}
-								width={50}
-							/>
-							<div className="w-48 commonTitle ml-4">
-								{parseInt(time / 60)}min:{time % 60}seg
+				<div className="flex flex-col items-center space-y-8">
+					<h1 className="commonTitle">Crear sala</h1>
+					<div className="flex flex-col items-center space-y-2">
+						<p className="commonSubtitle">Tiempo de escritura</p>
+						<div className="flex flex-col">
+							<div className="flex flex-row items-center justify-center space-x-4">
+								<img
+									src="/quick-game/clock.png"
+									className="h-8 w-8"
+								/>
+								<div className="commonSubtitle">
+									{parseInt(time / 60)}min:{time % 60}seg
+								</div>
+								<button
+									className="addReduceButton"
+									onClick={() => changeTime(-5)}
+								>
+									-
+								</button>
+								<button
+									className="addReduceButton "
+									onClick={() => changeTime(+5)}
+								>
+									+
+								</button>
 							</div>
-							<button
-								className="addReduceButton text-2xl font-bold mr-4"
+						</div>
+					</div>
+
+					<div className="flex flex-col items-center space-y-2">
+						<p className="commonSubtitle">Tipo de partida</p>
+						<div className="flex flex-row justify-center items-center space-x-0 h-full w-full text-white">
+							<input
+								className={`px-8 py-2 font-bold hover:cursor-pointer ${
+									!privateGame
+										? "bg-verde_letras"
+										: "bg-verde_publico_seleccionado"
+								}`}
 								type="button"
-								onClick={() => changeTime(-5)}
+								value="PÚBLICA"
+								onClick={() => setprivateGame(false)}
+							/>
+							<input
+								className={`ml-2 px-8 py-2 font-bold hover:cursor-pointer ${
+									privateGame
+										? "bg-verde_letras"
+										: "bg-verde_publico_seleccionado"
+								}`}
+								type="button"
+								value="PRIVADA"
+								onClick={() => setprivateGame(true)}
+							/>
+						</div>
+					</div>
+
+					<div className="flex flex-col items-center space-y-2">
+						<p className="commonSubtitle">Modo de juego</p>
+						<div className="flex flex-row justify-center items-center space-x-6 h-full w-full">
+							<button
+								className={`commonButton rounded-xl text-white hover:cursor-pointer w-36 ${
+									gameMode == "random"
+										? "bg-yellow-600  border-2 border-white"
+										: "bg-amber-400"
+								}`}
+								onClick={() => setGameMode("random")}
 							>
-								-
+								<img
+									src="/quick-game/random_words.png"
+									className="relative h-20 w-20 ml-4"
+								/>
+								<p>PALABRAS</p>
+								<p>OBLIGATORIAS</p>
 							</button>
+
 							<button
-								className="addReduceButton text-xl font-bold"
-								type="button"
-								onClick={() => changeTime(+5)}
+								className={`commonButton rounded-xl text-white hover:cursor-pointer w-36 ${
+									gameMode == "twitter"
+										? "bg-sky-600  border-2 border-white"
+										: "bg-sky-500"
+								}`}
+								onClick={() => setGameMode("twitter")}
 							>
-								+
+								<img
+									src="/quick-game/tendencias_twitter.png"
+									className="relative h-20 w-20 ml-4"
+								/>
+								<p>TENDENCIAS</p>
+								<p>TWITTER</p>
 							</button>
 						</div>
 					</div>
 
-					<p className="commonTitle">Tipo de partida</p>
-					<div className="flex flex-row text-white">
-						<input
-							className={`px-8 py-2 font-bold ${
-								!privateGame
-									? "bg-verde_letras"
-									: "bg-verde_publico_seleccionado"
-							}`}
-							type="button"
-							value="PÚBLICA"
-							onClick={() => setprivateGame(false)}
-						/>
-						<input
-							className={`ml-2 px-8 py-2 font-bold ${
-								privateGame
-									? "bg-verde_letras"
-									: "bg-verde_publico_seleccionado"
-							}`}
-							type="button"
-							value="PRIVADA"
-							onClick={() => setprivateGame(true)}
-						/>
-					</div>
-
-					<div className="commonTitle">Modo de juego</div>
-					<div className="flex flex-row">
-						<input
-							className={`py-2 px-8 rounded-xl text-white font-bold ${
-								gameMode == "random"
-									? "bg-yellow-400  border-4 border-white"
-									: "bg-yellow-600"
-							}`}
-							type="button"
-							value="ALEATORIAS"
-							onClick={() => setGameMode("random")}
-						/>
-						<> </>
-						<input
-							className={`ml-4 py-2 px-8 rounded-xl text-white font-bold ${
-								gameMode == "twitter"
-									? "bg-blue-400  border-4 border-white"
-									: "bg-blue-600"
-							}`}
-							type="button"
-							value="TWITTER"
-							onClick={() => setGameMode("twitter")}
-						/>
-						<> </>
-					</div>
 					<button
 						type="button"
 						onClick={() =>
@@ -192,7 +210,7 @@ export default function StoryMode() {
 								router
 							)
 						}
-						className="commonButton bg-verde_letras"
+						className="commonButton bg-verde_top hover:bg-emerald-600"
 					>
 						Crear sala
 					</button>
@@ -224,14 +242,14 @@ async function create(
 
 async function join(windowUser, code, setErrorR, setErrorJ, router) {
 	setErrorR("");
-	var urlCode = code
+	var urlCode = code;
 	if (urlCode[0] === "#") {
 		urlCode = urlCode.slice(1);
 	}
 	const res = await tryJoin(windowUser, urlCode);
 
 	if (res.reason == "player_in_game") {
-		alert("Pog")
+		alert("Pog");
 		//LINEA ANTIGUA
 		//		router.push(`quickGame/lobby?code=${code}`);
 		router.push(`quickGame/lobby?code=${res.id.slice(1)}`);
