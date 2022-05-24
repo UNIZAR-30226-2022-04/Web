@@ -10,7 +10,6 @@ export default function See_Tale() {
 	const router = useRouter();
 	const [windowUser, setWindowUser] = useState({});
 	const [story, setStory] = useState({});
-	var title;
 
 	useEffect(() => {
 		if (localStorage.getItem("logged") == "si") {
@@ -34,7 +33,7 @@ export default function See_Tale() {
 
 	useEffect(() => {
 		const queryParams = new URLSearchParams(window.location.search);
-		title = queryParams.get("title");
+		const title = queryParams.get("title");
 		const id = queryParams.get("id");
 		const type = queryParams.get("type");
 
@@ -65,7 +64,12 @@ export default function See_Tale() {
 				return;
 			}
 
+			data.title = title;
+			data.id = id;
+			data.type = type;
+
 			setStory(data);
+			console.log(title);
 		};
 		getData();
 	}, []);
@@ -82,18 +86,20 @@ export default function See_Tale() {
 		image_ID: windowUser.picture,
 	};
 
+	console.log(story);
+
 	return (
 		<Layout data={layoutInfo}>
-			<Meta title={title} />
+			<Meta title={story.title} />
 			<div className="flex flex-col w-full items-center m-10 space-y-3">
-				<div className="commonTitle">{title}</div>
-				<div className="relative bg-scroll bg-contain overflow-auto text-center mx-32 h-auto text-xl font-arial-r">
+				<div className="commonTitle">{story.title}</div>
+				<div className="relative bg-scroll bg-contain overflow-auto text-center mx-32 h-auto text-xl font-arial-r bg-slate-100 p-2 rounded-xl">
 					{story.body}
 				</div>
 				<Link href="/profile/saved_tales">
 					<a>
-						<div className="absolute left-5 bottom-5 commonButton bg-verde_letras">
-							{"<-"} Volver a libreria
+						<div className="relative mt-12 commonButton bg-red-500 hover:bg-red-700">
+							VOLVER
 						</div>
 					</a>
 				</Link>

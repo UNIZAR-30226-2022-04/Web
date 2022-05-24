@@ -11,7 +11,7 @@ export default function Layout({
 }) {
 	return (
 		<div className="background">
-			<div className="flex bg-teal-600 bg-opacity-60 shadow-lg items-center p-3">
+			<div className="flex flex-row items-center bg-teal-600 bg-opacity-60 shadow-lg p-3">
 				{inGame && (
 					<div className="clickableItem ml-5">
 						<Image
@@ -23,7 +23,7 @@ export default function Layout({
 				)}
 				{!inGame && (
 					<Link href={"/profile"}>
-						<div className="clickableItem ml-5">
+						<div className="clickableItem ml-5 hover:scale-105">
 							<Image
 								src="/frankenstory.png"
 								width="237"
@@ -32,6 +32,20 @@ export default function Layout({
 						</div>
 					</Link>
 				)}
+				<div className="flex flex-row space-x-4">
+					<Link href="https://github.com/UNIZAR-30226-2022-04">
+						<img
+							src="icons/github.png"
+							className="h-7 w-7 ml-8 hover:scale-110 hover:cursor-pointer"
+						/>
+					</Link>
+					<Link href="https://twitter.com/EINAunizar">
+						<img
+							src="res/drawable-hdpi/bird_twitter.png "
+							className="h-9 w-9 hover:scale-110 hover:cursor-pointer"
+						/>
+					</Link>
+				</div>
 				{!noInfo && (
 					<Crates
 						person={data}
@@ -57,7 +71,7 @@ function Crates({ person, changeSettings, playing }) {
 
 			{!playing &&
 				(changeSettings ? (
-					<div className="">
+					<div className="hover:scale-110 hover:cursor-pointer">
 						<Link href="/profile">
 							<a>
 								{" "}
@@ -71,7 +85,7 @@ function Crates({ person, changeSettings, playing }) {
 						</Link>
 					</div>
 				) : (
-					<div className="">
+					<div className="hover:scale-110 hover:cursor-pointer">
 						<Link href="/profile/settings">
 							<a>
 								{" "}
@@ -85,7 +99,7 @@ function Crates({ person, changeSettings, playing }) {
 					</div>
 				))}
 
-			<div className="clickableItem">
+			<div className="clickableItem hover:scale-110 hover:cursor-pointer">
 				<Image
 					className=""
 					src="/icons/logout.png"

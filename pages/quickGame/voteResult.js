@@ -292,7 +292,7 @@ export default function VoteResult() {
 				)}
 
 				<div className="text-2xl font-bangers">
-					{clock} seconds left until next vote
+					Avanzando en {clock} segundo(s)
 				</div>
 			</div>
 			{voteResult.state == "waiting_players" ? (

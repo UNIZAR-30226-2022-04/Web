@@ -134,52 +134,46 @@ function TalesList({ quicks, tales }) {
 function QuickStory({ info }) {
 	return (
 		<div className="flex flex-col">
-			<div className="flex flex-row justify-between w-80 items-center text-left space-y-1">
-				<div className="flex flex-col">
-					<div className="font-bold font-arial-b text-verde_punetas">
-						Historia{" "}
-						{info.type === "quick_twitter"
-							? "Twitter"
-							: "Aleatoria"}
-					</div>
-					<div className="flex flex-row space-x-2 font-arial-r text-xs">
-						<div className="font-bold text-verde_punetas">
-							Fecha:
+			<Link
+				href={`/profile/see_tale?id=${info.id}&type=quick&title=${info.title}`}
+			>
+				<a>
+					<div className="flex flex-row justify-between w-80 items-center text-left space-y-1">
+						<div className="flex flex-col">
+							<div className="font-bold font-arial-b text-verde_punetas">
+								Historia{" "}
+								{info.type === "quick_twitter"
+									? "Twitter"
+									: "Aleatoria"}
+							</div>
+							<div className="flex flex-row space-x-2 font-arial-r text-xs">
+								<div className="font-bold text-verde_punetas">
+									Fecha:
+								</div>
+								<div className="text-verde_plus_minus_back">
+									{info.date}
+								</div>
+							</div>
 						</div>
-						<div className="text-verde_plus_minus_back">
-							{info.date}
-						</div>
-					</div>
-				</div>
-				{info.type === "quick_twitter" ? (
-					<Link
-						href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}
-					>
-						<a>
+						{info.type === "quick_twitter" ? (
 							<Image
 								src="/quick-game/tendencias_twitter.png"
 								width="40"
 								height="40"
 								alt="Trends"
 							/>
-						</a>
-					</Link>
-				) : (
-					<Link
-						href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}
-					>
-						<a>
+						) : (
 							<Image
 								src="/quick-game/random_words.png"
 								width="40"
 								height="40"
 								alt="Random"
 							/>
-						</a>
-					</Link>
-				)}
-			</div>
-			<div className="w-full h-1 bg-verde_top rounded-full bg-opacity-60" />
+						)}
+					</div>
+					<div className="w-full h-1 bg-verde_top rounded-full bg-opacity-60" />
+				</a>
+			</Link>
 		</div>
 	);
 }
@@ -187,36 +181,36 @@ function QuickStory({ info }) {
 function TaleStory({ info }) {
 	return (
 		<div className="flex flex-col">
-			<div className="flex flex-row justify-between w-80 items-center text-left space-y-1">
-				<div className="flex flex-col">
-					<div className="font-bold font-arial-b text-verde_punetas">
-						{info.title}
-					</div>
-					<div className="flex flex-row space-x-2 font-arial-r text-xs">
-						<div className="font-bold text-verde_punetas">
-							Fecha:
+			<Link
+				href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}
+			>
+				<a>
+					<div className="flex flex-row justify-between w-80 items-center text-left space-y-1">
+						<div className="flex flex-col">
+							<div className="font-bold font-arial-b text-verde_punetas">
+								{info.title}
+							</div>
+							<div className="flex flex-row space-x-2 font-arial-r text-xs">
+								<div className="font-bold text-verde_punetas">
+									Fecha:
+								</div>
+								<div className="text-verde_plus_minus_back">
+									{info.date}
+								</div>
+							</div>
 						</div>
-						<div className="text-verde_plus_minus_back">
-							{info.date}
-						</div>
-					</div>
-				</div>
-				<div className="clickableItem">
-					<Link
-						href={`/profile/see_tale?id=${info.id}&type=tale&title=${info.title}`}
-					>
-						<a>
+						<div className="clickableItem">
 							<Image
 								src="/icons/read.png"
 								width="40"
 								height="40"
 								alt="Leer"
 							/>
-						</a>
-					</Link>
-				</div>
-			</div>
-			<div className="w-full h-1 bg-verde_top rounded-full bg-opacity-60" />
+						</div>
+					</div>
+					<div className="w-full h-1 bg-verde_top rounded-full bg-opacity-60" />
+				</a>
+			</Link>
 		</div>
 	);
 }

@@ -74,9 +74,8 @@ export default function StoryMode() {
 			setMyTales(data);
 		};
 
-		const interval = setInterval(() => (getData()), 2000)
+		const interval = setInterval(() => getData(), 2000);
 		return () => clearInterval(interval);
-		
 	}, [windowUser, router]);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
@@ -92,7 +91,10 @@ export default function StoryMode() {
 		image_ID: windowUser.picture,
 	};
 
-	const limiteMisRelatos = myTales.myTales.length >= 3 ? "Termina un relato antes de crear otro" : ""
+	const limiteMisRelatos =
+		myTales.myTales.length >= 3
+			? "Termina un relato antes de crear otro"
+			: "";
 
 	return (
 		<Layout data={layoutInfo}>
@@ -131,19 +133,20 @@ export default function StoryMode() {
 						<p>No tienes relatos para votar disponibles.</p>
 					)}
 					<StoryList
-						stories={myTales.talesForVote.filter((tale) => tale.meVoted == false)}
+						stories={myTales.talesForVote.filter(
+							(tale) => tale.meVoted == false
+						)}
 						isVoteStory={true}
 					/>
 				</div>
-				<form className="flex flex-col space-y-3 w-80">
+				<form className="flex flex-col justify-center items-center space-y-6">
 					<h1 className="commonTitle">Crear Relato</h1>
 
 					<div className="flex flex-col w-full justify-center item-center space-y-2">
 						<h1 className="commonSubtitle">Número de escrituras</h1>
 						<div className="flex flex-row space-x-2 items-center justify-center text-center">
 							<button
-								className="addReduceButton bg-verde_plus_minus"
-								type="button"
+								className="addReduceButton"
 								onClick={() =>
 									changeTurnos(setTurnos, turnos - 1)
 								}
@@ -154,8 +157,7 @@ export default function StoryMode() {
 								{turnos}
 							</div>
 							<button
-								className="addReduceButton bg-verde_plus_minus"
-								type="button"
+								className="addReduceButton"
 								onClick={() =>
 									changeTurnos(setTurnos, turnos + 1)
 								}
@@ -169,8 +171,7 @@ export default function StoryMode() {
 						<h1 className="commonSubtitle">Número de caracteres</h1>
 						<div className="flex flex-row space-x-2 items-center justify-center text-center">
 							<button
-								className="addReduceButton bg-verde_plus_minus"
-								type="button"
+								className="addReduceButton"
 								onClick={() =>
 									changeCaracteres(setChars, chars - 5)
 								}
@@ -181,8 +182,7 @@ export default function StoryMode() {
 								{chars}
 							</div>
 							<button
-								className="addReduceButton bg-verde_plus_minus"
-								type="button"
+								className="addReduceButton"
 								onClick={() =>
 									changeCaracteres(setChars, chars + 5)
 								}
@@ -192,35 +192,46 @@ export default function StoryMode() {
 						</div>
 					</div>
 
-					<div className="flex flex-col justify-center item-center space-y-2">
+					<div className="flex flex-col justify-center item-center space-y-4">
 						<h1 className="commonSubtitle">Tipo de partida</h1>
-						{privateGame == 1 ? (
-							<button
+						<div className="flex flex-row justify-center items-center space-x-0 h-full w-full text-white">
+							<input
+								className={`px-8 py-2 font-bold hover:cursor-pointer ${
+									!privateGame
+										? "bg-verde_letras"
+										: "bg-verde_publico_seleccionado"
+								}`}
 								type="button"
+								value="PÚBLICA"
 								onClick={() => setPrivateGame(0)}
-								className="bg-red-700 text-white rounded-3xl font-arial-b p-1"
-							>
-								Privada
-							</button>
-						) : (
-							<button
+							/>
+							<input
+								className={`ml-2 px-8 py-2 font-bold hover:cursor-pointer ${
+									privateGame
+										? "bg-verde_letras"
+										: "bg-verde_publico_seleccionado"
+								}`}
 								type="button"
+								value="PRIVADA"
 								onClick={() => setPrivateGame(1)}
-								className="bg-green-700 text-white rounded-3xl font-arial-b p-1"
-							>
-								Pública
-							</button>
-						)}
+							/>
+						</div>
 					</div>
 
 					<button
 						type="button"
-						className="commonButton bg-verde_top"
+						className="commonButton bg-verde_top hover:bg-verde_letras"
 						onClick={() =>
-							createGame(privateGame, router, turnos, chars, limiteMisRelatos)
+							createGame(
+								privateGame,
+								router,
+								turnos,
+								chars,
+								limiteMisRelatos
+							)
 						}
 					>
-						Crear Partida
+						Crear relato
 					</button>
 				</form>
 			</div>
@@ -242,7 +253,7 @@ function changeCaracteres(stateChanger, chars) {
 function changeTurnos(stateChanger, turnos) {
 	if (turnos < 3) {
 		stateChanger(3);
-	}else if(turnos > 1000){
+	} else if (turnos > 1000) {
 		stateChanger(1000);
 	} else {
 		stateChanger(turnos);
@@ -250,12 +261,11 @@ function changeTurnos(stateChanger, turnos) {
 }
 
 function createGame(privacy, router, turnos, chars2, limiteMisRelatos) {
-	
-	if(limiteMisRelatos){
-		alert(limiteMisRelatos)
-		return
+	if (limiteMisRelatos) {
+		alert(limiteMisRelatos);
+		return;
 	}
-	
+
 	const turns = turnos;
 	const chars = chars2;
 	if (turns && chars) {
