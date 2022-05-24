@@ -301,6 +301,7 @@ export default function Write() {
 						required={true}
 						value={currentText}
 						placeholder="Escribe tu parrafo"
+						maxLength={500}
 						onChange={(e) => setCurrentText(e.target.value)}
 					/>
 					<button
@@ -445,6 +446,7 @@ export default function Write() {
 						required={true}
 						value={currentText}
 						placeholder="Escribe tu parrafo"
+						maxLength={500}
 						onChange={(e) => setCurrentText(e.target.value)}
 					/>
 					{/*5*/}
