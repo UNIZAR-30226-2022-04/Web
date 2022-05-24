@@ -21,7 +21,6 @@ export default function StoryList({ stories, isVoteStory }) {
 }
 
 function Story({ story, isVoteStory }) {
-	const lastTurn = story.turn == story.max_turns - 2 ? 1 : 0;
 	return (
 		<div className="flex flex-col">
 			<div className="flex flex-row justify-between w-42 items-center text-left space-y-1">
@@ -58,7 +57,7 @@ function Story({ story, isVoteStory }) {
 						</Link>
 					) : (
 						<Link
-							href={`/storyMode/continue?id=${story.story_id}&lastTurn=${lastTurn}&creator=${story.creator}`}
+							href={`/storyMode/continue?id=${story.story_id}&creator=${story.creator}&maxTurns=${story.max_turns}`}
 						>
 							<a>
 								<Image

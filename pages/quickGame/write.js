@@ -771,12 +771,15 @@ function chooseTarget(
 		username: rivalName,
 	};
 
-	if (coins - precio < 0) {
+	const newCoins = coins - precio
+
+	if (newCoins < 0) {
 		alert("Monedas no suficientes");
 		return;
 	}
-
-	setCoins(coins - precio);
+	
+	localStorage.setItem("coins", newCoins)
+	setCoins(newCoins);
 
 	var pyt = punyetasCompradas;
 	pyt.push(dupla);

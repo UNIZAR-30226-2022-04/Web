@@ -10,6 +10,9 @@ export default function WriteStory ({ first }) {
 	const [currentText, setCurrentText] = useState("");
 
 	const [windowUser, setWindowUser] = useState({});
+	const [maxTurns, setMaxTurns] = useState(999);
+
+	const [disableClick, setDisableClick] = useState("");
 	
 	const [storyInfo, setStoryInfo] = useState({
 		id: "",
@@ -43,6 +46,7 @@ export default function WriteStory ({ first }) {
 	// Story info
 	useEffect(() => {
 		const queryParams = new URLSearchParams(window.location.search);
+	
 		if(first){
 			setStoryInfo({
 				id: "",
@@ -53,10 +57,11 @@ export default function WriteStory ({ first }) {
 				isPublic: queryParams.get("privacy") == 1,
 		});
 		}else{
+			setMaxTurns(parseInt(queryParams.get("maxTurns")))
 			setStoryInfo({
 				id: parseInt(queryParams.get("id")),
 				creator: queryParams.get("creator"),
-				isLast: queryParams.get("lastTurn") != 0,
+				isLast: false,
 				turns: "",
 				maxChar: 0,
 				isPublic: queryParams.get("privacy") == 1,
@@ -93,7 +98,10 @@ export default function WriteStory ({ first }) {
 				const data = await res.json();
 
 				if (data.result != "error") {
-
+					if(data.paragraphs.length >= maxTurns){
+						router.push("/storyMode")
+						return
+					}
 
 					setCurrentTitle(data.title);
 					setParrafos(data.paragraphs);
@@ -102,23 +110,23 @@ export default function WriteStory ({ first }) {
 						const story = {
 							id: storyInfo.id,
 							creator: storyInfo.creator,
-							isLast: storyInfo.isLast,
+							isLast: (data.paragraphs.length + 1) == maxTurns,
 							maxChar: data.maxCharacters,
 							isPublic: storyInfo.isPublic,
 						};
 						setStoryInfo(story);
 					}
-					console.log(storyInfo)
 				} else {
 					alert("No se ha encontrado la historia");
 					router.push("/storyMode");
 				}
 			}
 		};
-		
-		getPrevious();
 
-	}, [windowUser, storyInfo, router]);
+		const interval = setInterval(() => (getPrevious()), 500)
+		return () => clearInterval(interval);
+
+	}, [windowUser, router]);
 
 	const create_tale = async () => {
 		if (storyInfo.id == undefined) {
@@ -213,6 +221,8 @@ export default function WriteStory ({ first }) {
 		placeh = lastWrite ? "No puedes escribir ahora" : "Escribe tu parrafo";
 	}
 
+	console.log("Historia: ", storyInfo)
+
 	return (
 		<div className="flex flex-row w-full mt-10 p-10 items-start">
 			<div className="flex flex-col w-1/2 h-3/4 space-y-5 p-4">
@@ -258,6 +268,7 @@ export default function WriteStory ({ first }) {
 						className="text-center text-6xl font-arial-b rounded-xl"
 						type="text"
 						required={true}
+						maxLength={300}
 						placeholder="Inserte título del relato"
 						onChange={(e) => setCurrentTitle(e.target.value)}
 					/>
@@ -284,18 +295,23 @@ export default function WriteStory ({ first }) {
 				/>
 
 				<div className="flex flex-row space-x-3">
-					{!lastWrite ? (
+					{lastWrite?(
+						<div className="font-arial-b">
+							Has sido el último en escribir
+						</div>
+					):(
+						<></>
+					)}
+					{(!lastWrite && !storyInfo.isLast) ? (
 						<button
 							className="commonButton bg-verde_top"
 							type="submit"
+							disabled={disableClick}
 						>
 							Enviar parrafo
 						</button>
 					) : (
 						<div className="flex flex-col">
-							<div className="font-arial-b">
-								Has sido el último en escribir
-							</div>
 							<button
 								className="commonButton bg-red-500 shadow-red-800"
 								type="button"
@@ -305,7 +321,7 @@ export default function WriteStory ({ first }) {
 							</button>
 						</div>
 					)}
-					{!first && storyInfo.creator == windowUser.username ? (
+					{(!first && storyInfo.creator == windowUser.username) || (storyInfo.isLast) ? (
 						<button
 							className="commonButton bg-red-500 shadow-red-800"
 							type="button"
@@ -314,9 +330,11 @@ export default function WriteStory ({ first }) {
 									windowUser,
 									storyInfo,
 									currentText,
+									setDisableClick,
 									router
 								)
 							}
+							disabled={disableClick}
 						>
 							Terminar relato
 						</button>
@@ -329,11 +347,13 @@ export default function WriteStory ({ first }) {
 	);
 };
 
-async function finishTale(user, tale, body, router) {
+async function finishTale(user, tale, body, setDisableClick, router) {
 	if (body == "") {
 		alert("Añade texto");
 		return;
 	}
+
+	setDisableClick("si")
 
 	const info = {
 		username: user.username,

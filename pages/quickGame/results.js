@@ -160,13 +160,7 @@ export default function Results() {
 					<button
 						type="button"
 						className="commonButton w-1/12 bg-verde_letras text-center"
-						onClick={() =>
-							updateCoinsAndLeave(
-								windowUser,
-								results.coins,
-								router
-							)
-						}
+						onClick={() => (router.push("/profile"))}
 					>
 						Recoger
 					</button>
@@ -174,10 +168,4 @@ export default function Results() {
 			</div>
 		</Layout>
 	);
-}
-
-function updateCoinsAndLeave(user, coinsToAdd, router) {
-	var newCoins = parseInt(user.coins) + parseInt(coinsToAdd);
-	localStorage.setItem("coins", newCoins);
-	router.push("/profile");
 }

@@ -66,15 +66,18 @@ export default function StoryMode() {
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
 				localStorage.setItem("logged", "no");
-				router.push("/");
+				router.push("/login");
 				return;
 			}
 
 			// Llama al hook que almacena la información del usuario
 			setMyTales(data);
 		};
-		getData();
-	}, [windowUser]);
+
+		const interval = setInterval(() => (getData()), 2000)
+		return () => clearInterval(interval);
+		
+	}, [windowUser, router]);
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!myTales) {

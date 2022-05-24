@@ -6,8 +6,6 @@ import Rulette from "components/Rulette";
 import Spinner from "components/Spinner";
 import Meta from "components/Meta";
 
-import Image from "next/image";
-
 export default function StoryMode() {
 	const router = useRouter();
 
@@ -19,6 +17,7 @@ export default function StoryMode() {
 	const [privateGame, setprivateGame] = useState(false);
 	const [gameMode, setGameMode] = useState("random");
 	const [time, setTime] = useState(30);
+	const [disableClick, setDisableClick] = useState("");
 
 	useEffect(() => {
 		if (localStorage.getItem("logged") == "si") {
@@ -207,9 +206,11 @@ export default function StoryMode() {
 								gameMode,
 								setErrorR,
 								setErrorJ,
+								setDisableClick,
 								router
 							)
 						}
+						disabled={disableClick}
 						className="commonButton bg-verde_top hover:bg-emerald-600"
 					>
 						Crear sala
@@ -228,12 +229,15 @@ async function create(
 	gameMode,
 	setErrorR,
 	setErrorJ,
+	setDisableClick,
 	router
 ) {
 	setErrorR("");
+	setDisableClick("si")
 	const res = await tryCreate(windowUser, time, isPrivate, gameMode);
 
 	if (res.result != "success") {
+		setDisableClick("")
 		setErrorJ(res.reason);
 	} else {
 		router.push(`quickGame/lobby?code=${res.id.slice(1)}`);
