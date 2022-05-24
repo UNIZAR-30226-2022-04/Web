@@ -154,6 +154,7 @@ export default function Write() {
 
 		getData();
 	}, [windowUser, roomID, turn, refresh, router]);
+	
 
 	//Temporizador
 	useEffect(() => {
@@ -191,6 +192,7 @@ export default function Write() {
 
 		return () => clearInterval(interval);
 	}, [windowUser, roomID, currentText, checkNextTurn, setCheckNextTurn, punyetasCompradas, setTurn, setDisableClick, game, router]);
+
 
 	// Compruebo continuamente si estoy esperando al resto
 	useEffect(() => {
@@ -232,7 +234,8 @@ export default function Write() {
 	// Página principal
 	return (
 		<Layout data={layoutInfo} inGame={true}>
-			<Meta title={"#" + roomID} />
+		<Meta title={"#" + roomID} />
+		{ game.punyeta != "desorden" ? (
 			<div className="flex flex-row w-full mb-20">
 				<div className="flex flex-col items-center align-middle justify-center w-full h-full space-y-2">
 					<div className="commonTitle h-auto">
@@ -424,7 +427,226 @@ export default function Write() {
 						<></>
 					)}
 				</div>
-			</div>
+			</div>)
+			:
+			(
+			<div className="flex flex-row w-full mb-20">
+
+					<div className="w-1/3">
+						
+					{/*U*/}
+						<Image src = "/quick-game/desorden_total.png" width={350} height={350}/>
+					{/*U*/}
+					
+					{/*5*/}
+					<textarea
+						className="text-2xl font-arial h-2/5 w-2/5 p-3 rounded-lg"
+						type="password"
+						required={true}
+						value={currentText}
+						placeholder="Escribe tu parrafo"
+						onChange={(e) => setCurrentText(e.target.value)}
+					/>
+					{/*5*/}
+					</div>
+
+
+					{/*6*/}
+					<button
+						disabled={disableClick}
+						className="commonButton bg-verde_top"
+						type="button"
+						onClick={() =>
+							submitParagraph(
+								windowUser,
+								roomID,
+								currentText,
+								turn,
+								setTurn,
+								punyetasCompradas,
+								setCheckNextTurn,
+								setDisableClick,
+								router
+							)
+						}
+						>
+					{game.last? "Terminar historia":"Enviar parrafo"}
+					</button>
+					{/*6*/}
+
+					{/*1*/}
+					<div>{game.lastParagraph}</div>
+					<div className="commonTitle h-auto">
+						Párrafo anterior 
+					</div>
+
+					{/*1*/}
+
+				{/*7*/}
+				<div className="bg-green-800 flex flex-col align-middle w-20 h-20 mt-32 items-center">
+					<div className="flex-row">
+						{game.last ? (
+							<div className="flex flex-row items-center space-x-2 text-center w-full p-4">
+								<div className="text-white text-xl">
+									Ultima ronda, puñetas no disponibles
+								</div>
+								<Image
+									src={`/quick-game/punyetas.png`}
+									width={60}
+									height={60}
+								/>
+							</div>
+						) : (
+							<button
+								disabled={disableClick}
+								type="button"
+								className="text-xl text-white m-2"
+								onClick={() =>
+									openClose(
+										punyetasMenu,
+										setPunyetasMenu,
+										setPunyetaCarro
+									)
+								}
+							>
+								{punyetasMenu == "objetivo" ? (
+									"¿A quien le envias la puñeta?"
+								) : (
+									<div className="flex flex-row items-center space-x-2">
+										<div>Comprar puñetas</div>
+										<Image
+											src={`/quick-game/punyetas.png`}
+											width={60}
+											height={60}
+										/>
+									</div>
+								)}
+							</button>
+						)}
+					</div>
+					{punyetasMenu == "punyeta" ? (
+						<div className="flex flex-col space-y-2 2">
+							<ButtonPunyeta
+								img={"letras_reves"}
+								name={"reves"}
+								text={"Letras al revés"}
+								price={150}
+								setPunyetasMenu={setPunyetasMenu}
+								setPunyetaCarro={setPunyetaCarro}
+							/>
+							<ButtonPunyeta
+								img={"escribe_ciegas"}
+								name={"ciego"}
+								text={"Escribe a ciegas"}
+								price={300}
+								setPunyetasMenu={setPunyetasMenu}
+								setPunyetaCarro={setPunyetaCarro}
+							/>
+							<ButtonPunyeta
+								img={"desorden_total"}
+								name={"desorden"}
+								text={"Desorden total"}
+								price={500}
+								setPunyetasMenu={setPunyetasMenu}
+								setPunyetaCarro={setPunyetaCarro}
+							/>
+						</div>
+					) : (
+						<></>
+					)}
+
+					{punyetasMenu == "objetivo" ? (
+						<div className="flex flex-col space-y-2">
+							{rivals.map((rival, index) => (
+								<Rival
+									key={index}
+									coins={userCoins}
+									setCoins={setUserCoins}
+									rivalName={rival.username}
+									picture={rival.picture}
+									punyetaCarro={punyetaCarro}
+									setPunyetasMenu={setPunyetasMenu}
+									punyetasCompradas={punyetasCompradas}
+									setPunyetasCompradas={setPunyetasCompradas}
+									rivals={rivals}
+									setRivals={setRivals}
+								/>
+							))}
+							<button
+								disabled={disableClick}
+								type="button"
+								className="bg-white flex flex-row space-x-2 p-2 rounded items-center text-center"
+								onClick={() => setPunyetasMenu("")}
+							>
+								{"<-"} A Nadie
+							</button>
+						</div>
+					) : (
+						<></>
+					)}
+				</div>
+				{/*7*/}
+
+						{/*3*/}
+					<div className="mt-64 pt-64">
+						{game.topic ? (
+							<div className="flex flex-row space-x-2 items-center">
+								<div>Tema de la historia</div>
+								<div className="rounded bg-blue-400 p-1">
+									#{game.topic}
+								</div>
+								<Image
+									className=""
+									src="/quick-game/twitter_trend.png"
+									width={30}
+									height={30}
+								/>
+							</div>
+						)
+						:
+						(
+						<div className="flex flex-col items-center">
+							<div className="">Palabras a introducir</div>
+							<div className="flex flex-row space-x-2 items-center">
+								<DisplayPalabraClave
+									palabra={game.randomWords[0]}
+									currentText={currentText}
+								/>
+								<DisplayPalabraClave
+									palabra={game.randomWords[1]}
+									currentText={currentText}
+								/>
+								<DisplayPalabraClave
+									palabra={game.randomWords[2]}
+									currentText={currentText}
+								/>
+							</div>
+						</div>
+						)}
+					</div>
+					{/*3*/}
+						
+					{/*U*/}
+						<div>
+							<Image src = "/quick-game/desorden_total.png" width={350} height={350}/>
+							{/*4*/}
+							<div className="flex flex-row items-center">
+								<Image
+									className=""
+									src="/quick-game/clock.png"
+									width={30}
+									height={30}
+								/>
+								<div>
+									{parseInt(clock / 60)}min:{clock % 60}seg
+								</div>
+							</div>
+							{/*4*/}
+						</div>
+					{/*U*/}
+
+			</div>)}
+			
 
 			{game.state == "waiting_players" ? (
 				<div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white">
