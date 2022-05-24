@@ -63,7 +63,7 @@ export default function SavedTales() {
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
 				localStorage.setItem("logged", "no");
-				router.push("/");
+				router.push("/login");
 				return;
 			}
 
