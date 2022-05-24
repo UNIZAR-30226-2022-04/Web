@@ -6,32 +6,32 @@ import Layout from "components/Layout";
 import Spinner from "components/Spinner";
 import Meta from "components/Meta";
 
-export default function VoteResult(){
-    const router = useRouter();
+export default function VoteResult() {
+	const router = useRouter();
 
 	const [windowUser, setWindowUser] = useState({});
 	const [roomID, setRoomID] = useState("");
 
-    const [voteResult, setVoteResults] = useState({
-		state:"",
-		paragraphs:[],
+	const [voteResult, setVoteResults] = useState({
+		state: "",
+		paragraphs: [],
 		time: 999,
-		winner: 0
-	})
+		winner: 0,
+	});
 
-    const [clock, setClock] = useState(0);
-    const [isLast, setIsLast] = useState(false)
-    const [refresh, setRefresh] = useState(false);
-    const [checkNextVote, setCheckNextVote] = useState(true);
-    const [turn, setTurn] = useState(0);
+	const [clock, setClock] = useState(0);
+	const [isLast, setIsLast] = useState(false);
+	const [refresh, setRefresh] = useState(false);
+	const [checkNextVote, setCheckNextVote] = useState(true);
+	const [turn, setTurn] = useState(0);
 
-    // Sava la info del usuario
+	// Sava la info del usuario
 	useEffect(() => {
 		if (localStorage.getItem("logged") == "si") {
 			const queryParams = new URLSearchParams(window.location.search);
 			setRoomID(queryParams.get("id"));
-            setIsLast(queryParams.get("last") == "true")
-            setTurn(parseInt(queryParams.get("turn")))
+			setIsLast(queryParams.get("last") == "true");
+			setTurn(parseInt(queryParams.get("turn")));
 
 			const username = localStorage.getItem("username");
 			const password = localStorage.getItem("password");
@@ -47,13 +47,13 @@ export default function VoteResult(){
 				stars: stars,
 			});
 
-			setCheckNextVote(true)
+			setCheckNextVote(true);
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 
-    	// Hace fetch de la api de ver mejor parrafo
+	// Hace fetch de la api de ver mejor parrafo
 	useEffect(() => {
 		// Función que llama a la api
 		if (!windowUser.username || !roomID || turn == 0) {
@@ -68,7 +68,7 @@ export default function VoteResult(){
 				turn: turn,
 				id: "#" + roomID,
 			};
-			
+
 			const options = {
 				method: "POST",
 				headers: {
@@ -78,9 +78,9 @@ export default function VoteResult(){
 				body: JSON.stringify(info),
 			};
 
-			console.log("ENVÍO: ", info)
+			console.log("ENVÍO: ", info);
 
-            /*
+			/*
                 DEBUG FROM HERE
             
             setVoteResults({
@@ -143,15 +143,15 @@ export default function VoteResult(){
 				`${process.env.NEXT_PUBLIC_URL}/api/quick_game/resume_voted_quick_game`,
 				options
 			);
-			
-			if(!res.ok){
-				console.log("error responose: ", res)
+
+			if (!res.ok) {
+				console.log("error responose: ", res);
 				return;
 			}
 
 			const data = await res.json();
 
-			console.log(data)
+			console.log(data);
 
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result == "error") {
@@ -161,35 +161,36 @@ export default function VoteResult(){
 				return;
 			}
 
-			if(data.result == "waiting_players"){
+			if (data.result == "waiting_players") {
 				setVoteResults({
-					state:"waiting_players",
-                    paragraphs:[],
-                    time: 999,
-                    winner: 0
-				})
-			
-			}else{
-	
+					state: "waiting_players",
+					paragraphs: [],
+					time: 999,
+					winner: 0,
+				});
+			} else {
 				// Llama al hook que almacena la información de la partida
 				setVoteResults({
 					state: data.result,
-                    paragraphs: data.paragraphs,
-                    time: data.s,
-                    winner: data.winner
-				})
-			}			
+					paragraphs: data.paragraphs,
+					time: data.s,
+					winner: data.winner,
+				});
+			}
 		};
 
 		getData();
 	}, [windowUser, roomID, turn, refresh, router]);
 
-    // Controla  el tiempo máximo para visualizar el resultado
+	// Controla  el tiempo máximo para visualizar el resultado
 	useEffect(() => {
 		const start = new Date();
 
 		const interval = setInterval(() => {
-			if (voteResult.state == "waiting_players" || voteResult.state == "") {
+			if (
+				voteResult.state == "waiting_players" ||
+				voteResult.state == ""
+			) {
 				return;
 			}
 
@@ -201,25 +202,25 @@ export default function VoteResult(){
 			setClock(tiempo);
 
 			if (tiempo == 0) {
-                if(isLast){
-                    router.push(`/quickGame/results?id=${roomID}`)
-                }else{
-                    router.push(`/quickGame/vote?id=${roomID}`)
-                }
-            }
+				if (isLast) {
+					router.push(`/quickGame/results?id=${roomID}`);
+				} else {
+					router.push(`/quickGame/vote?id=${roomID}`);
+				}
+			}
 		}, 1000);
 
 		return () => clearInterval(interval);
 	}, [roomID, voteResult, router]);
-    
-    // Controla la espera de jugadores
+
+	// Controla la espera de jugadores
 	useEffect(() => {
 		const interval = setInterval(() => {
-		    console.log("Check Continuo");
-            if (voteResult.state == "waiting_players") {
-                console.log("tengo que checkear el paso de turno");
-                setRefresh(!refresh);
-            }
+			console.log("Check Continuo");
+			if (voteResult.state == "waiting_players") {
+				console.log("tengo que checkear el paso de turno");
+				setRefresh(!refresh);
+			}
 		}, 1000);
 
 		return () => clearInterval(interval);
@@ -227,67 +228,80 @@ export default function VoteResult(){
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!windowUser || voteResult.state == "") {
-        console.log("USER: ", windowUser)
-		console.log("STORY: ", voteResult)
+		console.log("USER: ", windowUser);
+		console.log("STORY: ", voteResult);
 		return <Spinner showLayout={true} />;
 	}
 
-    const layoutInfo = {
+	const layoutInfo = {
 		username: windowUser.username,
 		stars: windowUser.stars,
 		coins: windowUser.coins,
-		image_ID: windowUser.picture
+		image_ID: windowUser.picture,
 	};
 
-    return(
-        <Layout data={layoutInfo} inGame={true}>
-            <Meta title="Resultados de Votación" />
-            <div className="flex flex-col justify-center w-full items-center mb-20">
-                <div className="commonTitle">Votaciones</div>
-                {voteResult.paragraphs.length > 0 ? (
-                    <>
-                        <div className="commonSubtitle">Historia de {voteResult.paragraphs[0].username}</div>
-                        <div className="flex flex-row space-x-5 p-10 justify-center w-full items-center flex-wrap">
-                            {voteResult.paragraphs.map((parrafo, index)=>{                      
-                                const bg = index == voteResult.winner ? "bg-verde_parrafo_seleccionado" : "bg-verde_parrafo"
-                                return (
-                                <div key={index} className="flex flex-col space-y-1 pb-10">
-                                    <div className="flex flex-row">
-                                        {index == voteResult.winner?(
-                                            <Image 
-                                                src="/icons/crown.png" 
-                                                width={20} 
-                                                height={20} 
-                                                alt="WINNER"
-                                            />    
-                                        ):(
-                                            <></>
-                                        )}                                
-                                        <div className="font-graduate">Escrito por {parrafo.username}</div>
-                                    </div>
-                                    
-                                    <div className={`${bg} p-2 text-white font-arial-b`}>
-                                        {parrafo.body}
-                                    </div>
-                                </div>)
-                            })}
-                        </div>
-                    </>
-                ):(
-                    <></>
-                )}
-                
-                <div className="text-2xl font-bangers">
-                    {clock} seconds left until next vote
-                </div>
-            </div>
-            {voteResult.state == "waiting_players" ? (
-                <div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white">
-                    Esperando al resto de jugadores
-                </div>
-            ) : (
-                <></>
-            )}
-        </Layout>
-    )
+	return (
+		<Layout data={layoutInfo} inGame={true}>
+			<Meta title="Resultados de Votación" />
+			<div className="flex flex-col justify-center w-full items-center mb-20">
+				<div className="commonTitle">Votaciones</div>
+				{voteResult.paragraphs.length > 0 ? (
+					<>
+						<div className="commonSubtitle">
+							Historia de {voteResult.paragraphs[0].username}
+						</div>
+						<div className="flex flex-row space-x-5 p-10 justify-center w-full items-center flex-wrap">
+							{voteResult.paragraphs.map((parrafo, index) => {
+								const bg =
+									index == voteResult.winner
+										? "bg-verde_parrafo_seleccionado"
+										: "bg-verde_parrafo";
+								return (
+									<div
+										key={index}
+										className="flex flex-col space-y-1 pb-10"
+									>
+										<div className="flex flex-row">
+											{index == voteResult.winner ? (
+												<Image
+													src="/icons/crown.png"
+													width={20}
+													height={20}
+													alt="WINNER"
+												/>
+											) : (
+												<></>
+											)}
+											<div className="font-graduate">
+												Escrito por {parrafo.username}
+											</div>
+										</div>
+
+										<div
+											className={`${bg} p-2 text-white font-arial-b`}
+										>
+											{parrafo.body}
+										</div>
+									</div>
+								);
+							})}
+						</div>
+					</>
+				) : (
+					<></>
+				)}
+
+				<div className="text-2xl font-bangers">
+					{clock} seconds left until next vote
+				</div>
+			</div>
+			{voteResult.state == "waiting_players" ? (
+				<div className="absolute w-screen h-screen flex bg-opacity-75 bg-black text-6xl justify-center pt-60 text-white">
+					Esperando al resto de jugadores
+				</div>
+			) : (
+				<></>
+			)}
+		</Layout>
+	);
 }

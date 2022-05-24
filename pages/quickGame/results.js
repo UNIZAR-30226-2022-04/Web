@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -7,7 +6,6 @@ import Layout from "components/Layout";
 import ListOfPeople from "components/ListOfPeople";
 import Meta from "components/Meta";
 import Spinner from "components/Spinner";
-
 
 export default function Results() {
 	const router = useRouter();
@@ -22,12 +20,12 @@ export default function Results() {
 
 	const [position, setPosition] = useState(-1);
 
-	const [roomID, setRoomID] = useState("")
+	const [roomID, setRoomID] = useState("");
 
 	useEffect(() => {
 		if (localStorage.getItem("logged") == "si") {
 			const queryParams = new URLSearchParams(window.location.search);
-			setRoomID(queryParams.get("id"))
+			setRoomID(queryParams.get("id"));
 
 			const username = localStorage.getItem("username");
 			const password = localStorage.getItem("password");
@@ -42,9 +40,8 @@ export default function Results() {
 				coins: coins,
 				stars: stars,
 			});
-
 		} else {
-			router.push("/login");
+			router.push("/");
 		}
 	}, []);
 
@@ -56,12 +53,11 @@ export default function Results() {
 		}
 
 		const getResults = async () => {
-			
 			// Opciones para llamar a la api
 			const body = {
 				username: windowUser.username,
 				password: windowUser.password,
-				id: '#' + roomID
+				id: "#" + roomID,
 			};
 			const options = {
 				method: "POST",
@@ -71,8 +67,11 @@ export default function Results() {
 				body: JSON.stringify(body),
 			};
 			// Llamada a la api
-			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/quick_game/points_quick_game`, options)
-			const data = await res.json()
+			const res = await fetch(
+				`${process.env.NEXT_PUBLIC_URL}/api/quick_game/points_quick_game`,
+				options
+			);
+			const data = await res.json();
 
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result === "error") {
@@ -81,10 +80,10 @@ export default function Results() {
 				return;
 			}
 
-			setResults(data)
+			setResults(data);
 			return data;
 		};
-		
+
 		getResults().then((res) => {
 			for (var i = 0; i < res.classification.length; i++) {
 				if (res.classification[i].username == windowUser.username) {
@@ -95,11 +94,11 @@ export default function Results() {
 		});
 	}, [windowUser, roomID]);
 
-	console.log(results)
-	
+	console.log(results);
+
 	// Si tadavía no hoy usuario o resultados, esperamos a que los haya
 	if (!windowUser || !results.result) {
-		return <Spinner />
+		return <Spinner />;
 	}
 
 	// Renderizamos la página
@@ -127,9 +126,9 @@ export default function Results() {
 									</div>
 									<div className="text-centered commonTitle text-5xl ml-16">
 										{windowUser.username}
+									</div>
 								</div>
-								</div>
-								
+
 								<div className="flex flex-row">
 									<Image
 										src={`/profPic/icon${windowUser.picture}.png`}
@@ -159,11 +158,17 @@ export default function Results() {
 				</div>
 				<div className="w-full bottom-3 text-center mt-10">
 					<button
-							type="button"
-							className="commonButton w-1/12 bg-verde_letras text-center"
-							onClick={() => (updateCoinsAndLeave(windowUser, results.coins, router))}
-						>
-							Recoger
+						type="button"
+						className="commonButton w-1/12 bg-verde_letras text-center"
+						onClick={() =>
+							updateCoinsAndLeave(
+								windowUser,
+								results.coins,
+								router
+							)
+						}
+					>
+						Recoger
 					</button>
 				</div>
 			</div>
@@ -171,8 +176,8 @@ export default function Results() {
 	);
 }
 
-function updateCoinsAndLeave(user, coinsToAdd, router){
+function updateCoinsAndLeave(user, coinsToAdd, router) {
 	var newCoins = parseInt(user.coins) + parseInt(coinsToAdd);
 	localStorage.setItem("coins", newCoins);
-	router.push("/quickGame");
+	router.push("/profile");
 }
