@@ -47,7 +47,7 @@ export default function WriteStory ({ first }) {
 			setStoryInfo({
 				id: "",
 				creator: "",
-				isLast: "",
+				isLast: false,
 				turns: parseInt(queryParams.get("turns")),
 				maxChar: parseInt(queryParams.get("characters")),
 				isPublic: queryParams.get("privacy") == 1,
@@ -93,18 +93,20 @@ export default function WriteStory ({ first }) {
 				const data = await res.json();
 
 				if (data.result != "error") {
+
+
 					setCurrentTitle(data.title);
 					setParrafos(data.paragraphs);
 
 					if(storyInfo.creator){
-					const story = {
-						id: storyInfo.id,
-						creator: storyInfo.creator,
-						isLast: storyInfo.isLast,
-						maxChar: data.maxCharacters,
-						isPublic: storyInfo.isPublic,
-					};
-					setStoryInfo(story);
+						const story = {
+							id: storyInfo.id,
+							creator: storyInfo.creator,
+							isLast: storyInfo.isLast,
+							maxChar: data.maxCharacters,
+							isPublic: storyInfo.isPublic,
+						};
+						setStoryInfo(story);
 					}
 					console.log(storyInfo)
 				} else {

@@ -73,6 +73,10 @@ export default function Write() {
 			return;
 		}
 		setCurrentText("");
+		setPunyetasMenu(false);
+		setPunyetasCompradas([]);
+		setPunyetaCarro("");
+		
 
 		const getData = async () => {
 			// Información que necesitan las apis
@@ -178,9 +182,9 @@ export default function Write() {
 					windowUser,
 					roomID,
 					"",
-					turn,
+					0,
 					setTurn,
-					punyetasCompradas,
+					[],
 					setCheckNextTurn,
 					setDisableClick,
 					router
@@ -191,7 +195,7 @@ export default function Write() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, roomID, checkNextTurn, setCheckNextTurn, punyetasCompradas, setTurn, setDisableClick, game, router]);
+	}, [windowUser, roomID, checkNextTurn, setCheckNextTurn, setTurn, setDisableClick, game, router]);
 
 
 	// Compruebo continuamente si estoy esperando al resto
