@@ -159,7 +159,7 @@ export default function QuickVote() {
 				enviarVoto(
 					windowUser,
 					roomID,
-					chosenStory,
+					0,
 					game,
 					setDisableClick,
 					router
@@ -171,8 +171,6 @@ export default function QuickVote() {
 	}, [
 		windowUser,
 		roomID,
-		checkNextVote,
-		chosenStory,
 		game,
 		setDisableClick,
 		router,
