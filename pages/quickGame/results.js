@@ -151,7 +151,7 @@ export default function Results() {
 							<div className="commonTitle text-6xl">
 								Clasificación
 							</div>
-							<div className="bg-scroll overflow-x-visible overflow-y-auto w-auto h-64">
+							<div className="bg-scroll overflow-x-visible overflow-y-auto w-auto h-64 p-4">
 								<ListOfPeople data={results.classification} />
 							</div>
 						</div>

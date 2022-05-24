@@ -326,7 +326,7 @@ export default function Write() {
 						{game.last ? (
 							<div className="flex flex-row items-center space-x-2 text-center w-full p-4">
 								<div className="text-white text-xl">
-									Mercado de Puñetas Cerrado
+									Ultima ronda, puñetas no disponibles
 								</div>
 								<Image
 									src={`/quick-game/punyetas.png`}
