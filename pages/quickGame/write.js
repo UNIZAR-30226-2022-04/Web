@@ -177,7 +177,7 @@ export default function Write() {
 				submitParagraph(
 					windowUser,
 					roomID,
-					currentText,
+					"",
 					turn,
 					setTurn,
 					punyetasCompradas,
@@ -191,7 +191,7 @@ export default function Write() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, roomID, currentText, checkNextTurn, setCheckNextTurn, punyetasCompradas, setTurn, setDisableClick, game, router]);
+	}, [windowUser, roomID, checkNextTurn, setCheckNextTurn, punyetasCompradas, setTurn, setDisableClick, game, router]);
 
 
 	// Compruebo continuamente si estoy esperando al resto
