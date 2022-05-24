@@ -156,15 +156,17 @@ export default function Results() {
 							</div>
 						</div>
 					</div>
-				</div>				
+				</div>
+				<div className="w-full bottom-3 text-center mt-10">
+					<button
+							type="button"
+							className="commonButton w-1/12 bg-verde_letras text-center"
+							onClick={() => (updateCoinsAndLeave(windowUser, results.coins, router))}
+						>
+							Recoger
+					</button>
+				</div>
 			</div>
-			<button
-					type="button"
-					className="absolute bottom-3 commonButton bg-verde_letras"
-					onClick={() => (updateCoinsAndLeave(windowUser, results.coins, router))}
-				>
-					Recoger
-				</button>
 		</Layout>
 	);
 }
