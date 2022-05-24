@@ -12,8 +12,8 @@ export default function QuickVote() {
 
 	const [windowUser, setWindowUser] = useState({});
 	const [roomID, setRoomID] = useState("");
-	
-	const [disableClick, setDisableClick] = useState("")
+
+	const [disableClick, setDisableClick] = useState("");
 
 	const [game, setGame] = useState({
 		state: "",
@@ -21,9 +21,8 @@ export default function QuickVote() {
 		paragraphs: [],
 		turn: 0,
 		last: false,
-		time: 999
+		time: 999,
 	});
-	
 
 	const [refresh, setRefresh] = useState(false);
 
@@ -51,7 +50,7 @@ export default function QuickVote() {
 				stars: stars,
 			});
 
-			setCheckNextVote(true)
+			setCheckNextVote(true);
 		} else {
 			router.push("/login");
 		}
@@ -72,7 +71,7 @@ export default function QuickVote() {
 				turn: 0,
 				id: "#" + roomID,
 			};
-			
+
 			const options = {
 				method: "POST",
 				headers: {
@@ -82,21 +81,21 @@ export default function QuickVote() {
 				body: JSON.stringify(info),
 			};
 
-			console.log("ENVÍO: ", info)
+			console.log("ENVÍO: ", info);
 
 			const res = await fetch(
 				`${process.env.NEXT_PUBLIC_URL}/api/quick_game/resume_vote_quick_game`,
 				options
 			);
-			
-			if(!res.ok){
-				console.log("error responose: ", res)
+
+			if (!res.ok) {
+				console.log("error responose: ", res);
 				return;
 			}
 
 			const data = await res.json();
 
-			console.log(data)
+			console.log(data);
 
 			// Si no ha ido bien o no estoy logeado volvemos a /
 			if (data.result == "error") {
@@ -106,26 +105,25 @@ export default function QuickVote() {
 				return;
 			}
 
-			if(data.result == "waiting_players"){
+			if (data.result == "waiting_players") {
 				setGame({
 					state: data.result,
 					topic: "",
 					last: false,
 					turn: 0,
 					time: 0,
-					paragraphs: []
-				})
-			
-			}else{
+					paragraphs: [],
+				});
+			} else {
 				const parrafos = data.paragraphs.map((parrafo) => {
 					return {
 						text: parrafo.body,
 						words: parrafo.words,
 					};
 				});
-	
+
 				console.log("Parrafos: ", parrafos);
-	
+
 				// Llama al hook que almacena la información de la partida
 				setGame({
 					state: data.result,
@@ -133,9 +131,9 @@ export default function QuickVote() {
 					last: data.isLast,
 					turn: data.turn,
 					time: data.s,
-					paragraphs: parrafos
-				})
-			}			
+					paragraphs: parrafos,
+				});
+			}
 		};
 
 		getData();
@@ -170,7 +168,7 @@ export default function QuickVote() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [windowUser, roomID, checkNextVote, chosenStory, game, setDisableClick, router]);
+	}, [windowUser, roomID, checkNextVote, game, setDisableClick, router]);
 
 	// Controla la espera de jugadores
 	useEffect(() => {
@@ -180,7 +178,6 @@ export default function QuickVote() {
 				if (game.state == "waiting_players") {
 					console.log("tengo que checkear el paso de turno");
 					setRefresh(!refresh);
-				
 				} else {
 					console.log("paso de turno");
 					setCheckNextVote(false);
@@ -193,8 +190,8 @@ export default function QuickVote() {
 
 	// Si tadavía no hoy usuario, esperamos a que lo haya
 	if (!windowUser || game.state == "") {
-		console.log("USER: ", windowUser)
-		console.log("STORY: ", game)
+		console.log("USER: ", windowUser);
+		console.log("STORY: ", game);
 		return <Spinner showLayout={true} />;
 	}
 
@@ -202,7 +199,7 @@ export default function QuickVote() {
 		username: windowUser.username,
 		stars: windowUser.stars,
 		coins: windowUser.coins,
-		image_ID: windowUser.picture
+		image_ID: windowUser.picture,
 	};
 
 	return (
@@ -270,29 +267,36 @@ export default function QuickVote() {
 	);
 }
 
-async function enviarVoto(windowUser, roomID, voto, game, setDisableClick, router) {
-	setDisableClick("si")
-	const res = await addVote(windowUser, roomID, voto)
-	
+async function enviarVoto(
+	windowUser,
+	roomID,
+	voto,
+	game,
+	setDisableClick,
+	router
+) {
+	setDisableClick("si");
+	const res = await addVote(windowUser, roomID, voto);
+
 	if (!res) {
 		alert("Datos no encontrados");
-		return
-	
+		return;
 	} else if (res.result == "error") {
 		alert("Error al enviar datos:", res.reason);
 		router.push("/quickGame");
-		return
-	
-	} 
+		return;
+	}
 
-	router.push(`/quickGame/voteResult?id=${roomID}&turn=${game.turn}&last=${game.last}`)
+	router.push(
+		`/quickGame/voteResult?id=${roomID}&turn=${game.turn}&last=${game.last}`
+	);
 }
 
-async function addVote(windowUser, roomID, voto){
+async function addVote(windowUser, roomID, voto) {
 	const info = {
 		username: windowUser.username,
 		password: windowUser.password,
-		id: '#' + roomID,
+		id: "#" + roomID,
 		paragraph: voto,
 	};
 
@@ -311,5 +315,5 @@ async function addVote(windowUser, roomID, voto){
 
 	const data = await res.json();
 
-	return data
+	return data;
 }
