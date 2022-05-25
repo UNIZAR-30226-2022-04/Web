@@ -147,6 +147,7 @@ export default function StoryMode() {
 						<div className="flex flex-row space-x-2 items-center justify-center text-center">
 							<button
 								className="addReduceButton"
+								type="button"
 								onClick={() =>
 									changeTurnos(setTurnos, turnos - 1)
 								}
@@ -158,6 +159,7 @@ export default function StoryMode() {
 							</div>
 							<button
 								className="addReduceButton"
+								type="button"
 								onClick={() =>
 									changeTurnos(setTurnos, turnos + 1)
 								}
@@ -172,6 +174,7 @@ export default function StoryMode() {
 						<div className="flex flex-row space-x-2 items-center justify-center text-center">
 							<button
 								className="addReduceButton"
+								type="button"
 								onClick={() =>
 									changeCaracteres(setChars, chars - 5)
 								}
@@ -183,6 +186,7 @@ export default function StoryMode() {
 							</div>
 							<button
 								className="addReduceButton"
+								type="button"
 								onClick={() =>
 									changeCaracteres(setChars, chars + 5)
 								}
