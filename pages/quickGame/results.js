@@ -159,8 +159,8 @@ export default function Results() {
 				<div className="w-full bottom-3 text-center mt-10">
 					<button
 						type="button"
-						className="commonButton w-1/12 bg-verde_letras text-center"
-						onClick={() => (router.push("/profile"))}
+						className="commonButton w-1/12 bg-verde_top hover:bg-verde_letras text-center"
+						onClick={() => router.push("/profile")}
 					>
 						Recoger
 					</button>
