@@ -133,9 +133,7 @@ export default function StoryMode() {
 						<p>No tienes relatos para votar disponibles.</p>
 					)}
 					<StoryList
-						stories={myTales.talesForVote.filter(
-							(tale) => tale.meVoted == false
-						)}
+						stories={myTales.talesForVote}
 						isVoteStory={true}
 					/>
 				</div>

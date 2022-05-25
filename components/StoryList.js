@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function StoryList({ stories, isVoteStory }) {
+export default function StoryList({ stories, isVoteStory}) {
 	if (stories.length > 0) {
 		return (
 			<div className="flex flex-col space-y-2">
@@ -39,35 +39,58 @@ function Story({ story, isVoteStory }) {
 				</div>
 
 				<div className="relative flex flex-row items-center">
-					<div className="pr-2 text-verde_punetas text-sm font-arial_r">
-						{story.turn + 1}/{story.max_turns}
-					</div>
-					{isVoteStory ? (
-						<Link
-							href={`/storyMode/vote?id=${story.story_id}&creator=${story.creator}`}
-						>
-							<a>
+					{isVoteStory ? (<>
+						{ story.meVoted	? (
+							<>
+								<div className="pr-2 text-verde_punetas text-xs font-arial_r">
+									-/-
+								</div>	
 								<Image
-									src="/icons/voting-box.png"
+									src="/quick-game/wait.png"
 									width="20"
 									height="20"
 									alt="Votar"
 								/>
-							</a>
-						</Link>
+							</>)
+							:
+							(
+							<>
+								<div className="pr-2 text-verde_punetas text-sm font-arial_r">
+									{story.turn + 1}/{story.max_turns}
+								</div>
+								<Link
+									href={`/storyMode/vote?id=${story.story_id}&creator=${story.creator}`}
+								>
+									<a>
+										<Image
+											src="/icons/voting-box.png"
+											width="20"
+											height="20"
+											alt="Votar"
+										/>
+									</a>
+								</Link>
+							</>)
+						}
+						</>
 					) : (
-						<Link
-							href={`/storyMode/continue?id=${story.story_id}&creator=${story.creator}&maxTurns=${story.max_turns}`}
-						>
-							<a>
-								<Image
-									src="/icons/pencil.png"
-									width="20"
-									height="20"
-									alt="Editar"
-								/>
-							</a>
-						</Link>
+						<>
+							<div className="pr-2 text-verde_punetas text-sm font-arial_r">
+								{story.turn + 1}/{story.max_turns}
+							</div>
+							<Link
+								href={`/storyMode/continue?id=${story.story_id}&creator=${story.creator}&maxTurns=${story.max_turns}`}
+							>
+								<a>
+									<Image
+										src="/icons/pencil.png"
+										width="20"
+										height="20"
+										alt="Editar"
+									/>
+								</a>
+							</Link>
+						</>
 					)}
 				</div>
 			</div>
