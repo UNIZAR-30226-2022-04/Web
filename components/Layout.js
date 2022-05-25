@@ -35,19 +35,19 @@ export default function Layout({
 				<div className="flex flex-row items-center justify-center space-x-4 mb-1">
 					<Link href="/">
 						<img
-							src="icons/mooncode.png"
+							src="/icons/mooncode.png"
 							className="h-8 w-8 ml-8 hover:scale-110"
 						/>
 					</Link>
 					<Link href="https://github.com/UNIZAR-30226-2022-04">
 						<img
-							src="icons/github.png"
+							src="/icons/github.png"
 							className="h-6 w-6 hover:scale-110 hover:cursor-pointer"
 						/>
 					</Link>
 					<Link href="mailto:mooncodecontact@gmail.com">
 						<img
-							src="icons/mail.png"
+							src="/icons/mail.png"
 							className="h-4 w-6 hover:scale-110 hover:cursor-pointer"
 						/>
 					</Link>
