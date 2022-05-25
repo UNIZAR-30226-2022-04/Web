@@ -13,7 +13,8 @@ module.exports = {
         'bangers': ['BANGERS-REGULAR'] ,
         'graduate': ['GRADUATE'] ,
         'blank': ['BLANK'],
-        'reverse' : ['REVERSE']
+        'reverse': ['REVERSE'],
+        'swapped': ['SWAPPED']
       },
       textShadow: {
         sm: '1px 1px 2px var(--tw-shadow-color)',

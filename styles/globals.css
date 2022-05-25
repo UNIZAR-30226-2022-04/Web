@@ -77,6 +77,11 @@
 }
 
 @font-face {
+	font-family: "SWAPPED";
+	src: url("./fonts/swapped.ttf");
+}
+
+@font-face {
 	font-family: "ARIAL-BOLD";
 	src: url("./fonts/arial_bold.ttf");
 }

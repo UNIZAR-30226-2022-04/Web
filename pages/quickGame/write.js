@@ -460,7 +460,7 @@ export default function Write() {
 
 						{/*5*/}
 						<textarea
-							className="text-2xl font-arial h-2/5 w-2/5 p-3 rounded-lg"
+							className="text-2xl h-2/5 w-2/5 p-3 rounded-lg font-swapped"
 							type="password"
 							required={true}
 							value={currentText}
