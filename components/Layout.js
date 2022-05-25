@@ -32,17 +32,23 @@ export default function Layout({
 						</div>
 					</Link>
 				)}
-				<div className="flex flex-row space-x-4">
+				<div className="flex flex-row items-center justify-center space-x-4 mb-1">
+					<Link href="/">
+						<img
+							src="icons/mooncode.png"
+							className="h-8 w-8 ml-8 hover:scale-110"
+						/>
+					</Link>
 					<Link href="https://github.com/UNIZAR-30226-2022-04">
 						<img
 							src="icons/github.png"
-							className="h-7 w-7 ml-8 hover:scale-110 hover:cursor-pointer"
+							className="h-6 w-6 hover:scale-110 hover:cursor-pointer"
 						/>
 					</Link>
-					<Link href="https://twitter.com/EINAunizar">
+					<Link href="mailto:mooncodecontact@gmail.com">
 						<img
-							src="res/drawable-hdpi/bird_twitter.png "
-							className="h-9 w-9 hover:scale-110 hover:cursor-pointer"
+							src="icons/mail.png"
+							className="h-4 w-6 hover:scale-110 hover:cursor-pointer"
 						/>
 					</Link>
 				</div>
