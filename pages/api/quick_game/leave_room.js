@@ -42,7 +42,7 @@ export default async (req, res) => {
 
 			if (game.players.length == 0) {
 				const gameIndex = gamesList.indexOf(game);
-				gamesList.splice(gameIndex);
+				gamesList.splice(gameIndex, 1);
 			}
 			res.status(200).json({ result: "success" });
 		} else {
