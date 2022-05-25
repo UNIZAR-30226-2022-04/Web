@@ -108,7 +108,7 @@ export default function StoryVote() {
 					setChosenStory={setChosenStory}
 				/>
 				<button
-					className="commonButton bg-verde_parrafo"
+					className="commonButton bg-verde_top hover:bg-verde_letras"
 					onClick={() => enviarVoto(info, chosenStory, router)}
 				>
 					Enviar Voto

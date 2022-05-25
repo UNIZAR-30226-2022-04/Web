@@ -168,13 +168,7 @@ export default function QuickVote() {
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [
-		windowUser,
-		roomID,
-		game,
-		setDisableClick,
-		router,
-	]);
+	}, [windowUser, roomID, game, setDisableClick, router]);
 
 	// Controla la espera de jugadores
 	useEffect(() => {
@@ -247,7 +241,7 @@ export default function QuickVote() {
 				/>
 				<button
 					disabled={disableClick}
-					className="bg-white rounded-full p-2"
+					className="commonButton bg-verde_top hover:bg-verde_letras p-2"
 					onClick={() =>
 						enviarVoto(
 							windowUser,
